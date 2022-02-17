@@ -1,4 +1,4 @@
-package com.home.inmy.domain.account.form;
+package com.home.inmy.account.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -15,8 +15,9 @@ public class SignUpForm {
     private String email;
 
     @NotBlank
+    @Length(min = 5, max = 10)
     @Pattern(regexp = "^[A-Za-z0-9]{5,10}$")
-    private Long id;
+    private String loginId;
 
     @NotBlank
     @Length(min = 2, max = 10)
@@ -28,9 +29,10 @@ public class SignUpForm {
 
     @NotBlank
     @Length(min = 8, max = 8)
-    private int birthToDate;
+    private String dateToBirth;
 
     @NotBlank
+    @Length(min = 8, max = 15)
     private String password;
 
     @NotBlank

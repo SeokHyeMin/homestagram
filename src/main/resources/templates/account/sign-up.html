@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-white">
+    <div th:replace="fragments.html :: main-nav"></div>
+    <div class="container">
+        <div class="py-9 text-center">
+            <small>Homestagram</small>
+            <h2>회원가입</h2>
+        </div>
+        <div class="row justify-content-center">
+            <form class="needs-validation col-sm-6" action="#"
+                  th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
 
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input id="name" type="text" th:field="*{name}" class="form-control"
+                           placeholder="name" aria-describedby="nameHelp" required minlength="1">
+                    <small id="nameHelp" class="form-text text-muted">
+                        이름을 작성해주세요.
+                    </small>
+                    <small class="invalid-feedback">이름을 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name Error</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateToBirth">생년월일</label>
+                    <input id="dateToBirth" type="text" th:field="*{dateToBirth}" class="form-control"
+                           placeholder="20220301" aria-describedby="dateToBirthHelp" required minlength="8" maxlength="8">
+                    <small id="dateToBirthHelp" class="form-text text-muted">
+                        생년월일의 양식으로 8자로 작성해주세요.
+                    </small>
+                    <small class="invalid-feedback">생년월일을 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('dateToBirth')}" th:errors="*{dateToBirth}">dateToBirth Error</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginId">ID</label>
+                    <input id="loginId" type="text" th:field="*{loginId}" class="form-control"
+                           placeholder="id" aria-describedby="loginIdHelp" required minlength="5" maxlength="10">
+                    <small id="loginIdHelp" class="form-text text-muted">
+                        영문자와 숫자를 포함하여 5~10자 이내로 작성해주세요.
+                    </small>
+                    <small class="invalid-feedback">아이디를 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">loginId Error</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input id="password" type="password" th:field="*{password}" class="form-control"
+                           placeholder="password" aria-describedby="passwordHelp" required minlength="8" maxlength="15">
+                    <small id="passwordHelp" class="form-text text-muted">
+                        영문자, 숫자, 특수기호를 포함하여 8~12자 이내로 작성해주세요.
+                    </small>
+                    <small class="invalid-feedback">패스워드를 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="nickname">닉네임</label>
+                    <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
+                           placeholder="nickname" aria-describedby="nicknameHelp" required minlength="2" maxlength="10">
+                    <small id="nicknameHelp" class="form-text text-muted">
+                        문자와 숫자를 포함하여 2~10자 이내로 작성헤주세요.
+                    </small>
+                    <small class="invalid-feedback">닉네임을 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input id="email" type="email" th:field="*{email}" class="form-control"
+                           placeholder="your@email.com" aria-describedby="emailHelp" required>
+                    <small id="emailHelp" class="form-text text-muted">
+                        이메일을 입력하세요.
+                    </small>
+                    <small class="invalid-feedback">이메일을 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">전화번호</label>
+                    <input id="phoneNumber" type="tel" th:field="*{phoneNumber}" class="form-control"
+                           placeholder="01012345678" aria-describedby="phoneHelp" required minlength="10" maxlength="11">
+                    <small id="phoneNumberHelp" class="form-text text-muted">
+                        전화번호는 10~11자 이내입니다.
+                    </small>
+                    <small class="invalid-feedback">전화번호를 다시 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">phone Error</small>
+                </div>
+
+                <br>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit"
+                            aria-describedby="submitHelp">가입하기</button>
+                </div>
+            </form>
+        </div>
+        <div class="fragments.html :: footer"></div>
+    </div>
+<script th:replace="fragments.html :: form-validation"></script>
 </body>
 </html>
