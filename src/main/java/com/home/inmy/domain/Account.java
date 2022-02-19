@@ -2,10 +2,7 @@ package com.home.inmy.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -41,20 +38,23 @@ public class Account {
 
     private String emailCheckToken;
 
-    private LocalDateTime emailCheckTokenGeneratedAt;
+    private LocalDateTime e_tokenGeneratedAt;
 
     private LocalDateTime joinedAt;
 
     //프로필
-    private String bio;
+    @Embedded
+    private Profile profile;
 
     public void generateEmailToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
-        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
+        this.e_tokenGeneratedAt = LocalDateTime.now();
     }
 
     public void completeSignUp(){
         this.emailCheckVerified = true;
         this.joinedAt = LocalDateTime.now();
     }
+
+
 }

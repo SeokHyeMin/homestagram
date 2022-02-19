@@ -4,8 +4,9 @@
 <body class="bg-white">
     <div th:replace="fragments.html :: main-nav"></div>
     <div class="container">
+        <br>
         <div class="py-9 text-center">
-            <small>Homestagram</small>
+            <h4>Homestagram</h4>
             <h2>회원가입</h2>
         </div>
         <div class="row justify-content-center">
@@ -61,7 +62,7 @@
                     <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
                            placeholder="nickname" aria-describedby="nicknameHelp" required minlength="2" maxlength="10">
                     <small id="nicknameHelp" class="form-text text-muted">
-                        문자와 숫자를 포함하여 2~10자 이내로 작성헤주세요.
+                        문자와 숫자만 가능합니다. 2~10자 이내로 작성헤주세요.
                     </small>
                     <small class="invalid-feedback">닉네임을 다시 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
@@ -91,7 +92,7 @@
 
                 <br>
                 <div class="form-group">
-                    <button class="btn btn-primary btn-block" type="submit"
+                    <button class="btn white-font" type="submit" th:width="120px"
                             aria-describedby="submitHelp">가입하기</button>
                 </div>
             </form>

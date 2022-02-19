@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-white">
+<div th:replace="fragments.html :: main-nav"></div>
+<div class="container">
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-3 mt-5" th:align="center" id="profile-box">
+            <div class="mt-2">
+                <svg th:if="${#strings.isEmpty(account.profile?.image)}" class="profile-img"
+                     th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
+                <img th:if="${!#strings.isEmpty(account.profile?.image)}" class="profile-img"
+                     th:src="${account.profile.image}"
+                     width="125" height="125"/>
+            </div>
+            <h4 class="display-8" th:text="${account.nickname}">nickname</h4>
+            <div class="row mt-2 mb-2 justify-content-center">
+                <div class="col-3">팔로워</div>
+                <div class="col-3">팔로잉</div>
+            </div>
+            <div th:if="${isOwner}">
+                <a class="btn follow white-font" href="#" th:href="@{/settings/profile}">프로필 수정</a>
+            </div>
+            <div th:if="${!isOwner}">
+                <a class="btn follow" href="#" th:href="@{/settings/profile}" th:style="500px">팔로우</a>
+            </div>
+            <br>
+            <div>
+                <p class="lead" th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</p>
+                일단 테스트
+            </div>
+            <div class="mb-3">
+                <p th:if="${!#strings.isEmpty(account.profile?.url)}">
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-link col-1"></i>
+                            </span>
+                    <span th:text="${account.profile.url}" class="col-11"></span>
+                </p>
+                url
+            </div>
+        </div>
+        <div class="col-1">
+
+        </div>
+        <div class="col-6">
+            <div class="mt-5">
+                <p>사진</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

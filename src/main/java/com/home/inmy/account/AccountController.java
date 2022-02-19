@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -55,6 +52,19 @@ public class AccountController {
     @PostMapping ("/login")
     public String login(){
         return "login";
+    }
+
+    @GetMapping("/profile/{loginId}")
+    public String profile(@PathVariable String loginId, Model model, @CurrentUser Account account){
+
+        Account accountByLoginId = accountRepository.findByLoginId(loginId); //해당 프로필 주인
+        if(accountByLoginId == null){
+            throw new IllegalArgumentException(loginId + "에 해당하는 사용자가 없습니다.");
+        }
+        model.addAttribute("isOwner", accountByLoginId.equals(account)); //현재 로그인한 계정과 프로필 주인이 같으면 true
+        model.addAttribute(accountByLoginId);
+
+        return "account/profile";
     }
 
 }
