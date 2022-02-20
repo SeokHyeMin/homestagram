@@ -8,15 +8,13 @@ import javax.persistence.FetchType;
 import javax.persistence.Lob;
 
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED) @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED) @AllArgsConstructor
 @Builder
 @Getter
 @ToString
 public class Profile {
 
     private String bio;
-
-    private String job;
 
     private String url;
 

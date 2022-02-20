@@ -1,7 +1,10 @@
 package com.home.inmy.account;
 
+import com.home.inmy.settings.form.PasswordForm;
+import com.home.inmy.settings.form.ProfileForm;
 import com.home.inmy.account.form.SignUpForm;
 import com.home.inmy.domain.Account;
+import com.home.inmy.domain.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -60,5 +62,17 @@ public class AccountService implements UserDetailsService {
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
+    public void updateProfile(Account account, ProfileForm profileForm) {
+
+        account.setProfile(new Profile(profileForm.getBio(), profileForm.getUrl(), profileForm.getImage()));
+        accountRepository.save(account);
+    }
+
+    public void updatePassword(Account account, String newPassword) {
+
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
     }
 }

@@ -44,7 +44,7 @@ public class Account {
 
     //프로필
     @Embedded
-    private Profile profile;
+    private Profile profile = new Profile();
 
     public void generateEmailToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
@@ -55,6 +55,5 @@ public class Account {
         this.emailCheckVerified = true;
         this.joinedAt = LocalDateTime.now();
     }
-
 
 }

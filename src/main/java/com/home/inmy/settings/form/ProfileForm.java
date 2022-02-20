@@ -1,4 +1,4 @@
-package com.home.inmy.account.form;
+package com.home.inmy.settings.form;
 
 import com.home.inmy.domain.Account;
 import lombok.Data;
@@ -12,9 +12,6 @@ public class ProfileForm {
     @Length(max = 35)
     private String bio;
 
-    @Length(max = 30)
-    private String job;
-
     @Length(max = 50)
     private String url;
 
@@ -22,7 +19,6 @@ public class ProfileForm {
 
     public ProfileForm(Account account){
         this.bio = account.getProfile().getBio();
-        this.job = account.getProfile().getJob();
         this.url = account.getProfile().getUrl();
         this.image = account.getProfile().getImage();
     }

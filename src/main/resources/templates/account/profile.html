@@ -10,7 +10,7 @@
         <div class="col-3 mt-5" th:align="center" id="profile-box">
             <div class="mt-2">
                 <svg th:if="${#strings.isEmpty(account.profile?.image)}" class="profile-img"
-                     th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
+                     th:data-jdenticon-value="${account.loginId}" width="125" height="125"></svg>
                 <img th:if="${!#strings.isEmpty(account.profile?.image)}" class="profile-img"
                      th:src="${account.profile.image}"
                      width="125" height="125"/>
@@ -28,8 +28,7 @@
             </div>
             <br>
             <div>
-                <p class="lead" th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</p>
-                일단 테스트
+                <p th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</p>
             </div>
             <div class="mb-3">
                 <p th:if="${!#strings.isEmpty(account.profile?.url)}">
@@ -38,7 +37,6 @@
                             </span>
                     <span th:text="${account.profile.url}" class="col-11"></span>
                 </p>
-                url
             </div>
         </div>
         <div class="col-1">

@@ -13,7 +13,8 @@
     <script  src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js" integrity="sha512-ZK6m9vADamSl5fxBPtXw6ho6A4TuX89HUbcfvxa2v2NYNT/7l8yFGJ3JlXyMN4hlNbz0il4k6DvqbIW5CCwqkw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         .container {
             max-width: 100%;
@@ -46,7 +47,7 @@
         #logo-img {
             height: auto;
 
-            margin-left: 5%;
+            margin-left: 2%;
             overflow: hidden;
         }
         #footer-logo {
@@ -71,6 +72,9 @@
         .profile-img{
             border-radius: 70%;
             overflow: hidden;
+            width: 120px;
+        }
+        .dropdown-menu{
             width: 120px;
         }
 
@@ -133,29 +137,13 @@
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <div class="btn-group">
-                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="background: #EBFBFF">
+                    <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="background: #EBFBFF">
                         <svg th:if="${#strings.isEmpty(account?.profile?.image)}" th:data-jdenticon-value="${#authentication?.name}"
                              width="24" height="24" class="rounded border bg-light"></svg>
                         <img th:if="${!#strings.isEmpty(account?.profile?.image)}" th:src="${account.profile.image}"
                              width="24" height="24" class="rounded border"/>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication?.name}}">프로필</a>
-                        <a class="dropdown-item" >아직 미정</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
-                        <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
-                            <button class="dropdown-item" type="submit">로그아웃</button>
-                        </form>
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span sec:authentication="name">Username</span>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink" style="width: 100px">
                         <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication?.name}}">프로필</a>
                         <a class="dropdown-item" >아직 미정</a>
                         <div class="dropdown-divider"></div>
@@ -164,7 +152,6 @@
                             <button class="dropdown-item" type="submit">로그아웃</button>
                         </form>
                     </ul>
-
                 </div>
             </li>
         </ul>
@@ -182,7 +169,7 @@
 
 <div th:fragment="settings-menu (currentMenu)" class="list-group">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">프로필</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">패스워드</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">비밀번호</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">알림</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">계정</a>
 </div>

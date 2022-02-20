@@ -38,10 +38,6 @@ public class AccountController {
         if(errors.hasErrors()){
             return "account/sign-up";
         }
-        signUpFormValidator.validate(signUpForm, errors);
-        if(errors.hasErrors()){
-            return "account/sign-up";
-        }
 
         Account account = accountService.processNewAccount(signUpForm);
         accountService.login(account);
