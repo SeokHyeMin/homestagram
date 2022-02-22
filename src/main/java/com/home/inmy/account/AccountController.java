@@ -63,4 +63,15 @@ public class AccountController {
         return "account/profile";
     }
 
+    @GetMapping("/profile")
+    public String profile(Model model, @CurrentUser Account account){
+
+        //내 정보를 통해 이동.
+
+        model.addAttribute("isOwner", true); //현재 로그인한 계정과 프로필 주인이 같으면 true
+        model.addAttribute(account);
+
+        return "account/profile";
+    }
+
 }

@@ -4,9 +4,14 @@ import com.home.inmy.account.AccountService;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.settings.form.*;
 import com.home.inmy.domain.Account;
-import com.home.inmy.settings.validator.PasswordValidator;
+import com.home.inmy.settings.validator.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,8 +25,12 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SettingsController {
 
-    private final ModelMapper modelMapper;
     private final AccountService accountService;
+    private final AccountFormValidator accountFormValidator;
+    private final ModelMapper modelMapper;
+    private final AuthenticationManager authenticationManager;
+
+
 
     @GetMapping("/settings/profile")
     public String profileView(@CurrentUser Account account, Model model){
@@ -80,15 +89,36 @@ public class SettingsController {
     }
 
     @GetMapping("/settings/account")
-    public String accountForm(@CurrentUser Account account, Model model){
+    public String accountView(@CurrentUser Account account, Model model){
 
         model.addAttribute(account);
-        model.addAttribute(new NicknameForm(account));
-        model.addAttribute(new PhoneNumberForm(account));
-        model.addAttribute(new EmailForm(account));
-        model.addAttribute(new LoginIdForm(account));
+        model.addAttribute(modelMapper.map(account, AccountForm.class));
 
         return "settings/account";
+    }
+
+    @PostMapping("/settings/account")
+    public String updateAccount(@CurrentUser Account account, @Valid AccountForm accountForm, Errors errors, Model model,
+                                RedirectAttributes attributes){
+
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            return "settings/account";
+        }
+
+        accountFormValidator.check(account, accountForm);
+        accountFormValidator.validate(accountForm, errors);
+
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            return "settings/account";
+        }
+
+        accountService.updateAccount(account, accountForm);
+        accountFormValidator.checkInitialization();
+        attributes.addFlashAttribute("message","계정정보를 수정하였습니다.");
+
+        return "redirect:/" + "settings/account";
     }
 
 }

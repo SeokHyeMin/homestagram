@@ -13,9 +13,7 @@
     <script  src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js" integrity="sha512-ZK6m9vADamSl5fxBPtXw6ho6A4TuX89HUbcfvxa2v2NYNT/7l8yFGJ3JlXyMN4hlNbz0il4k6DvqbIW5CCwqkw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
+     <style>
         .container {
             max-width: 100%;
         }
@@ -61,6 +59,10 @@
         }
         .btn{
            background: #35c5f0;
+        }
+        .btn.color-light{
+            background: white;
+            color: black;
         }
         .follow{
             color: white;
@@ -144,7 +146,7 @@
                              width="24" height="24" class="rounded border"/>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink" style="width: 100px">
-                        <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication?.name}}">프로필</a>
+                        <a class="dropdown-item" th:href="@{'/profile'}">프로필</a>
                         <a class="dropdown-item" >아직 미정</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>

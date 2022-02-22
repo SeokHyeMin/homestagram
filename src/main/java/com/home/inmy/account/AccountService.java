@@ -1,6 +1,6 @@
 package com.home.inmy.account;
 
-import com.home.inmy.settings.form.PasswordForm;
+import com.home.inmy.settings.form.AccountForm;
 import com.home.inmy.settings.form.ProfileForm;
 import com.home.inmy.account.form.SignUpForm;
 import com.home.inmy.domain.Account;
@@ -8,7 +8,9 @@ import com.home.inmy.domain.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +31,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
 
     public Account processNewAccount(SignUpForm signUpForm){
         Account newAccount = saveNewAccount(signUpForm);
@@ -75,4 +78,34 @@ public class AccountService implements UserDetailsService {
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
+
+    public void updateNickname(Account account, String newNickname) {
+
+        account.setNickname(newNickname);
+        accountRepository.save(account);
+
+    }
+
+    public void updateLoginId(Account account, String newLoginId) {
+
+        account.setLoginId(newLoginId);
+        accountRepository.save(account);
+    }
+
+    public void updatePhoneNumber(Account account, String newPhoneNumber) {
+
+        account.setPhoneNumber(newPhoneNumber);
+        accountRepository.save(account);
+    }
+
+    public void updateAccount(Account account, AccountForm accountForm) {
+
+        account.setNickname(accountForm.getNickname());
+        account.setPhoneNumber(accountForm.getPhoneNumber());
+        account.setEmail(accountForm.getEmail());
+        account.setLoginId(accountForm.getLoginId());
+        accountRepository.save(account);
+
+    }
+
 }

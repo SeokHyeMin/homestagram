@@ -11,12 +11,10 @@
         <div class="col-8">
             <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
                 <span th:text="${message}">완료</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="row">
-                <form class="needs-validation col-12" th:object="${nicknameForm}" th:action="@{/settings/account/nickname}" method="post" novalidate>
+                <form class="needs-validation col-12" th:object="${accountForm}" th:action="@{/settings/account}" method="post" novalidate>
                     <div class="form-group">
                         닉네임 변경
                         <input id="nickname" type="text" th:field="*{nickname}" class="form-control" aria-describedby="nicknameHelp" required>
@@ -26,14 +24,7 @@
                         <small class="invalid-feedback">닉네임을 입력하세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">nickname Error</small>
                     </div>
-                    <div class="form-group">
-                        <button class="btn white-font" type="submit" aria-describedby="submitHelp">변경하기</button>
-                    </div>
-                </form>
-            </div>
-            <div class="row">
-                <form class="needs-validation col-12" th:object="${loginIdForm}" th:action="@{/settings/account/loginId}" method="post" novalidate>
-                    <div class="form-group">
+                     <div class="form-group">
                         아이디 변경
                         <input id="loginId" type="text" th:field="*{loginId}" class="form-control" aria-describedby="loginIdHelp" required>
                         <small id="loginIdHelp" class="form-text text-muted">
@@ -42,13 +33,7 @@
                         <small class="invalid-feedback">아이디를 입력하세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">loginId Error</small>
                     </div>
-                    <div class="form-group">
-                        <button class="btn white-font" type="submit" aria-describedby="submitHelp">변경하기</button>
-                    </div>
-                </form>
-            </div>
-            <div class="row">
-                <form class="needs-validation col-12" th:object="${emailForm}" th:action="@{/settings/account/email}" method="post" novalidate>
+
                     <div class="form-group">
                         이메일 변경
                         <input id="emailId" type="text" th:field="*{email}" class="form-control" aria-describedby="emailHelp" required>
@@ -58,13 +43,6 @@
                         <small class="invalid-feedback">이메일을 입력하세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</small>
                     </div>
-                    <div class="form-group">
-                        <button class="btn white-font" type="submit" aria-describedby="submitHelp">변경하기</button>
-                    </div>
-                </form>
-            </div>
-            <div class="row">
-                <form class="needs-validation col-12" th:object="${phoneNumberForm}" th:action="@{/settings/account/phoneNumber}" method="post" novalidate>
                     <div class="form-group">
                         전화번호 변경
                         <input id="phoneNumber" type="text" th:field="*{phoneNumber}" class="form-control" aria-describedby="phoneNumberHelp" required>

@@ -4,7 +4,6 @@ import com.home.inmy.WithAccount;
 import com.home.inmy.account.AccountRepository;
 import com.home.inmy.domain.Account;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,11 +140,25 @@ class SettingsControllerTest {
         mvc.perform(get("/settings/account"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("nicknameForm"))
-                .andExpect(model().attributeExists("loginIdForm"))
-                .andExpect(model().attributeExists("emailForm"))
-                .andExpect(model().attributeExists("phoneNumberForm"));
-
+                .andExpect(model().attributeExists("accountForm"));
     }
+
+    @WithAccount("testId")
+    @DisplayName("계정 수정 성공")
+    @Test
+    public void 계정_수정_성공() throws Exception{
+
+        mvc.perform(post("/settings/account")
+                .param("nickname", "nickNew")
+                .param("email","newEmail@email.com")
+                .param("loginId","newTestId")
+                .param("phoneNumber","01088997766")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/settings/account"))
+                .andExpect(flash().attributeExists("message"));
+    }
+
+
 
 }
