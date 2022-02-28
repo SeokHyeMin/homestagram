@@ -1,17 +1,20 @@
 package com.home.inmy.domain;
 
+import com.home.inmy.images.ImageFile;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter @Setter @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED) @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class Posts {
+@NoArgsConstructor @AllArgsConstructor
+public class Post {
 
     @Id @GeneratedValue
     private Long post_num;
@@ -19,16 +22,22 @@ public class Posts {
     @Length(min = 2, max = 20)
     private String title;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
-    private String image;
+    @ElementCollection
+    private List<ImageFile> imageFiles = new ArrayList<ImageFile>();
 
-    @OneToMany(mappedBy = "posts")
-    private Set<PostDetails> postDetails = new HashSet<>();
+    @OneToMany(mappedBy = "post")
+    private Set<Post_Tag> post_tags = new HashSet<>();
 
     private String content;
 
     private String author;
 
     private LocalDateTime writeTime;
+
+    private String category;
+
+    public void completePostSave(){
+        this.writeTime = LocalDateTime.now();
+    }
 
 }

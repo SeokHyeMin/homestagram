@@ -11,7 +11,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(of = "tag_num")
-public class Tags {
+public class Tag{
 
     @Id @GeneratedValue
     private Long tag_num;
@@ -19,6 +19,6 @@ public class Tags {
     @Column(unique = true, nullable = false)
     private String tagTitle;
 
-    @OneToMany(mappedBy = "tags")
-    private Set<PostDetails> postDetailsSet = new HashSet<>();
+    @OneToMany(mappedBy = "tag")
+    private Set<Post_Tag> post_tags = new HashSet<>();
 }

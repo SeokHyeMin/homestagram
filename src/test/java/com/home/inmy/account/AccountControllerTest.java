@@ -56,7 +56,7 @@ class AccountControllerTest {
                .param("phoneNumber","01012345678"))
                .andExpect(status().is3xxRedirection())
                .andExpect(view().name("redirect:/"))
-               .andExpect(authenticated().withUsername("nick"));
+               .andExpect(authenticated().withUsername("test1"));
 
         Assertions.assertTrue(accountRepository.existsByEmail("test@email.com"));
         Account account = accountRepository.findByLoginId("test1");

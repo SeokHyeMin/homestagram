@@ -10,3 +10,6 @@ out/
 settings.gradle
 gradlew
 gradlew.bat
+
+
+src/main/resources/node_modules
