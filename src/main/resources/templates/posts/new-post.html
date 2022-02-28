@@ -8,51 +8,117 @@
 
     <div class="container">
         <div class="py-5 text-center">
-            <h2>게시글 작성</h2>
+            <h2>글 작성</h2>
         </div>
         <div class="row justify-content-center">
-            <form class="needs-validation col-sm-10" th:action="@{/new-post}" th:object="${postDto}" method="post" novalidate>
-
-                <div class="form-group">
-                    <label for="title">제목</label>
-                    <input id="title" type="text" th:field="*{title}" class="form-control"
-                           placeholder="제목" aria-describedby="titleHelp" required minlength="2" maxlength="20">
-                    <small id="titleHelp" class="form-text text-muted">
-                        제목을 입력해주세요.
-                    </small>
-                    <small class="invalid-feedback">제목을 입력하세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
+            <form class="needs-validation col-sm-10" th:action="@{/new-post}" th:object="${postDto}"
+                  method="post" enctype="multipart/form-data" novalidate>
+                <div class="row justify-content-center mx-auto col-9">
+                    <div class="col">
+                        <input id="title" type="text" th:field="*{title}" class="form-control" style="width: 300px"
+                               placeholder="제목" aria-describedby="titleHelp" required minlength="2" maxlength="20">
+                        <small id="titleHelp" class="form-text text-muted">
+                            제목을 입력해주세요.
+                        </small>
+                        <small class="invalid-feedback">제목을 입력하세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
+                    </div>
+                    <div class="col">
+                        <select th:field="*{category}" class="form-select">
+                            <option value="">공간(필수)</option>
+                            <option th:each="category : ${categories}" th:value="${category.categoryName}"
+                                    th:text="${category.categoryName}">원룸</option>
+                        </select>
+                    </div>
+                    </div>
+            <br>
+            <div class="row justify-content-center mx-auto col-9">
+                <div class="col">
+                    <div class="card text-center">
+                        <div class="card-header" >
+                            사진 업로드
+                        </div>
+                        <div id="current-image" class="mt-3">
+                            <img class="rounded" width="125" height="125" alt="name" src="/images/basic_photo.png" th:value="*{imageFiles}"/>
+                        </div>
+                        <div id="new-image" class="mt-3"></div>
+                        <div class="card-body">
+                            <input type="file" class="form-control" multiple="multiple" name="imageFiles">
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="tag">태그</label>
-                    <input id="tag" type="text" name="tag" th:field="*{tag}"
-                           placeholder="태그를 입력해주세요." class="form-control" aria-describedby="tagHelp"/>
-                    <small class="form-text text-muted">태그를 입력하세요.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="content">상세 소개</label>
-                    <textarea id="content" th:field="*{content}" class="form-control"
+                <div class="col">
+                    <label for="content">내용 입력</label>
+                    <textarea id="content" th:field="*{content}" class="form-control" style="height: 200px"
                               placeholder="자세한 내용을 입력해주세요." aria-describedby="contentHelp" required></textarea>
-                    <small id="contentHelp" class="form-text text-muted">
-                        내용을 입력해주세요.
-                    </small>
-                    <small class="invalid-feedback">게시글 내용을 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
+                    <br>
+                    <input id="tag" type="text" name="tag" th:field="*{tag}"
+                           placeholder="키워드를 입력하세요 :)" class="form-control" aria-describedby="tagHelp"/>
+                    <small class="form-text text-muted">키워드를 입력하세요.</small>
                 </div>
-                <br><br><br><br><br><br><br><br><br>
+            </div>
                 <div class="form-group">
                     <button class="btn home white-font" type="submit" aria-describedby="submitHelp">등록</button>
                 </div>
-
+                <div class="form-group">
+                    <input id="postImage" type="hidden" th:field="*{imageFiles}" class="form-control" />
+                </div>
             </form>
         </div>
 
         <div class="fragments.html :: footer"></div>
     </div>
-
-    <script th:replace="fragments.html :: editor-script"></script>
     <script th:replace="fragments.html :: form-validation"></script>
+    <link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+    <script src="/node_modules/cropper/dist/cropper.min.js"></script>
+    <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
+    <script type="application/javascript">
+        $(function() {
+            cropper = '';
+            let $confirmBtn = $("#confirm-button");
+            let $resetBtn = $("#reset-button");
+            let $cutBtn = $("#cut-button");
+            let $newPostImage = $("#new-image");
+            let $currentImage = $("#current-image");
+            let $resultImage = $("#cropped-new-mage");
+            let $postImage = $("#postImage");
+
+            $newPostImage.hide();
+
+            $("#imageFiles").change(function(e) {
+                if (e.target.files.length === 1) {
+                    const reader = new FileReader();
+                    reader.onload = e => { //파일을 가져왔다면
+                        if (e.target.result) {
+                            if (!e.target.result.startsWith("data:image")) {
+                                alert("이미지 파일을 선택하세요.");
+                                return;
+                            }
+
+                            let img = document.createElement("img");
+                            img.id = 'new-profile';
+                            img.src = e.target.result;
+                            img.setAttribute('width', '100%');
+
+                            $newPostImage.html(img);
+                            $newPostImage.show();
+                            $currentImage.hide();
+
+                            let $newImage = $(img);
+                            $newImage.cropper({aspectRatio: 1});
+                            cropper = $newImage.data('cropper');
+
+                            $cutBtn.show();
+                            $confirmBtn.hide();
+                            $resetBtn.show();
+                        }
+                    };
+
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments.html :: head"></head>
+
+<body class="bg-white">
+
+    <div th:replace="fragments.html :: main-nav"></div>
+
+        <div class="container mt-5">
+            <div class="row justify-content-md-center">
+                <div class="col-sm-8">
+                    Column
+                    <div class="title">
+                        <span th:text="${post.title}">제목</span>
+                    </div>
+                    <div class="titleImage">
+                        <div>
+                            <img class="rounded" th:each="imageFile : ${post.imageFiles}"
+                                 th:src="|/images/${imageFile.getStoreFilename()}|" width="300" height="300"/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-sm">
+                            <button type="button" class="btn btn-light" style="width: 100px">♡</button>
+                        </div>
+                        <div class="col-sm">
+                            <button type="button" class="btn btn-light" style="width: 100px">북마크</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm">
+                            <svg th:if="${#strings.isEmpty(profile?.image)}" class="post-img"
+                                 th:data-jdenticon-value="${loginId}" width="50" height="50"></svg>
+                            <img th:if="${!#strings.isEmpty(profile?.image)}" class="post-img"
+                                 th:src="${profile?.image}"
+                                 width="50" height="50" alt="name" th:alt="${loginId}"/>
+                        </div>
+                        <div class="col-sm">
+                            <span th:text="${nickname}">닉네임</span>
+                        </div>
+                          <div class="col-sm">
+                            <button type="button" class="btn home white-font" style="width: 80px">팔로우</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div th:replace="fragments.html :: footer"></div>
+    </div>
+
+</body>
+</html>
