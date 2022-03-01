@@ -4,10 +4,12 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "account_num") @ToString
+@Getter @Setter
 @Builder @AllArgsConstructor(access = AccessLevel.PROTECTED) @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
 
@@ -41,6 +43,9 @@ public class Account {
     private LocalDateTime e_tokenGeneratedAt;
 
     private LocalDateTime joinedAt;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
+    private List<Post> posts = new ArrayList<Post>();
 
     //프로필
     @Embedded

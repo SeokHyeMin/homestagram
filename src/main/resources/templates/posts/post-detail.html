@@ -9,52 +9,62 @@
 
         <div class="container mt-5">
             <div class="row justify-content-md-center">
-                <div class="col-sm-8">
-                    Column
-                    <div class="title">
-                        <span th:text="${post.title}">제목</span>
-                    </div>
-                    <div class="titleImage">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-7"  style="margin-top: 5%">
+                    <div class="post-category" style="color: gray">
                         <div>
-                            <img class="rounded" th:each="imageFile : ${post.imageFiles}"
-                                 th:src="|/images/${imageFile.getStoreFilename()}|" width="300" height="300"/>
+                            <span th:text="${post?.category}">카테고리</span>
                         </div>
-                    </div>
-
-                </div>
-                <div class="col-sm-2">
-                    <div class="row">
-                        <div class="col-sm">
-                            <button type="button" class="btn btn-light" style="width: 100px">♡</button>
-                        </div>
-                        <div class="col-sm">
-                            <button type="button" class="btn btn-light" style="width: 100px">북마크</button>
+                        <div style="text-align: right; margin-right: 10%" >
+                            <span th:text="${#temporals.format(post.writeTime,'yyyy-MM-dd HH:mm')}">작성시간</span>
                         </div>
                     </div>
                     <br>
-                    <div class="row">
-                        <div class="col-sm">
-                            <svg th:if="${#strings.isEmpty(profile?.image)}" class="post-img"
-                                 th:data-jdenticon-value="${loginId}" width="50" height="50"></svg>
-                            <img th:if="${!#strings.isEmpty(profile?.image)}" class="post-img"
-                                 th:src="${profile?.image}"
-                                 width="50" height="50" alt="name" th:alt="${loginId}"/>
-                        </div>
-                        <div class="col-sm">
-                            <span th:text="${nickname}">닉네임</span>
-                        </div>
-                          <div class="col-sm">
-                            <button type="button" class="btn home white-font" style="width: 80px">팔로우</button>
-                        </div>
-
+                    <div class="titleImage" style="width:50px">
+                          <img class="rounded" th:each="imageFile : ${post.imageFiles}"
+                                 th:src="|/images/${imageFile.getStoreFilename()}|" width="800" height="800" style="margin-bottom: 10%"/>
                     </div>
-                </div>
+                    <div>
+                        <span th:text="${post.content}">내용</span>
+                    </div>
 
+                </div>
+                <div class="col-sm-4" style="border-left: 1px solid lightgray; margin-top: 5%">
+                    <div class="col-8" style="margin-left: 7%">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-light" style="width: 130px; height: 50px">♡</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-light" style="width: 130px; height: 50px">북마크</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row post-profile">
+                            <div class="col-sm-2" style="margin-right: 1%">
+                                <svg th:if="${#strings.isEmpty(writer?.profile?.image)}" class="post-img"
+                                     th:data-jdenticon-value="${post.author}" width="50" height="50"></svg>
+                                <img th:if="${!#strings.isEmpty(writer?.profile?.image)}" class="post-img"
+                                     th:src="${writer?.profile?.image}"
+                                     width="50" height="50" alt="name" th:alt="${post.author}"/>
+                            </div>
+                            <div class="col-sm" style="text-align: left">
+                                <div>
+                                    <span th:text="${writer.nickname}">닉네임</span>
+                                </div>
+                                <div>
+                                    <span th:text="${writer?.profile.bio}" style="font-size: small; color: gray">한줄소개</span>
+                                </div>
+                            </div>
+                              <div class="col-sm">
+                                <button type="button" class="btn home white-font" style="width: 80px;">팔로우</button>
+                            </div>
+                        </div>
+                </div>
+                </div>
             </div>
         </div>
 
         <div th:replace="fragments.html :: footer"></div>
-    </div>
-
 </body>
 </html>

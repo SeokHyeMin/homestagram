@@ -19,6 +19,9 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -36,6 +39,7 @@ public class PostController {
     private final ImageFileService imageFileService;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
+    private final EntityManager em;
 
     @ModelAttribute("categories")
     public List<Category> categories() {
@@ -61,14 +65,12 @@ public class PostController {
     @GetMapping("/post/{post_num}")
     public String postView(@PathVariable Long post_num, Model model, @CurrentUser Account account) {
 
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        String writerLoginId = post.getAuthor();
-        Account writer = accountRepository.findByLoginId(writerLoginId);
+
+        String jpql = "select p from Post p join fetch p.account where p.post_num = " + post_num;
+        Post post = em.createQuery(jpql, Post.class).getSingleResult();
+
         model.addAttribute(post);
-        model.addAttribute(writer);
-        model.addAttribute("nickname",writer.getNickname());
-        model.addAttribute("profile",writer.getProfile());
-        model.addAttribute("loginId",writer.getLoginId());
+        model.addAttribute("writer",post.getAccount());
 
         return "posts/post-detail";
     }
@@ -86,6 +88,7 @@ public class PostController {
 
         Post newPost = postService.newPostSave(modelMapper.map(postDto, Post.class), account, imageFiles);
 
+
         redirectAttributes.addAttribute("post_num", newPost.getPost_num());
 
 
@@ -98,4 +101,15 @@ public class PostController {
         return new UrlResource("file:" + imageFileService.getFullPath(filename));
     }
 
+    @Transactional(readOnly = true)
+    @GetMapping("/postList")
+    public String postList(Model model){
+
+        String jpql = "select p from Post p join fetch p.account";
+        List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
+
+        model.addAttribute("postList",postList);
+
+        return "posts/post-list";
+    }
 }

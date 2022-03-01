@@ -36,8 +36,17 @@ public class Post {
 
     private String category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_num")
+    private Account account;
+
     public void completePostSave(){
         this.writeTime = LocalDateTime.now();
+    }
+
+    public void changeAccount(Account account){
+        this.account = account;
+        account.getPosts().add(this);
     }
 
 }

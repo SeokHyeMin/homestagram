@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +18,15 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final EntityManager em;
 
     public Post newPostSave(Post post, Account account, List<ImageFile> imageFiles){
 
         Post newPost = postRepository.save(post);
         newPost.setAuthor(account.getLoginId());
         newPost.setImageFiles(new ArrayList<>(imageFiles));
+        newPost.setAccount(account);
+        account.getPosts().add(post);
         newPost.completePostSave();
         return newPost;
     }

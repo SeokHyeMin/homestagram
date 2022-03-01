@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-white">
+
+<div th:replace="fragments.html :: main-nav"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            1 of 2
+        </div>
+        <div class="col">
+            2 of 2
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="col-md-4" th:each="post: ${postList}" style="margin-left: 8%; margin-top: 5%">
+            <div class="card mb-4" style="width: 260px">
+            <div class="row">
+                <div class="row postList-profile card-text">
+                    <div class="col-sm-2">
+                        <svg th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
+                             th:data-jdenticon-value="${post.author}" width="30" height="30"></svg>
+                        <img th:if="${!#strings.isEmpty(post.account.profile?.image)}" class="post-img"
+                             th:src="${post.account.profile?.image}"
+                             width="30" height="30" alt="name" th:alt="${post.author}"/>
+                    </div>
+                    <div class="col" style="text-align: left">
+                            <div class="col">
+                                <span th:text="${post.account.nickname}">닉네임</span>
+                                <span style="color: #35c5f0 ">팔로우</span>
+                            </div>
+                            <div>
+                                <span th:text="${post.account.profile.bio}" style="font-size: small; color: gray">한줄소개</span>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="post-detail">
+                    <div>
+                        <img class="rounded card-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="270" height="270"/>
+                    </div>
+                    <div class="row card-text" style="text-align: center">
+                        <div class="col-sm-1">♡</div>
+                        <div class="col-sm-2">북</div>
+                        <div class="col-sm-1">댓</div>
+                    </div>
+                    <div>
+                        <span class="card-text" th:text="${post.title}">글 제목</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
