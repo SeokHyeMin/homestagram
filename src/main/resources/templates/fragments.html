@@ -6,8 +6,7 @@
 <head th:fragment="head">
     <meta charset="UTF-8">
     <title>Homestagram</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Black+Han+Sans&family=Cute+Font&family=Do+Hyeon&family=Dokdo&family=East+Sea+Dokdo&family=Gaegu&family=Gamja+Flower&family=Gothic+A1&family=Gugi&family=Hi+Melody&family=Jua&family=Kirang+Haerang&family=Nanum+Brush+Script&family=Nanum+Gothic&family=Nanum+Gothic+Coding&family=Nanum+Myeongjo&family=Nanum+Pen+Script&family=Noto+Sans+KR&family=Noto+Serif+KR&family=Poor+Story&family=Single+Day&family=Song+Myung&family=Stylish&family=Sunflower:wght@300&family=Yeon+Sung&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
@@ -58,7 +57,7 @@
            margin-left: auto;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Century Gothic", "Jeju Gothic",
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR","Century Gothic", "Jeju Gothic",
             "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
             "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
@@ -80,6 +79,13 @@
             border-radius: 70%;
             overflow: hidden;
         }
+        .postList-img{
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .postList-bio{
+            overflow: hidden;
+        }
         .profile-img{
             border-radius: 70%;
             overflow: hidden;
@@ -96,7 +102,7 @@
         textarea,
         .tooltip,
         .popover {
-            font-family: -apple-system, BlinkMacSystemFont, "Century Gothic", "Jeju Gothic",
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR","Century Gothic", "Jeju Gothic",
             "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
             "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
@@ -123,7 +129,7 @@
                 <a class="nav-link active" aria-current="page" href="/" th:href="@{/}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">커뮤니티</a>
+                <a class="nav-link" th:href="@{/postList}">커뮤니티</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Q&A</a>

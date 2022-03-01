@@ -26,7 +26,6 @@ public class PostService {
         newPost.setAuthor(account.getLoginId());
         newPost.setImageFiles(new ArrayList<>(imageFiles));
         newPost.setAccount(account);
-        account.getPosts().add(post);
         newPost.completePostSave();
         return newPost;
     }

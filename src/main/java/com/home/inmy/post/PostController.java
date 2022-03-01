@@ -71,6 +71,7 @@ public class PostController {
 
         model.addAttribute(post);
         model.addAttribute("writer",post.getAccount());
+        model.addAttribute(account);
 
         return "posts/post-detail";
     }
@@ -103,12 +104,13 @@ public class PostController {
 
     @Transactional(readOnly = true)
     @GetMapping("/postList")
-    public String postList(Model model){
+    public String postList(Model model, @CurrentUser Account account){
 
         String jpql = "select p from Post p join fetch p.account";
         List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
 
         model.addAttribute("postList",postList);
+        model.addAttribute(account);
 
         return "posts/post-list";
     }
