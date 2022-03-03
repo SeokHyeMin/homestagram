@@ -5,6 +5,7 @@ import com.home.inmy.account.CurrentUser;
 import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Post;
 import com.home.inmy.domain.ImageFile;
+import com.home.inmy.domain.Tag;
 import com.home.inmy.images.FileStore;
 import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.post.form.PostForm;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
@@ -26,6 +28,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +37,7 @@ public class PostController {
 
     private final PostServiceImpl postService;
     private final ModelMapper modelMapper;
-    private final FileStore imageFileService;
+    private final FileStore fileStore;
     private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
@@ -68,17 +71,11 @@ public class PostController {
 
         Post post = postRepository.findById(post_num).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
 
-        List<ImageFile> imageFiles = imageFileRepository.findByPost(post_num);
+        List<ImageFile> imageFiles = imageFileRepository.findByPost(post);
 
-        Account writer = post.getAccount();
-
-        Boolean isOwner = writer.getLoginId().equals(account.getLoginId()); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        log.info(String.valueOf(imageFiles.size()));
         model.addAttribute(post);
-        model.addAttribute(writer);
-        model.addAttribute(imageFiles);
         model.addAttribute(account);
-        model.addAttribute(isOwner);
+        model.addAttribute("isOwner",post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
 
 
         return "posts/post-detail";
@@ -94,7 +91,6 @@ public class PostController {
         }
 
         model.addAttribute(account);
-        //List<ImageFile> imageFiles = imageFileService.storeFiles(postDto.getImageFiles());
 
         PostDto postDto = postForm.createBoardPostDto(account);
 
@@ -102,22 +98,20 @@ public class PostController {
 
         redirectAttributes.addAttribute("post_num", newPost.getPost_num());
 
-        log.info("newPostSaveEnd");
-
         return "redirect:/post/{post_num}";
     }
 
     @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + imageFileService.getFullPath(filename));
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 
     @Transactional(readOnly = true)
     @GetMapping("/postList")
     public String postList(Model model, @CurrentUser Account account){
 
-        String jpql = "select p from Post p join fetch p.account join fetch p.imageFiles";
+        String jpql = "select distinct p from Post p join fetch p.account join fetch p.imageFiles";
         List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
 
         model.addAttribute(postList);
@@ -131,12 +125,38 @@ public class PostController {
 
         Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당하는 글이 없습니다."));
 
-        List<ImageFile> imageFiles = post.getImageFiles();
-        PostForm postDto = new PostForm();
-        //postDto.setImageFiles(post.getImageFiles());
+        PostForm postForm = PostForm.builder()
+                            .title(post.getTitle())
+                            .category(post.getCategory())
+                            .content(post.getContent())
+                            .build();
+
+        model.addAttribute(account);
+        model.addAttribute(postForm);
+        model.addAttribute(post_num);
+
+        return "posts/post-update";
+    }
+
+
+    @PostMapping("/post-update/{post_num}")
+    public String postUpdate(@PathVariable Long post_num, @CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,
+                             RedirectAttributes redirectAttributes) throws IOException {
+
+        if (errors.hasErrors()) {
+            log.info("post update error");
+            return "posts/new-post";
+        }
 
         model.addAttribute(account);
 
-        return "posts/post-update";
+        PostDto postDto = postForm.createBoardPostDto(account);
+        log.info("start");
+        Post newPost = postService.updatePost(postDto, post_num);
+
+        redirectAttributes.addAttribute("post_num", newPost.getPost_num());
+        log.info("end");
+        log.info(newPost.getTitle());
+        return "redirect:/post/{post_num}";
     }
 }

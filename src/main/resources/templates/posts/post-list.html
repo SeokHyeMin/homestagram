@@ -32,11 +32,13 @@
                     <div class="row">
                         <div class="row postList-profile card-text" style="padding-bottom: 16px;" >
                             <div class="col-sm-2" style="margin: auto;">
+                                <a th:href="@{'/profile/'+${post.account.loginId}}">
                                 <svg th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
-                                     th:data-jdenticon-value="${post.author}" width="36" height="36"></svg>
+                                     th:data-jdenticon-value="${post.writer}" width="36" height="36"></svg>
                                 <img th:if="${!#strings.isEmpty(post.account.profile?.image)}" class="post-img"
                                      th:src="${post.account.profile?.image}"
-                                     width="36" height="36" alt="name" th:alt="${post.author}"/>
+                                     width="36" height="36" alt="name" th:alt="${post.writer}"/>
+                                </a>
                             </div>
                             <div class="col card-title" style="text-align: left; margin: auto; height: 38px; font-size: 15px">
                                     <div class="col">
@@ -44,7 +46,7 @@
                                         <span style="color: #35c5f0 ">팔로우</span>
                                     </div>
                                     <div>
-                                        <span class="postList-bio" th:text="${post.account.profile.bio}" style="font-size: small; color: gray; height: 16px">한줄소개</span>
+                                        <span class="postList-bio" th:text="${post.account.profile?.bio}" style="font-size: small; color: gray; height: 16px">한줄소개</span>
                                     </div>
                             </div>
                             </div>

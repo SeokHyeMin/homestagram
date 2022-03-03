@@ -61,4 +61,7 @@ public class Account {
         this.joinedAt = LocalDateTime.now();
     }
 
+    public Profile getProfile(){
+        return this.profile == null ? new Profile() : this.profile;
+    }
 }

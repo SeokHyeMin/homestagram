@@ -11,7 +11,7 @@
             <h2>글 작성</h2>
         </div>
         <div class="row justify-content-center">
-            <form class="needs-validation col-sm-10" th:action="@{/update-post}" th:object="${postDto}"
+            <form class="needs-validation col-sm-10" th:action="@{'/post-update/' + ${post_num}}" th:object="${postForm}"
                   method="post" enctype="multipart/form-data" novalidate>
                 <div class="row justify-content-center mx-auto col-9">
                     <div class="col">

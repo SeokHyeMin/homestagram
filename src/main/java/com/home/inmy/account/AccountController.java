@@ -70,10 +70,10 @@ public class AccountController {
         }
 
 
-            String jpql = "select p from Post p join fetch p.imageFiles where p.writer = '" + loginId + "'";
+            String jpql = "select distinct p from Post p join fetch p.imageFiles where p.writer = '" + loginId + "'";
             List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
 
-            model.addAttribute("isOwner", accountByLoginId.equals(account)); //현재 로그인한 계정과 프로필 주인이 같으면 true
+            model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
             model.addAttribute(accountByLoginId);
             model.addAttribute(postList);
             model.addAttribute("count", postList.size());
