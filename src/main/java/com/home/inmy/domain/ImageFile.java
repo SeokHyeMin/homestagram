@@ -21,9 +21,11 @@ public class ImageFile { //업로드한 파일정보를 보관.
     @JoinColumn(name = "post_num")
     private Post post;
 
-    public ImageFile(String origFilename, String storeFilename){
+    public ImageFile(String origFilename, String storeFilename, Post post){
         this.origFilename = origFilename;
         this.storeFilename = storeFilename;
+        this.post = post;
     }
+
 
 }

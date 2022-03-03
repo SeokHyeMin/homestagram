@@ -21,7 +21,7 @@
                     </div>
                     <br>
                     <div class="titleImage" style="width:50px">
-                          <img class="rounded" th:each="imageFile : ${post.imageFiles}"
+                          <img class="rounded" th:each="imageFile : ${imageFiles}"
                                  th:src="|/images/${imageFile.getStoreFilename()}|" width="800" height="800" style="margin-bottom: 10%"/>
                     </div>
                     <div>

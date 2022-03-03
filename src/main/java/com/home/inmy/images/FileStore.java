@@ -2,6 +2,7 @@ package com.home.inmy.images;
 
 
 import com.home.inmy.domain.ImageFile;
+import com.home.inmy.domain.Post;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,19 +24,19 @@ public class FileStore {
     }
 
 
-    public List<ImageFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException{
+    public List<ImageFile> storeFiles(List<MultipartFile> multipartFiles, Post post) throws IOException{
 
         List<ImageFile> storeFilesResult = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if(!multipartFile.isEmpty()){
-                storeFilesResult.add(storeFile(multipartFile));
+                storeFilesResult.add(storeFile(multipartFile, post));
             }
         }
 
         return storeFilesResult;
     }
 
-    private ImageFile storeFile(MultipartFile multipartFile) throws IOException {
+    private ImageFile storeFile(MultipartFile multipartFile, Post post) throws IOException {
 
         if(multipartFile.isEmpty()){
             return null;
@@ -45,7 +46,7 @@ public class FileStore {
         String storeFilename = createStoreFileName(origFilename);
         multipartFile.transferTo(new File(getFullPath(storeFilename)));
 
-        return new ImageFile(origFilename, storeFilename);
+        return new ImageFile(origFilename, storeFilename, post);
     }
 
     //UUID 사용해서 서버 내부에서 관리하는 파일명을 생성(유일한 이름으로)

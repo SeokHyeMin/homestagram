@@ -6,6 +6,7 @@ import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Post;
 import com.home.inmy.domain.ImageFile;
 import com.home.inmy.images.FileStore;
+import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.post.form.PostForm;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class PostController {
     private final PostServiceImpl postService;
     private final ModelMapper modelMapper;
     private final FileStore imageFileService;
+    private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
     private final EntityManager em;
@@ -64,16 +66,20 @@ public class PostController {
     @GetMapping("/post/{post_num}")
     public String postView(@PathVariable Long post_num, Model model, @CurrentUser Account account) {
 
+        Post post = postRepository.findById(post_num).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
 
-        String jpql = "select p from Post p join fetch p.account and p.imageFile where p.post_num = " + post_num;
+        List<ImageFile> imageFiles = imageFileRepository.findByPost(post_num);
 
-        Post post = em.createQuery(jpql, Post.class).getSingleResult();
+        Account writer = post.getAccount();
 
+        Boolean isOwner = writer.getLoginId().equals(account.getLoginId()); //현재 로그인한 계정과 프로필 주인이 같으면 true
+        log.info(String.valueOf(imageFiles.size()));
         model.addAttribute(post);
-        model.addAttribute("writer",post.getAccount());
+        model.addAttribute(writer);
+        model.addAttribute(imageFiles);
         model.addAttribute(account);
-        model.addAttribute("isOwner", post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        log.info(String.valueOf(post.getAccount().equals(account)));
+        model.addAttribute(isOwner);
+
 
         return "posts/post-detail";
     }
