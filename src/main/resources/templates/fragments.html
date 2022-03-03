@@ -81,6 +81,9 @@
         }
         .postList-img{
             border-radius: 20px;
+        }
+        .profile-postList-img{
+            border-radius: 7px;
             overflow: hidden;
         }
         .postList-bio{
@@ -162,7 +165,7 @@
                              width="24" height="24" class="rounded border"/>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink" style="width: 100px">
-                        <a class="dropdown-item" th:href="@{'/profile'}">프로필</a>
+                        <a class="dropdown-item" th:href="@{'/profile/' + ${account.loginId}}">프로필</a>
                         <a class="dropdown-item" th:href="@{'/new-post'}" >새 글 작성</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>

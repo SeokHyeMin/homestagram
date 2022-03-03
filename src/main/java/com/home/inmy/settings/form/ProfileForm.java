@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class ProfileForm {
 
-    @Length(max = 35)
+    @Length(max = 18)
     private String bio;
 
     @Length(max = 50)

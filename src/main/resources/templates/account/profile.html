@@ -7,7 +7,7 @@
 <div class="container">
     <br>
     <div class="row justify-content-center">
-        <div class="col-3 mt-5" th:align="center" id="profile-box">
+        <div class="card col-3 mt-5" th:align="center" id="profile-box">
             <div class="mt-2">
                 <svg th:if="${#strings.isEmpty(account.profile?.image)}" class="profile-img"
                      th:data-jdenticon-value="${account.loginId}" width="125" height="125"></svg>
@@ -27,24 +27,31 @@
                 <a class="btn home follow" href="#" th:href="@{/settings/profile}" th:style="500px">팔로우</a>
             </div>
             <br>
-            <div>
-                <p th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</p>
+            <div class="card-text">
+                <small th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</small>
             </div>
-            <div class="mb-3">
+            <div class="card-text mb-3" style="text-align: center">
                 <p th:if="${!#strings.isEmpty(account.profile?.url)}">
                             <span style="font-size: 20px;">
                                 <i class="fa fa-link col-1"></i>
                             </span>
-                    <span th:text="${account.profile.url}" class="col-11"></span>
+                    <small th:text="${account.profile.url}" class="col-11"></small>
                 </p>
             </div>
         </div>
-        <div class="col-1">
-
-        </div>
-        <div class="col-6">
-            <div class="mt-5">
-                <p>사진</p>
+        <div class="col-8">
+            <div class="mt-5" style="margin-left: 10%;">
+                <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+                        <span>사진</span>
+                        <span th:text="${count}" style="color: #35c5f0">글 개수</span>
+                </div>
+                <div class="row" style="margin-right: 8%; padding-top: 15px">
+                    <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px;">
+                        <a th:href="@{'/post/'+${post.post_num}}">
+                            <img class="profile-postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="170" height="170"/>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

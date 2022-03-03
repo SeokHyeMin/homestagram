@@ -11,7 +11,7 @@
             <h2>글 작성</h2>
         </div>
         <div class="row justify-content-center">
-            <form class="needs-validation col-sm-10" th:action="@{/new-post}" th:object="${postForm}"
+            <form class="needs-validation col-sm-10" th:action="@{/update-post}" th:object="${postDto}"
                   method="post" enctype="multipart/form-data" novalidate>
                 <div class="row justify-content-center mx-auto col-9">
                     <div class="col">
@@ -59,7 +59,7 @@
                 </div>
             </div>
                 <div class="form-group">
-                    <button class="btn home white-font" type="submit" aria-describedby="submitHelp">등록</button>
+                    <button class="btn home white-font" type="submit" aria-describedby="submitHelp">수정</button>
                 </div>
                 <div class="form-group">
                     <input id="postImage" type="hidden" th:field="*{imageFiles}" class="form-control" />

@@ -50,8 +50,10 @@
                             </div>
                         </div>
                         <div class="post-detail">
-                            <div>
-                                <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="270" height="285" style="padding-bottom: 12px; border-radius: 20px;"/>
+                            <div style="padding-bottom: 15px;">
+                                <a th:href="@{'/post/'+${post.post_num}}">
+                                    <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="270" height="285" style="border-radius: 20px;"/>
+                                </a>
                             </div>
                             <div class="row card-text" style="text-align: center; padding-bottom: 12px">
                                 <div class="col">♡</div>

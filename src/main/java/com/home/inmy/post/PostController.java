@@ -4,8 +4,9 @@ import com.home.inmy.account.AccountRepository;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Post;
-import com.home.inmy.images.ImageFile;
-import com.home.inmy.images.ImageFileService;
+import com.home.inmy.domain.ImageFile;
+import com.home.inmy.images.FileStore;
+import com.home.inmy.post.form.PostForm;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,23 +21,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
 
-    private final PostService postService;
+    private final PostServiceImpl postService;
     private final ModelMapper modelMapper;
-    private final Post_TagService postTagService;
-    private final ImageFileService imageFileService;
+    private final FileStore imageFileService;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
     private final EntityManager em;
@@ -55,8 +52,10 @@ public class PostController {
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
 
-        model.addAttribute(new PostDto());
+        model.addAttribute(new PostForm());
         model.addAttribute(account);
+        log.info("new-post-view");
+        log.info(account.getLoginId());
 
         return "posts/new-post";
     }
@@ -66,18 +65,21 @@ public class PostController {
     public String postView(@PathVariable Long post_num, Model model, @CurrentUser Account account) {
 
 
-        String jpql = "select p from Post p join fetch p.account where p.post_num = " + post_num;
+        String jpql = "select p from Post p join fetch p.account and p.imageFile where p.post_num = " + post_num;
+
         Post post = em.createQuery(jpql, Post.class).getSingleResult();
 
         model.addAttribute(post);
         model.addAttribute("writer",post.getAccount());
         model.addAttribute(account);
+        model.addAttribute("isOwner", post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
+        log.info(String.valueOf(post.getAccount().equals(account)));
 
         return "posts/post-detail";
     }
 
     @PostMapping("/new-post")
-    public String newPostSave(@CurrentUser Account account, @Valid PostDto postDto, Errors errors, Model model,
+    public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,
                               RedirectAttributes redirectAttributes) throws IOException {
 
         if (errors.hasErrors()) {
@@ -85,13 +87,16 @@ public class PostController {
             return "posts/new-post";
         }
 
-        List<ImageFile> imageFiles = imageFileService.storeFiles(postDto.getImageFiles());
+        model.addAttribute(account);
+        //List<ImageFile> imageFiles = imageFileService.storeFiles(postDto.getImageFiles());
 
-        Post newPost = postService.newPostSave(modelMapper.map(postDto, Post.class), account, imageFiles);
+        PostDto postDto = postForm.createBoardPostDto(account);
 
+        Post newPost = postService.newPostSave(postDto);
 
         redirectAttributes.addAttribute("post_num", newPost.getPost_num());
 
+        log.info("newPostSaveEnd");
 
         return "redirect:/post/{post_num}";
     }
@@ -106,12 +111,26 @@ public class PostController {
     @GetMapping("/postList")
     public String postList(Model model, @CurrentUser Account account){
 
-        String jpql = "select p from Post p join fetch p.account";
+        String jpql = "select p from Post p join fetch p.account join fetch p.imageFiles";
         List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
 
-        model.addAttribute("postList",postList);
+        model.addAttribute(postList);
         model.addAttribute(account);
 
         return "posts/post-list";
+    }
+
+    @GetMapping("/post-update/{post_num}")
+    public String postUpdateView(@PathVariable Long post_num, @CurrentUser Account account, Model model){
+
+        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당하는 글이 없습니다."));
+
+        List<ImageFile> imageFiles = post.getImageFiles();
+        PostForm postDto = new PostForm();
+        //postDto.setImageFiles(post.getImageFiles());
+
+        model.addAttribute(account);
+
+        return "posts/post-update";
     }
 }

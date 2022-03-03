@@ -29,38 +29,46 @@
                     </div>
 
                 </div>
-                <div class="col-sm-4" style="border-left: 1px solid lightgray; margin-top: 5%">
-                    <div class="col-8" style="margin-left: 7%">
+                <div class="col-sm-4" style="border-left: 1px solid lightgray; margin-top: 5%; width: 365px">
+                    <div style="margin-left: 7%">
                         <div class="row">
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-light" style="width: 130px; height: 50px">♡</button>
+                            <div class="col-sm-5">
+                                <button type="button" class="btn btn-light" style="width: 120px; height: 50px">♡</button>
                             </div>
-                            <div class="col-sm-6">
-                                <button type="button" class="btn btn-light" style="width: 130px; height: 50px">북마크</button>
+                            <div class="col-sm-5">
+                                <button type="button" class="btn btn-light" style="width: 120px; height: 50px">북마크</button>
+                            </div>
+                            <div class="dropdown col-sm-2" style="text-align: center">
+                                <a role="button" class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="width: 30px; height: 30px; border-radius: 70%; background-color: gray"></a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="width: 50px">
+                                        <li><a class="dropdown-item" th:href="@{'/'}" >신고하기</a></li>
+                                        <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-update/' + ${post_num}}">수정하기</a></li>
+                                    </ul>
                             </div>
                         </div>
                         <br>
-                        <div class="row post-profile">
+                        <div class="row post-profile" style="margin-top: 3%">
                             <div class="col-sm-2" style="margin-right: 1%">
                                 <svg th:if="${#strings.isEmpty(writer?.profile?.image)}" class="post-img"
-                                     th:data-jdenticon-value="${post.author}" width="50" height="50"></svg>
+                                     th:data-jdenticon-value="${post.account.loginId}" width="50" height="50"></svg>
                                 <img th:if="${!#strings.isEmpty(writer?.profile?.image)}" class="post-img"
                                      th:src="${writer?.profile?.image}"
-                                     width="50" height="50" alt="name" th:alt="${post.author}"/>
+                                     width="50" height="50" alt="name" th:alt="${post.account.loginId}"/>
                             </div>
                             <div class="col-sm" style="text-align: left">
                                 <div>
-                                    <span th:text="${writer.nickname}">닉네임</span>
+                                    <span th:text="${writer.nickname}" style="font-weight: bold; font-size: 15px">닉네임</span>
                                 </div>
                                 <div>
-                                    <span th:text="${writer?.profile.bio}" style="font-size: small; color: gray">한줄소개</span>
+                                    <span th:text="${writer?.profile.bio}" style="font-size: 11px; color: gray">한줄소개</span>
                                 </div>
                             </div>
-                              <div class="col-sm">
+                              <div class="col-sm-3">
                                 <button type="button" class="btn home white-font" style="width: 80px;">팔로우</button>
                             </div>
                         </div>
-                </div>
+                    </div>
                 </div>
             </div>
         </div>

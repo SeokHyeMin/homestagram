@@ -44,8 +44,8 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST)
-    private List<Post> posts = new ArrayList<Post>();
+    @OneToMany(mappedBy = "account")
+    private List<Post> posts = new ArrayList<>();
 
     //프로필
     @Embedded

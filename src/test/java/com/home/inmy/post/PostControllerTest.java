@@ -1,11 +1,6 @@
 package com.home.inmy.post;
 
 import com.home.inmy.WithAccount;
-import com.home.inmy.domain.Post;
-import com.home.inmy.web.dto.PostDto;
-import lombok.RequiredArgsConstructor;
-import lombok.With;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

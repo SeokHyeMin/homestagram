@@ -1,6 +1,5 @@
 package com.home.inmy.domain;
 
-import com.home.inmy.images.ImageFile;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -22,23 +21,23 @@ public class Post {
     @Length(min = 2, max = 20)
     private String title;
 
-    @ElementCollection
-    private List<ImageFile> imageFiles = new ArrayList<ImageFile>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_num")
+    private Account account;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<ImageFile> imageFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
-    private Set<Post_Tag> post_tags = new HashSet<>();
+    private Set<Post_Tag> tags = new HashSet<>();
 
     private String content;
-
-    private String author;
 
     private LocalDateTime writeTime;
 
     private String category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_num")
-    private Account account;
+    private String writer;
 
     public void completePostSave(){
         this.writeTime = LocalDateTime.now();
@@ -48,5 +47,4 @@ public class Post {
         this.account = account;
         account.getPosts().add(this);
     }
-
 }

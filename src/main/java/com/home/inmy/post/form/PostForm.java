@@ -1,7 +1,9 @@
-package com.home.inmy.web.dto;
+package com.home.inmy.post.form;
 
 import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.Tag;
+import com.home.inmy.web.dto.PostDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,22 +11,24 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Data @Builder
 @NoArgsConstructor
-public class PostDto {
+@AllArgsConstructor
+public class PostForm {
 
     @NotBlank
     @Length(min = 2, max = 20)
     private String title;
 
-    @NotBlank
-    private List<MultipartFile> imageFiles = new ArrayList<>();
+    @NotNull
+    private List<MultipartFile> imageFiles;
 
     @NotBlank
     private String content;
@@ -34,31 +38,33 @@ public class PostDto {
     @NotBlank
     private String category;
 
-    private Account account;
-
     private String writer;
 
+
+
     @Builder
-    public PostDto(String title, String content, String category, String writer, Account account, List<MultipartFile> imageFiles, Set<String> tags) {
+    public PostForm(String title, String content, String writer, String category, List<MultipartFile> imageFiles, Set<String> tags) {
         this.title = title;
         this.content = content;
-        this.account = account;
         this.category = category;
-        this.imageFiles = imageFiles;
-        this.tags = tags;
         this.writer = writer;
+        this.imageFiles = (imageFiles != null) ? imageFiles : new ArrayList<>();
+        this.tags = (tags != null) ? tags : new HashSet<>();
     }
 
-    public Post createPost() {
-        return Post.builder()
+
+    public PostDto createBoardPostDto(Account account) {
+
+        return PostDto.builder()
                 .title(title)
                 .account(account)
-                .imageFiles(new ArrayList<>())
-                .tags(new HashSet<>())
-                .writeTime(LocalDateTime.now())
-                .content(content)
                 .category(category)
-                .writer(writer)
+                .content(content)
+                .imageFiles(imageFiles)
+                .tags(tags)
+                .writer(account.getLoginId())
                 .build();
     }
+
+
 }
