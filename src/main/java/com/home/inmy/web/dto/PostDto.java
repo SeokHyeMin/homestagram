@@ -1,7 +1,7 @@
 package com.home.inmy.web.dto;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
+import com.home.inmy.account.Account;
+import com.home.inmy.post.Post;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,7 +54,7 @@ public class PostDto {
                 .title(title)
                 .account(account)
                 .imageFiles(new ArrayList<>())
-                .tags(new HashSet<>())
+                .postTags(new HashSet<>())
                 .writeTime(LocalDateTime.now())
                 .content(content)
                 .category(category)

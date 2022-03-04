@@ -1,26 +1,32 @@
 package com.home.inmy.post;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.home.inmy.account.AccountRepository;
 import com.home.inmy.account.CurrentUser;
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
-import com.home.inmy.domain.ImageFile;
-import com.home.inmy.domain.Tag;
+import com.home.inmy.account.Account;
+import com.home.inmy.images.ImageFile;
+import com.home.inmy.postTag.PostTag;
+import com.home.inmy.postTag.PostTagService;
+import com.home.inmy.postTag.PostTagServiceImpl;
+import com.home.inmy.tag.Tag;
 import com.home.inmy.images.FileStore;
 import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.post.form.PostForm;
+import com.home.inmy.tag.TagForm;
+import com.home.inmy.tag.TagRepository;
+import com.home.inmy.tag.TagService;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
@@ -28,19 +34,23 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
 
-    private final PostServiceImpl postService;
-    private final ModelMapper modelMapper;
-    private final FileStore fileStore;
     private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
+    private final TagRepository tagRepository;
+
+    private final FileStore fileStore;
+    private final PostServiceImpl postService;
+    private final TagService tagService;
+    private final PostTagServiceImpl postTagService;
+
+    private final ModelMapper modelMapper;
     private final EntityManager em;
 
     @ModelAttribute("categories")
@@ -59,8 +69,6 @@ public class PostController {
 
         model.addAttribute(new PostForm());
         model.addAttribute(account);
-        log.info("new-post-view");
-        log.info(account.getLoginId());
 
         return "posts/new-post";
     }
@@ -81,8 +89,29 @@ public class PostController {
         return "posts/post-detail";
     }
 
+   /* @GetMapping("/tags")
+    public String updateTags(@CurrentUser Account account, Post post, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+        Set<Tag> tags = postTagService.getTags(post);
+        model.addAttribute("tags",tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+
+        List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(allTags));
+
+        return SETTINGS + TAGS;
+    }*/
+
+    @PostMapping("/tags/add")
+    @ResponseBody
+    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+
+        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
+
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/new-post")
-    public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,
+    public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, String tags, Errors errors, Model model,
                               RedirectAttributes redirectAttributes) throws IOException {
 
         if (errors.hasErrors()) {
@@ -91,10 +120,12 @@ public class PostController {
         }
 
         model.addAttribute(account);
-
         PostDto postDto = postForm.createBoardPostDto(account);
-
         Post newPost = postService.newPostSave(postDto);
+        //postTagService.PostTagSave(newPost);
+        //postTagService.PostTagSave(newPost);
+        log.info("-----tagList?----");
+        log.info(tags);
 
         redirectAttributes.addAttribute("post_num", newPost.getPost_num());
 

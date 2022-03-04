@@ -1,5 +1,8 @@
-package com.home.inmy.domain;
+package com.home.inmy.post;
 
+import com.home.inmy.account.Account;
+import com.home.inmy.images.ImageFile;
+import com.home.inmy.postTag.PostTag;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -29,7 +32,7 @@ public class Post {
     private List<ImageFile> imageFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
-    private Set<Post_Tag> tags = new HashSet<>();
+    private Set<PostTag> postTags = new HashSet<>();
 
     private String content;
 

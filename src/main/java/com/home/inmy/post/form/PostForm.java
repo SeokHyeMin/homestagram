@@ -1,7 +1,6 @@
 package com.home.inmy.post.form;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Tag;
+import com.home.inmy.account.Account;
 import com.home.inmy.web.dto.PostDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

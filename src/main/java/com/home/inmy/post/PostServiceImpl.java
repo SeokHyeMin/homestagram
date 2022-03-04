@@ -1,10 +1,7 @@
 package com.home.inmy.post;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
-import com.home.inmy.domain.ImageFile;
+import com.home.inmy.images.ImageFile;
 import com.home.inmy.images.ImageFileService;
-import com.home.inmy.post.form.PostForm;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

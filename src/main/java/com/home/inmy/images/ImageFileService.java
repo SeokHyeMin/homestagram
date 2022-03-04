@@ -1,7 +1,6 @@
 package com.home.inmy.images;
 
-import com.home.inmy.domain.ImageFile;
-import com.home.inmy.domain.Post;
+import com.home.inmy.post.Post;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

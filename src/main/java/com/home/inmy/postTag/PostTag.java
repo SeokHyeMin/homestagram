@@ -1,5 +1,7 @@
-package com.home.inmy.domain;
+package com.home.inmy.postTag;
 
+import com.home.inmy.post.Post;
+import com.home.inmy.tag.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,10 +11,10 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class Post_Tag {
+public class PostTag {
 
     @Id @GeneratedValue
-    private Long postDetails_num;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "post_num")

@@ -1,5 +1,6 @@
-package com.home.inmy.domain;
+package com.home.inmy.tag;
 
+import com.home.inmy.postTag.PostTag;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,7 +11,6 @@ import java.util.Set;
 @Getter @Setter
 @Builder
 @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(of = "tag_num")
 public class Tag{
 
     @Id @GeneratedValue
@@ -20,5 +20,5 @@ public class Tag{
     private String tagTitle;
 
     @OneToMany(mappedBy = "tag")
-    private Set<Post_Tag> post_tags = new HashSet<>();
+    private Set<PostTag> postTags = new HashSet<>();
 }

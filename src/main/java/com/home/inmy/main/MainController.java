@@ -1,7 +1,7 @@
 package com.home.inmy.main;
 
 import com.home.inmy.account.CurrentUser;
-import com.home.inmy.domain.Account;
+import com.home.inmy.account.Account;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

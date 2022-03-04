@@ -1,8 +1,7 @@
 package com.home.inmy.images;
 
 
-import com.home.inmy.domain.ImageFile;
-import com.home.inmy.domain.Post;
+import com.home.inmy.post.Post;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

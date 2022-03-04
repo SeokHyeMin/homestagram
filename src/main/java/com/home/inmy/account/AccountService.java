@@ -3,8 +3,6 @@ package com.home.inmy.account;
 import com.home.inmy.settings.form.AccountForm;
 import com.home.inmy.settings.form.ProfileForm;
 import com.home.inmy.account.form.SignUpForm;
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

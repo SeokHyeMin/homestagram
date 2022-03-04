@@ -1,5 +1,6 @@
-package com.home.inmy.domain;
+package com.home.inmy.account;
 
+import com.home.inmy.post.Post;
 import lombok.*;
 
 import javax.persistence.*;
