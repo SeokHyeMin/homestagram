@@ -1,6 +1,7 @@
 package com.home.inmy.post;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.home.inmy.account.AccountRepository;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.account.Account;
@@ -38,6 +39,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -55,6 +57,7 @@ public class PostController {
     private final TagService tagService;
     private final PostTagServiceImpl postTagService;
 
+    private final ObjectMapper objectMapper;
     private final ModelMapper modelMapper;
     private final EntityManager em;
 
@@ -148,9 +151,17 @@ public class PostController {
                             .content(post.getContent())
                             .build();
 
+        List<PostTag> tagList = postTagRepository.findByPost(post);
+        List<String> tags = new ArrayList<>();
+
+        for (PostTag postTag : tagList) {
+            tags.add(postTag.getTag().getTagTitle());
+        }
+
         model.addAttribute(account);
-        model.addAttribute(postForm);
         model.addAttribute(post_num);
+        model.addAttribute(postForm);
+        model.addAttribute("tagStr", String.join("," ,tags));
 
         return "posts/post-update";
     }
@@ -158,7 +169,7 @@ public class PostController {
 
     @PostMapping("/post-update/{post_num}")
     public String postUpdate(@PathVariable Long post_num, @CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,
-                             RedirectAttributes redirectAttributes) throws IOException {
+                             RedirectAttributes redirectAttributes) throws IOException{
 
         if (errors.hasErrors()) {
             log.info("post update error");
@@ -168,12 +179,40 @@ public class PostController {
         model.addAttribute(account);
 
         PostDto postDto = postForm.createBoardPostDto(account);
-        log.info("start");
-        Post newPost = postService.updatePost(postDto, post_num);
+        Post post = postService.updatePost(postDto, post_num);
 
-        redirectAttributes.addAttribute("post_num", newPost.getPost_num());
-        log.info("end");
-        log.info(newPost.getTitle());
+       redirectAttributes.addAttribute("post_num", post.getPost_num());
+
         return "redirect:/post/{post_num}";
+    }
+
+    @PostMapping("/post-update/{post_num}/tags/add")
+    @ResponseBody
+    public ResponseEntity addTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
+
+        log.info("addTag");
+        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+
+        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
+        postTagService.postTagSave(post, tag);
+
+        log.info("addTag end");
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/post-update/{post_num}/tags/remove")
+    @ResponseBody
+    public ResponseEntity removeTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
+
+        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Tag tag = tagRepository.findByTagTitle(tagForm.getTagTitle());
+
+        if (tag == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        PostTag postTag = postTagRepository.findByPostAndTag(post, tag);
+        postTagRepository.delete(postTag);
+
+        return ResponseEntity.ok().build();
     }
 }

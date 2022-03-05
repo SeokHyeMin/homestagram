@@ -29,8 +29,8 @@ public class PostTagServiceImpl implements PostTagService{
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject tagList = jsonArray.getJSONObject(i);
             String tagTitle = tagList.getString("value");
-            Tag newTag = tagService.findOrCreateNew(tagTitle);
-            postTagSave(post, newTag);
+            Tag tag = tagService.findOrCreateNew(tagTitle);
+            postTagSave(post, tag);
         }
 
     }
@@ -51,8 +51,10 @@ public class PostTagServiceImpl implements PostTagService{
         return postTag.getId();
     }
 
+
     @Override
-    public Set<Tag> getTags(Post post) {
-        return null;
+    public void tagUpdate(Post post, String tags) throws JSONException {
+
+        JSONArray jsonArray = new JSONArray(tags);
     }
 }
