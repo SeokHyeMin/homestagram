@@ -1,6 +1,7 @@
 package com.home.inmy.post;
 
 import com.home.inmy.images.ImageFile;
+import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.images.ImageFileService;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService{
 
+    private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
     private final EntityManager em;
     private final ImageFileService imageFileService;
@@ -38,6 +40,7 @@ public class PostServiceImpl implements PostService{
 
         modelMapper.map(postDto, newPost);
 
+        imageFileRepository.deleteAll(newPost.getImageFiles());
         List<ImageFile> imageFiles = imageFileService.saveImageFile(newPost, postDto.getImageFiles());
 
         log.info("update Post ok");
