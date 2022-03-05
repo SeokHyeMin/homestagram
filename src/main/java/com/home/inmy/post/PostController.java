@@ -98,27 +98,6 @@ public class PostController {
         return "posts/post-detail";
     }
 
-   /* @GetMapping("/tags")
-    public String updateTags(@CurrentUser Account account, Post post, Model model) throws JsonProcessingException {
-        model.addAttribute(account);
-        Set<Tag> tags = postTagService.getTags(post);
-        model.addAttribute("tags",tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
-
-        List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
-        model.addAttribute("whitelist",objectMapper.writeValueAsString(allTags));
-
-        return SETTINGS + TAGS;
-    }*/
-
-    @PostMapping("/tags/add")
-    @ResponseBody
-    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
-
-        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
-
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/new-post")
     public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, String tags, Errors errors, Model model,
                               RedirectAttributes redirectAttributes) throws JSONException, IOException {

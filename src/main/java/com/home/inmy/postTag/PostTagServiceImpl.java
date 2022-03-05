@@ -3,6 +3,7 @@ package com.home.inmy.postTag;
 import com.home.inmy.post.Post;
 import com.home.inmy.tag.Tag;
 import com.home.inmy.tag.TagRepository;
+import com.home.inmy.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -18,6 +19,8 @@ public class PostTagServiceImpl implements PostTagService{
     private final PostTagRepository postTagRepository;
     private final TagRepository tagRepository;
 
+    private final TagService tagService;
+
     @Override
     public void tagSave(Post post, String tags) throws JSONException {
 
@@ -26,7 +29,7 @@ public class PostTagServiceImpl implements PostTagService{
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject tagList = jsonArray.getJSONObject(i);
             String tagTitle = tagList.getString("value");
-            Tag newTag = tagRepository.findByTagTitle(tagTitle);
+            Tag newTag = tagService.findOrCreateNew(tagTitle);
             postTagSave(post, newTag);
         }
 
