@@ -12,8 +12,6 @@ public interface PostTagService {
 
     void tagSave(Post post, String tags) throws JSONException;
 
-    void tagUpdate(Post post, String tags) throws JSONException;
-
     Long PostTagSave(Tag tag);
 
 }

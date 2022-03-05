@@ -50,11 +50,4 @@ public class PostTagServiceImpl implements PostTagService{
 
         return postTag.getId();
     }
-
-
-    @Override
-    public void tagUpdate(Post post, String tags) throws JSONException {
-
-        JSONArray jsonArray = new JSONArray(tags);
-    }
 }
