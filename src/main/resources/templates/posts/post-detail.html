@@ -24,6 +24,11 @@
                           <img class="rounded" th:each="imageFile : ${post.imageFiles}"
                                  th:src="|/images/${imageFile.getStoreFilename()}|" width="800" height="800" style="margin-bottom: 10%"/>
                     </div>
+                    <div class="row" style="margin-bottom: 20px; margin-top: 15px">
+                        <div class="tagList" style="width:100px; color: #35c5f0;" th:each="tag : ${postTagList}" >
+                            #<span class="tags" th:text="${tag.getTag().getTagTitle()}"></span>
+                        </div>
+                    </div>
                     <div>
                         <span th:text="${post.content}">내용</span>
                     </div>

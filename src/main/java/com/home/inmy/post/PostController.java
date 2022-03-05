@@ -6,6 +6,7 @@ import com.home.inmy.account.CurrentUser;
 import com.home.inmy.account.Account;
 import com.home.inmy.images.ImageFile;
 import com.home.inmy.postTag.PostTag;
+import com.home.inmy.postTag.PostTagRepository;
 import com.home.inmy.postTag.PostTagService;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.tag.Tag;
@@ -19,6 +20,9 @@ import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +48,7 @@ public class PostController {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
+    private final PostTagRepository postTagRepository;
 
     private final FileStore fileStore;
     private final PostServiceImpl postService;
@@ -80,9 +85,13 @@ public class PostController {
         Post post = postRepository.findById(post_num).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
 
         List<ImageFile> imageFiles = imageFileRepository.findByPost(post);
+        List<PostTag> postTagList = postTagRepository.findByPost(post);
+
 
         model.addAttribute(post);
+        model.addAttribute(postTagList);
         model.addAttribute(account);
+
         model.addAttribute("isOwner",post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
 
 
@@ -112,7 +121,7 @@ public class PostController {
 
     @PostMapping("/new-post")
     public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, String tags, Errors errors, Model model,
-                              RedirectAttributes redirectAttributes) throws IOException {
+                              RedirectAttributes redirectAttributes) throws JSONException, IOException {
 
         if (errors.hasErrors()) {
             log.info("post save error");
@@ -122,10 +131,8 @@ public class PostController {
         model.addAttribute(account);
         PostDto postDto = postForm.createBoardPostDto(account);
         Post newPost = postService.newPostSave(postDto);
-        //postTagService.PostTagSave(newPost);
-        //postTagService.PostTagSave(newPost);
-        log.info("-----tagList?----");
-        log.info(tags);
+
+        postTagService.tagSave(newPost, tags);
 
         redirectAttributes.addAttribute("post_num", newPost.getPost_num());
 
