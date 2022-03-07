@@ -4,8 +4,6 @@ import com.home.inmy.post.Post;
 import com.home.inmy.tag.Tag;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
-import java.util.Set;
-
 public interface PostTagService {
 
     void postTagSave(Post post, Tag tag);
@@ -14,4 +12,5 @@ public interface PostTagService {
 
     Long PostTagSave(Tag tag);
 
+    void deleteTag(PostTag postTag);
 }

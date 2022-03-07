@@ -42,12 +42,11 @@ public class Post {
 
     private String writer;
 
-    public void completePostSave(){
-        this.writeTime = LocalDateTime.now();
-    }
+    private Long views = 0L;
 
-    public void changeAccount(Account account){
-        this.account = account;
-        account.getPosts().add(this);
+    //private Long like;
+
+    public void updateViews(){
+        views++;
     }
 }

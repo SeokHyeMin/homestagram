@@ -66,17 +66,14 @@ public class AccountController {
             throw new IllegalArgumentException(loginId + "에 해당하는 사용자가 없습니다.");
         }
 
+        List<Post> postList = postRepository.findByAccount(account);
 
-            String jpql = "select distinct p from Post p join fetch p.imageFiles where p.writer = '" + loginId + "'";
-            List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
+        model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
+        model.addAttribute(accountByLoginId);
+        model.addAttribute(postList);
+        model.addAttribute("count", postList.size());
+        log.info(String.valueOf(postList.size()));
 
-            model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-            model.addAttribute(accountByLoginId);
-            model.addAttribute(postList);
-            model.addAttribute("count", postList.size());
-            log.info(String.valueOf(postList.size()));
-
-            return "account/profile";
+        return "account/profile";
     }
-
 }

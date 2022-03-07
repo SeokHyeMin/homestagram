@@ -12,7 +12,7 @@
         </div>
         <div class="row justify-content-center">
             <form class="needs-validation col-sm-10" th:action="@{/new-post}" th:object="${postForm}"
-                  method="post" enctype="multipart/form-data" novalidate>
+                  method="post" enctype="multipart/form-data">
                 <div class="row justify-content-center mx-auto col-9">
                     <div class="col">
                         <input id="title" type="text" th:field="*{title}" class="form-control" style="width: 300px"
@@ -24,7 +24,7 @@
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
                     </div>
                     <div class="col">
-                        <select th:field="*{category}" class="form-select">
+                        <select th:field="*{category}" class="form-select" required>
                             <option value="">공간(필수)</option>
                             <option th:each="category : ${categories}" th:value="${category.categoryName}"
                                     th:text="${category.categoryName}">원룸</option>
@@ -43,7 +43,7 @@
                         </div>
                         <div id="new-image" class="mt-3"></div>
                         <div class="card-body">
-                            <input type="file" class="form-control" multiple="multiple" name="imageFiles">
+                            <input type="file" class="form-control" multiple="multiple" name="imageFiles" required>
                         </div>
                     </div>
                 </div>

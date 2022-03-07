@@ -1,14 +1,10 @@
 package com.home.inmy.post;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.home.inmy.account.AccountRepository;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.account.Account;
 import com.home.inmy.images.ImageFile;
 import com.home.inmy.postTag.PostTag;
 import com.home.inmy.postTag.PostTagRepository;
-import com.home.inmy.postTag.PostTagService;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.tag.Tag;
 import com.home.inmy.images.FileStore;
@@ -20,10 +16,7 @@ import com.home.inmy.tag.TagService;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +32,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -48,7 +40,6 @@ public class PostController {
 
     private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
-    private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
 
@@ -57,8 +48,6 @@ public class PostController {
     private final TagService tagService;
     private final PostTagServiceImpl postTagService;
 
-    private final ObjectMapper objectMapper;
-    private final ModelMapper modelMapper;
     private final EntityManager em;
 
     @ModelAttribute("categories")
@@ -81,22 +70,21 @@ public class PostController {
         return "posts/new-post";
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @GetMapping("/post/{post_num}")
     public String postView(@PathVariable Long post_num, Model model, @CurrentUser Account account) {
 
         Post post = postRepository.findById(post_num).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
 
-        List<ImageFile> imageFiles = imageFileRepository.findByPost(post);
         List<PostTag> postTagList = postTagRepository.findByPost(post);
 
+        postService.updateViews(post); //조회수 증가
 
         model.addAttribute(post);
         model.addAttribute(postTagList);
         model.addAttribute(account);
 
         model.addAttribute("isOwner",post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-
 
         return "posts/post-detail";
     }
@@ -190,13 +178,11 @@ public class PostController {
     @ResponseBody
     public ResponseEntity addTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
 
-        log.info("addTag");
         Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
 
         Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
         postTagService.postTagSave(post, tag);
 
-        log.info("addTag end");
         return ResponseEntity.ok().build();
     }
 
@@ -210,8 +196,9 @@ public class PostController {
         if (tag == null) {
             return ResponseEntity.badRequest().build();
         }
+
         PostTag postTag = postTagRepository.findByPostAndTag(post, tag);
-        postTagRepository.delete(postTag);
+        postTagService.deleteTag(postTag);
 
         return ResponseEntity.ok().build();
     }

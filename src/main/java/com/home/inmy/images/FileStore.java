@@ -15,7 +15,7 @@ import java.util.UUID;
 @Component
 public class FileStore {
 
-    @Value("${file.dir}")
+    @Value("${file.dir}") //실제 파일이 저장될 경로
     private String fileDir;
 
     public String getFullPath(String filename){
@@ -53,13 +53,13 @@ public class FileStore {
 
         String ext = extract(origFilename); //확장자를 별도로 추출하여, 서버 내부에서 관리하는 파일명에 붙여준다.
         String uuid = UUID.randomUUID().toString();
-        return uuid + "." + ext;
+        return uuid + "." + ext; //파일명 생성 후, 파일확장자와 함께 반환
     }
 
     private String extract(String origFilename) {
 
         int pos = origFilename.lastIndexOf(".");
-        return origFilename.substring(pos+1);
+        return origFilename.substring(pos+1); //.뒤의 확장자 반환
     }
 
 }

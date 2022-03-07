@@ -10,8 +10,6 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class PostTagServiceImpl implements PostTagService{
@@ -49,5 +47,10 @@ public class PostTagServiceImpl implements PostTagService{
         postTag.setTag(tag);
 
         return postTag.getId();
+    }
+
+    @Override
+    public void deleteTag(PostTag postTag) {
+        postTagRepository.delete(postTag);
     }
 }

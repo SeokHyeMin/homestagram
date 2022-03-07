@@ -17,7 +17,6 @@ public class ImageFileServiceImpl implements ImageFileService {
 
     public List<ImageFile> saveImageFile(Post newPost, List<MultipartFile> multipartFiles) throws IOException {
 
-        ImageFile imageFile = new ImageFile();
         List<ImageFile> result = fileStore.storeFiles(multipartFiles, newPost);
         newPost.setImageFiles(result);
         return result;
