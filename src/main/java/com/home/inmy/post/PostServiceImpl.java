@@ -1,6 +1,6 @@
 package com.home.inmy.post;
 
-import com.home.inmy.images.ImageFile;
+import com.home.inmy.domain.Post;
 import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.images.ImageFileService;
 import com.home.inmy.web.dto.PostDto;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 @Transactional
@@ -47,6 +46,18 @@ public class PostServiceImpl implements PostService{
     @Override
     public void updateViews(Post post) {
         post.updateViews();
+    }
+
+    @Override
+    public void increaseLikes(Post post) {
+        post.increaseLikes();
+    }
+
+    @Override
+    public void decreaseLikes(Post post) {
+        if(post.getLikes() != 0){
+            post.decreaseLikes();
+        }
     }
 
 }

@@ -1,14 +1,10 @@
-package com.home.inmy.postTag;
+package com.home.inmy.domain;
 
-import com.home.inmy.post.Post;
-import com.home.inmy.tag.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter @Setter

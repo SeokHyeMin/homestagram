@@ -1,6 +1,6 @@
 package com.home.inmy.post.form;
 
-import com.home.inmy.account.Account;
+import com.home.inmy.domain.Account;
 import com.home.inmy.web.dto.PostDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,6 +63,5 @@ public class PostForm {
                 .writer(account.getLoginId())
                 .build();
     }
-
 
 }

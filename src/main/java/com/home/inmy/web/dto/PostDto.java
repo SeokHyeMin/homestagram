@@ -1,7 +1,7 @@
 package com.home.inmy.web.dto;
 
-import com.home.inmy.account.Account;
-import com.home.inmy.post.Post;
+import com.home.inmy.domain.Account;
+import com.home.inmy.domain.Post;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,6 +59,8 @@ public class PostDto {
                 .content(content)
                 .category(category)
                 .writer(writer)
+                .likes(0L)
+                .views(0L)
                 .build();
     }
 }

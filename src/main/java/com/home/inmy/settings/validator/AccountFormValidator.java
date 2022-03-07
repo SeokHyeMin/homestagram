@@ -1,7 +1,7 @@
 package com.home.inmy.settings.validator;
 
 import com.home.inmy.account.AccountRepository;
-import com.home.inmy.account.Account;
+import com.home.inmy.domain.Account;
 import com.home.inmy.settings.form.AccountForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

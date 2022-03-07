@@ -1,8 +1,5 @@
-package com.home.inmy.post;
+package com.home.inmy.domain;
 
-import com.home.inmy.account.Account;
-import com.home.inmy.images.ImageFile;
-import com.home.inmy.postTag.PostTag;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -42,11 +39,19 @@ public class Post {
 
     private String writer;
 
-    private Long views = 0L;
+    private Long views;
 
-    //private Long like;
+    private Long likes;
 
     public void updateViews(){
         views++;
+    }
+
+    public void increaseLikes() {
+        likes++;
+    }
+
+    public void decreaseLikes() {
+        likes--;
     }
 }

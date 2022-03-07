@@ -1,12 +1,11 @@
 package com.home.inmy.post;
 
 import com.home.inmy.account.CurrentUser;
-import com.home.inmy.account.Account;
-import com.home.inmy.images.ImageFile;
-import com.home.inmy.postTag.PostTag;
+import com.home.inmy.domain.*;
+import com.home.inmy.like.LikeRepository;
+import com.home.inmy.like.LikeService;
 import com.home.inmy.postTag.PostTagRepository;
 import com.home.inmy.postTag.PostTagServiceImpl;
-import com.home.inmy.tag.Tag;
 import com.home.inmy.images.FileStore;
 import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.post.form.PostForm;
@@ -38,15 +37,16 @@ import java.util.*;
 @Slf4j
 public class PostController {
 
-    private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
+    private final LikeRepository likeRepository;
 
     private final FileStore fileStore;
     private final PostServiceImpl postService;
     private final TagService tagService;
     private final PostTagServiceImpl postTagService;
+    private final LikeService likeService;
 
     private final EntityManager em;
 
@@ -122,7 +122,10 @@ public class PostController {
         String jpql = "select distinct p from Post p join fetch p.account join fetch p.imageFiles";
         List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
 
+        List<Likes> likes = likeRepository.findByAccount(account);
+
         model.addAttribute(postList);
+        model.addAttribute(likes);
         model.addAttribute(account);
 
         return "posts/post-list";
@@ -174,7 +177,7 @@ public class PostController {
         return "redirect:/post/{post_num}";
     }
 
-    @PostMapping("/post-update/{post_num}/tags/add")
+    @GetMapping("/post-update/{post_num}/tags/add")
     @ResponseBody
     public ResponseEntity addTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
 
@@ -201,5 +204,31 @@ public class PostController {
         postTagService.deleteTag(postTag);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/like/add")
+    @ResponseBody
+    public Post addLike(Long post_num, @CurrentUser Account account) {
+
+        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+
+        postService.increaseLikes(post); //게시글 좋아요 수 증가
+
+        likeService.addLike(post, account);
+
+        return post;
+    }
+
+    @GetMapping("/like/remove")
+    @ResponseBody
+    public Post removeLike(Long post_num, @CurrentUser Account account) {
+
+        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+
+        postService.decreaseLikes(post); //게시글 좋아요 수 감소
+
+        likeService.removeLike(post, account);
+
+        return post;
     }
 }

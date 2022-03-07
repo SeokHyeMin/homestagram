@@ -1,6 +1,6 @@
-package com.home.inmy.tag;
+package com.home.inmy.domain;
 
-import com.home.inmy.postTag.PostTag;
+import com.home.inmy.domain.PostTag;
 import lombok.*;
 
 import javax.persistence.*;

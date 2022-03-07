@@ -1,7 +1,8 @@
 package com.home.inmy.postTag;
 
-import com.home.inmy.post.Post;
-import com.home.inmy.tag.Tag;
+import com.home.inmy.domain.Post;
+import com.home.inmy.domain.PostTag;
+import com.home.inmy.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;

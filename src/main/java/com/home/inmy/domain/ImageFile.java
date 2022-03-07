@@ -1,6 +1,6 @@
-package com.home.inmy.images;
+package com.home.inmy.domain;
 
-import com.home.inmy.post.Post;
+import com.home.inmy.domain.Post;
 import lombok.*;
 
 import javax.persistence.*;

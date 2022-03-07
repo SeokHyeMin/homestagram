@@ -2,7 +2,8 @@ package com.home.inmy.account;
 
 import com.home.inmy.account.form.SignUpForm;
 import com.home.inmy.account.validator.SignUpFormValidator;
-import com.home.inmy.post.Post;
+import com.home.inmy.domain.Post;
+import com.home.inmy.domain.Account;
 import com.home.inmy.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,5 @@
-package com.home.inmy.account;
+package com.home.inmy.domain;
 
-import com.home.inmy.post.Post;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,6 +46,9 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account")
+    private List<Likes> likes = new ArrayList<>();
 
     //프로필
     @Embedded

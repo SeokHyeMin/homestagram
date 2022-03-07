@@ -1,6 +1,7 @@
 package com.home.inmy.images;
 
-import com.home.inmy.post.Post;
+import com.home.inmy.domain.ImageFile;
+import com.home.inmy.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;

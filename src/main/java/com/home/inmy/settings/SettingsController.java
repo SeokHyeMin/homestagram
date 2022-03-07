@@ -3,7 +3,7 @@ package com.home.inmy.settings;
 import com.home.inmy.account.AccountService;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.settings.form.*;
-import com.home.inmy.account.Account;
+import com.home.inmy.domain.Account;
 import com.home.inmy.settings.validator.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

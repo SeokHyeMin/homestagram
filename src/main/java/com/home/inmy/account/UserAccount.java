@@ -1,5 +1,6 @@
 package com.home.inmy.account;
 
+import com.home.inmy.domain.Account;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

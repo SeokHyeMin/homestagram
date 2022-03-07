@@ -1,5 +1,7 @@
 package com.home.inmy.account;
 
+import com.home.inmy.domain.Profile;
+import com.home.inmy.domain.Account;
 import com.home.inmy.settings.form.AccountForm;
 import com.home.inmy.settings.form.ProfileForm;
 import com.home.inmy.account.form.SignUpForm;
