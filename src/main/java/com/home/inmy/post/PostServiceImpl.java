@@ -3,6 +3,8 @@ package com.home.inmy.post;
 import com.home.inmy.domain.Post;
 import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.images.ImageFileService;
+import com.home.inmy.like.LikeService;
+import com.home.inmy.postTag.PostTagService;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,7 +21,9 @@ public class PostServiceImpl implements PostService{
     private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
 
+    private final PostTagService postTagService;
     private final ImageFileService imageFileService;
+    private final LikeService likeService;
 
     private final ModelMapper modelMapper;
 
@@ -58,6 +62,15 @@ public class PostServiceImpl implements PostService{
         if(post.getLikes() != 0){
             post.decreaseLikes();
         }
+    }
+
+    @Override
+    public void deletePost(Long post_num) {
+        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        imageFileService.deleteImageFile(post);
+        likeService.deletePostLike(post);
+        postTagService.deletePost(post);
+        postRepository.delete(post);
     }
 
 }

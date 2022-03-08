@@ -15,4 +15,6 @@ public interface PostService {
     void increaseLikes(Post post);
 
     void decreaseLikes(Post post);
+
+    void deletePost(Long post_num);
 }

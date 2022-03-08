@@ -11,6 +11,8 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+
 @Service
 @RequiredArgsConstructor
 public class PostTagServiceImpl implements PostTagService{
@@ -18,6 +20,8 @@ public class PostTagServiceImpl implements PostTagService{
     private final PostTagRepository postTagRepository;
 
     private final TagService tagService;
+
+    private final EntityManager em;
 
     @Override
     public void tagSave(Post post, String tags) throws JSONException {
@@ -44,5 +48,10 @@ public class PostTagServiceImpl implements PostTagService{
     @Override
     public void deleteTag(PostTag postTag) {
         postTagRepository.delete(postTag);
+    }
+
+    @Override
+    public void deletePost(Post post) {
+        postTagRepository.deleteInBatch(post.getPostTags());
     }
 }

@@ -25,11 +25,14 @@ public class Post {
     @JoinColumn(name = "account_num")
     private Account account;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<ImageFile> imageFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
     private Set<PostTag> postTags = new HashSet<>();
+
+    @OneToMany(mappedBy = "post")
+    private List<Likes> likesList = new ArrayList<>();
 
     private String content;
 

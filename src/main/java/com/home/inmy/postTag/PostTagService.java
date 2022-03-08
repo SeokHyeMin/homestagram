@@ -12,4 +12,6 @@ public interface PostTagService {
     void tagSave(Post post, String tags) throws JSONException;
 
     void deleteTag(PostTag postTag);
+
+    void deletePost(Post post);
 }

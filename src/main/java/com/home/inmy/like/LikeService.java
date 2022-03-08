@@ -9,4 +9,7 @@ public interface LikeService {
 
     void removeLike(Post post, Account account);
 
+    void deletePostLike(Post post);
+
+    boolean accountPostLike(Post post, Account account);
 }

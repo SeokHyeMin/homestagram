@@ -1,5 +1,6 @@
 package com.home.inmy.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -48,6 +49,7 @@ public class Account {
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "account")
+    @JsonBackReference
     private List<Likes> likes = new ArrayList<>();
 
     //프로필

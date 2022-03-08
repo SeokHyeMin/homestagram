@@ -85,6 +85,7 @@ public class PostController {
         model.addAttribute(account);
 
         model.addAttribute("isOwner",post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
+        model.addAttribute("like",likeService.accountPostLike(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true
 
         return "posts/post-detail";
     }
@@ -123,9 +124,15 @@ public class PostController {
         List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
 
         List<Likes> likes = likeRepository.findByAccount(account);
+        List<Long> postNumList = new ArrayList<>();
+
+        for (Likes like : likes) {
+            postNumList.add(like.getPost().getPost_num());
+        }
 
         model.addAttribute(postList);
-        model.addAttribute(likes);
+        model.addAttribute("likes", likeRepository.findByAccount(account));
+        model.addAttribute("postNumList", postNumList);
         model.addAttribute(account);
 
         return "posts/post-list";
@@ -177,7 +184,19 @@ public class PostController {
         return "redirect:/post/{post_num}";
     }
 
-    @GetMapping("/post-update/{post_num}/tags/add")
+    @GetMapping("/post-delete/{post_num}")
+    public String postDelete(@PathVariable Long post_num, @CurrentUser Account account, Model model, RedirectAttributes redirectAttributes){
+
+        postService.deletePost(post_num);
+
+        model.addAttribute(account);
+
+        redirectAttributes.addAttribute("message","해당 글을 삭제하였습니다.");
+
+        return "redirect:/postList";
+    }
+
+    @PostMapping("/post-update/{post_num}/tags/add")
     @ResponseBody
     public ResponseEntity addTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
 
@@ -189,6 +208,7 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
+    @Transactional
     @PostMapping("/post-update/{post_num}/tags/remove")
     @ResponseBody
     public ResponseEntity removeTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
@@ -208,7 +228,7 @@ public class PostController {
 
     @GetMapping("/like/add")
     @ResponseBody
-    public Post addLike(Long post_num, @CurrentUser Account account) {
+    public Long addLike(Long post_num, @CurrentUser Account account) {
 
         Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
 
@@ -216,12 +236,12 @@ public class PostController {
 
         likeService.addLike(post, account);
 
-        return post;
+        return post.getLikes();
     }
 
     @GetMapping("/like/remove")
     @ResponseBody
-    public Post removeLike(Long post_num, @CurrentUser Account account) {
+    public Long removeLike(Long post_num, @CurrentUser Account account) {
 
         Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
 
@@ -229,6 +249,6 @@ public class PostController {
 
         likeService.removeLike(post, account);
 
-        return post;
+        return post.getLikes();
     }
 }

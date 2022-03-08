@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface ImageFileService {
 
-    public abstract List<ImageFile> saveImageFile(Post post, List<MultipartFile> multipartFiles) throws IOException;
+    public abstract void saveImageFile(Post post, List<MultipartFile> multipartFiles) throws IOException;
 
     public abstract List<ImageFile> findImageFile();
+
+    void deleteImageFile(Post post);
 }

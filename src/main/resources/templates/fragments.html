@@ -321,35 +321,6 @@
             });
         </script>
     </div>
-
-    <div th:fragment="click-like">
-        <script type="application/javascript" th:inline="javascript">
-            $(function() {
-                let i = 0;
-                $('.like').on('click',function() {
-                    let url = "";
-                    let post_num = this.val();
-                    if (i === 0) {
-                        $(this).attr('src', 'heart-fill.svg');
-                        i++;
-                        url = "/like/add/" + post_num;
-                    } else if (i === 1) {
-                        $(this).attr('src', 'heart.svg');
-                        url = "/like/remove/" + post_num;
-                        i--;
-                    }
-                    $.ajax({
-                        url: url,
-                        type: "GET",
-                        cache: false,
-                        dataType: "JSON",
-                    })
-                })
-            });
-        </script>
-
-    </div>
-
 </div>
 
 </body>

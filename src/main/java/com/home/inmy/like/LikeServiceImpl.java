@@ -31,4 +31,16 @@ public class LikeServiceImpl implements LikeService{
         likeRepository.delete(likes);
     }
 
+    @Override
+    public void deletePostLike(Post post) {
+        likeRepository.deleteAll(post.getLikesList());
+    }
+
+    @Override
+    public boolean accountPostLike(Post post , Account account){
+        Likes likes = likeRepository.findByPostAndAccount(post, account);
+
+        return likes == null ? false : true;
+    }
+
 }

@@ -54,34 +54,43 @@
                         <div class="post-detail">
                             <div style="padding-bottom: 15px;">
                                 <a th:href="@{'/post/'+${post.post_num}}">
-                                    <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="270" height="285" style="border-radius: 20px;"/>
+                                    <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="290" height="285" style="border-radius: 20px;"/>
                                 </a>
                             </div>
                             <div class="row card-text" style="text-align: center; padding-bottom: 12px">
-                                <div class="col row">
-                                    <div class="col" th:if="${likes != null}">
+                                <div class="col-4 row mx-auto">
+                                    <div class="col-3 " th:if="${!#lists.isEmpty(likes)}" style="width: 22px">
                                         <a th:value="${post.post_num}" href="javascript:" class="heart-click heart_icon${post.post_num}">
-                                            <svg th:if="${#lists.contains(likes, post)}" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="crimson" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                            <svg th:if="${#lists.contains(postNumList, post.post_num)}" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="crimson" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
                                             </svg>
-                                            <svg th:if="${!#lists.contains(likes, post)}" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="crimson" class="bi bi-heart" viewBox="0 0 16 16">
+                                            <svg th:if="${!#lists.contains(postNumList, post.post_num)}" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="crimson" class="bi bi-heart" viewBox="0 0 16 16">
                                                 <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
                                             </svg>
                                         </a>
                                     </div>
-                                    <div class="col" th:if="${likes == null}">
+                                    <div class="col-3" th:if="${#lists.isEmpty(likes)}">
                                         <a th:value="${post.post_num}" href="javascript:" class="heart-click heart_icon${post.post_num}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="crimson" class="bi bi-heart" viewBox="0 0 16 16">
                                             <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
                                         </svg>
                                         </a>
                                     </div>
-                                    <div class="col">
-                                        <span id="heart${post.post_num}" th:text="${post.likes}"></span>
+                                    <div class="col-1">
+                                        <span style="font-size: 13px; width: 13px; height: 13px" th:id="${post.post_num}">[[${post.likes}]]</span>
                                     </div>
                                 </div>
-                                <div class="col">북마크</div>
-                                <div class="col">댓글</div>
+                                <div class="col">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bookmark-heart" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z"/>
+                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                                    </svg>
+                                </div>
+                                <div class="col">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square" viewBox="0 0 16 16">
+                                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    </svg>
+                                </div>
                             </div>
                             <div>
                                 <span class="card-text" th:text="${post.title}">글 제목</span>
@@ -91,6 +100,7 @@
                 </div>
             </div>
         </div>
+    </div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
 <script type="application/javascript" th:inline="javascript">
@@ -108,17 +118,18 @@
                 data : {
                     post_num : post_num,
                 },
-                success : function(post) {
+                success : function(likes) {
 
-                    let likes = post.likes;
-
-                    $('#heart'+post.post_num).text(likes);
+                    console.log("좋아요 추가 성공");
+                    console.log(likes);
+                    $('#'+post_num).text(likes);
                 }
             });
 
             // 꽉찬하트로 바꾸기
-            $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='18' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
-            $('.heart_icon'+post_num).html("<svg xmlns='http://www.w3.org/2000/svg' width='18' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
+            $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
+            $('.heart_icon'+post_num).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
+
 
             // 꽉찬 하트를 눌렀을 때
         }else if($(this).children('svg').attr('class') === "bi bi-heart-fill"){
@@ -129,18 +140,18 @@
                 data : {
                     post_num : post_num,
                 },
-                success : function(post) {
+                success : function(likes) {
 
-                    let likes = post.likes;
+                    console.log("좋아요 삭제 성공");
+                    console.log(likes);
 
-                    $('#heart'+post.post_num).text(likes);
+                    $('#'+post_num).text(likes);
 
-                    console.log("하트삭제 성공");
                 }
             });
             // 빈하트로 바꾸기
-            $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='18' height='20' fill='crimson' class='bi bi-heart' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
-            $('.heart_icon'+post_num).html("<svg xmlns='http://www.w3.org/2000/svg' width='18' height='20' fill='crimson' class='bi bi-heart' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
+            $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart' viewBox='0 0 16 16'><path d='m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z'/></svg>");
+            $('.heart_icon'+post_num).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart' viewBox='0 0 16 16'><path d='m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z'/></svg>");
         }
     });
 </script>
