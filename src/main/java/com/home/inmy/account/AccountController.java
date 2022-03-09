@@ -2,8 +2,10 @@ package com.home.inmy.account;
 
 import com.home.inmy.account.form.SignUpForm;
 import com.home.inmy.account.validator.SignUpFormValidator;
+import com.home.inmy.domain.Likes;
 import com.home.inmy.domain.Post;
 import com.home.inmy.domain.Account;
+import com.home.inmy.like.LikeRepository;
 import com.home.inmy.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,10 +27,12 @@ import java.util.List;
 public class AccountController {
 
     private final AccountRepository accountRepository;
+    private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
+
     private final AccountService accountService;
     private final SignUpFormValidator signUpFormValidator;
-    private final PostRepository postRepository;
-    private final EntityManager em;
+
 
     @InitBinder("signUpForm") //
     public void initBinder(WebDataBinder webDataBinder) {
@@ -73,6 +78,32 @@ public class AccountController {
         model.addAttribute(accountByLoginId);
         model.addAttribute(postList);
         model.addAttribute("count", postList.size());
+        log.info(String.valueOf(postList.size()));
+
+        return "account/profile";
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/profile/like/{loginId}")
+    public String profileLike(@PathVariable String loginId, Model model, @CurrentUser Account account) {
+
+        Account accountByLoginId = accountRepository.findByLoginId(loginId); //해당 프로필 주인
+        if (accountByLoginId == null) {
+            throw new IllegalArgumentException(loginId + "에 해당하는 사용자가 없습니다.");
+        }
+
+        List<Likes> likesList = likeRepository.findByAccount(accountByLoginId);
+        List<Post> postList = new ArrayList<>();
+
+        for (Likes likes : likesList) {
+            postList.add(likes.getPost());
+        }
+
+        model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
+        model.addAttribute(accountByLoginId);
+        model.addAttribute(postList);
+        model.addAttribute("count", postList.size());
+        log.info(String.valueOf(postList.size()));
         log.info(String.valueOf(postList.size()));
 
         return "account/profile";
