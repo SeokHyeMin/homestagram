@@ -8,10 +8,12 @@ import com.home.inmy.postTag.PostTagService;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -71,6 +73,21 @@ public class PostServiceImpl implements PostService{
         likeService.deletePostLike(post);
         postTagService.deletePost(post);
         postRepository.delete(post);
+    }
+
+    public Post HighestViews(){
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "views");
+        List<Post> postList = postRepository.findAll(sort);
+
+        return postList.get(0);
+    }
+
+    public List<Post> DescLikes(){
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "likes");
+
+        return postRepository.findAll(sort);
     }
 
 }
