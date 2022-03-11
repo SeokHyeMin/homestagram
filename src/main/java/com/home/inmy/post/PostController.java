@@ -3,9 +3,7 @@ package com.home.inmy.post;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.domain.*;
 import com.home.inmy.like.LikeService;
-import com.home.inmy.postTag.PostTagRepository;
 import com.home.inmy.postTag.PostTagServiceImpl;
-import com.home.inmy.images.FileStore;
 import com.home.inmy.post.form.PostForm;
 import com.home.inmy.tag.TagService;
 import com.home.inmy.web.dto.PostDto;
@@ -84,7 +82,6 @@ public class PostController {
             log.info("post save error");
             return "posts/new-post";
         }
-
 
         PostDto postDto = postForm.createBoardPostDto(account);
         Post newPost = postService.newPostSave(postDto);

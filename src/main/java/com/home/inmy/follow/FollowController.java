@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class FollowController {
 
-    private FollowServiceImpl followService;
-    private FollowRepository followRepository;
+    private final FollowServiceImpl followService;
 
     @PostMapping("/follow/{loginId}")
     public Boolean follow(@CurrentUser Account account, @PathVariable String loginId){
 
         if(account == null){
-            //TODO 로그인 페이지이 혹은 로그인 경고창 띄우기
+            //TODO 로그인 페이지 혹은 로그인 경고창 띄우기
             return null;
         }
 

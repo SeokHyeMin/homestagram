@@ -5,8 +5,10 @@ import com.home.inmy.account.validator.SignUpFormValidator;
 import com.home.inmy.domain.Likes;
 import com.home.inmy.domain.Post;
 import com.home.inmy.domain.Account;
-import com.home.inmy.like.LikeRepository;
+import com.home.inmy.follow.FollowServiceImpl;
+import com.home.inmy.like.LikeServiceImpl;
 import com.home.inmy.post.PostRepository;
+import com.home.inmy.post.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,9 +18,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,12 +26,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountRepository accountRepository;
     private final PostRepository postRepository;
-    private final LikeRepository likeRepository;
 
     private final AccountService accountService;
     private final SignUpFormValidator signUpFormValidator;
+
+    private final LikeServiceImpl likeService;
+    private final FollowServiceImpl followService;
+    private final PostServiceImpl postService;
 
 
     @InitBinder("signUpForm") //
@@ -67,10 +69,7 @@ public class AccountController {
     @GetMapping("/profile/{loginId}")
     public String profile(@PathVariable String loginId, Model model, @CurrentUser Account account) {
 
-        Account accountByLoginId = accountRepository.findByLoginId(loginId); //해당 프로필 주인
-        if (accountByLoginId == null) {
-            throw new IllegalArgumentException(loginId + "에 해당하는 사용자가 없습니다.");
-        }
+        Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 
         List<Post> postList = postRepository.findByAccount(account);
 
@@ -84,27 +83,19 @@ public class AccountController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/profile/like/{loginId}")
+    @GetMapping("/profile/like/{loginId}") //해당프로필에서 프로필 주인이 좋아요한 게시물만 보기.
     public String profileLike(@PathVariable String loginId, Model model, @CurrentUser Account account) {
 
-        Account accountByLoginId = accountRepository.findByLoginId(loginId); //해당 프로필 주인
-        if (accountByLoginId == null) {
-            throw new IllegalArgumentException(loginId + "에 해당하는 사용자가 없습니다.");
-        }
+        Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 
-        List<Likes> likesList = likeRepository.findByAccount(accountByLoginId);
-        List<Post> postList = new ArrayList<>();
-
-        for (Likes likes : likesList) {
-            postList.add(likes.getPost());
-        }
+        List<Likes> postList = likeService.getLikeList(accountByLoginId);
+        Boolean follow = followService.findFollow(account.getLoginId(), accountByLoginId); //로그인 계정, 프로필 주인 계정
 
         model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        model.addAttribute(accountByLoginId);
+        model.addAttribute("follow",follow);
+        model.addAttribute("ownerLoginId",accountByLoginId.getLoginId());
         model.addAttribute(postList);
         model.addAttribute("count", postList.size());
-        log.info(String.valueOf(postList.size()));
-        log.info(String.valueOf(postList.size()));
 
         return "account/profile";
     }

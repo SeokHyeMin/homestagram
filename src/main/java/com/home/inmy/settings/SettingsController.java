@@ -24,8 +24,6 @@ public class SettingsController {
     private final AccountService accountService;
     private final AccountFormValidator accountFormValidator;
     private final ModelMapper modelMapper;
-    private final AuthenticationManager authenticationManager;
-
 
 
     @GetMapping("/settings/profile")

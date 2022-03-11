@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor
 public class TagController {
 
-    private PostRepository postRepository;
-    private TagRepository tagRepository;
-    private PostTagRepository postTagRepository;
+    private final PostRepository postRepository;
+    private final TagRepository tagRepository;
+    private final PostTagRepository postTagRepository;
 
     private PostTagServiceImpl postTagService;
     private TagService tagService;

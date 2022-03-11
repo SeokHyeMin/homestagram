@@ -107,4 +107,14 @@ public class AccountService implements UserDetailsService {
 
     }
 
+    public Account getAccount(String loginId) {
+
+        Account account = accountRepository.findByLoginId(loginId);
+
+        if (account == null) {
+            throw new IllegalArgumentException(loginId + "에 해당하는 사용자가 없습니다.");
+        }
+
+        return account;
+    }
 }

@@ -25,7 +25,8 @@
                 <a class="btn home follow white-font" href="#" th:href="@{/settings/profile}">프로필 수정</a>
             </div>
             <div th:if="${!isOwner}">
-                <a class="btn home follow" href="#" th:href="@{/settings/profile}" th:style="500px">팔로우</a>
+                <a th:if="${!follow}" class="btn home follow" th:href="@{'/follow/'+${ownerLoginId}}" th:style="500px">팔로우</a>
+                <a th:if="${follow}" class="btn home follow" th:href="@{'/unfollow/'+${ownerLoginId}}" th:style="500px">언팔로우</a>
             </div>
             <br>
             <div class="card-text">
