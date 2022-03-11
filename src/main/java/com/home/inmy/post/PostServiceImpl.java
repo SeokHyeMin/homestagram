@@ -75,6 +75,12 @@ public class PostServiceImpl implements PostService{
         postRepository.delete(post);
     }
 
+    @Override
+    public Post getPost(Long post_num) {
+
+        return postRepository.findById(post_num).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
+    }
+
     public Post HighestViews(){
 
         Sort sort = Sort.by(Sort.Direction.DESC, "views");

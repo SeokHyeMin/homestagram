@@ -52,6 +52,9 @@ public class Account {
     @JsonBackReference
     private List<Likes> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "account")
+    private List<Follow> follows;
+
     //프로필
     @Embedded
     private Profile profile = new Profile();

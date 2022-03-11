@@ -2,23 +2,16 @@ package com.home.inmy.post;
 
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.domain.*;
-import com.home.inmy.like.LikeRepository;
 import com.home.inmy.like.LikeService;
 import com.home.inmy.postTag.PostTagRepository;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.images.FileStore;
-import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.post.form.PostForm;
-import com.home.inmy.tag.TagForm;
-import com.home.inmy.tag.TagRepository;
 import com.home.inmy.tag.TagService;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -29,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.*;
 
 @Controller
@@ -37,16 +29,10 @@ import java.util.*;
 @Slf4j
 public class PostController {
 
-    private final PostRepository postRepository;
-    private final TagRepository tagRepository;
-    private final PostTagRepository postTagRepository;
-    private final LikeRepository likeRepository;
-
-    private final FileStore fileStore;
     private final PostServiceImpl postService;
-    private final TagService tagService;
     private final PostTagServiceImpl postTagService;
     private final LikeService likeService;
+    private final TagService tagService;
 
     private final EntityManager em;
 
@@ -74,9 +60,9 @@ public class PostController {
     @GetMapping("/post/{post_num}")
     public String postView(@PathVariable Long post_num, Model model, @CurrentUser Account account) {
 
-        Post post = postRepository.findById(post_num).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
+        Post post = postService.getPost(post_num);
 
-        List<PostTag> postTagList = postTagRepository.findByPost(post);
+        List<PostTag> postTagList = postTagService.getPostTagList(post);
 
         postService.updateViews(post); //조회수 증가
 
@@ -99,21 +85,16 @@ public class PostController {
             return "posts/new-post";
         }
 
-        model.addAttribute(account);
+
         PostDto postDto = postForm.createBoardPostDto(account);
         Post newPost = postService.newPostSave(postDto);
 
         postTagService.tagSave(newPost, tags);
 
+        model.addAttribute(account);
         redirectAttributes.addAttribute("post_num", newPost.getPost_num());
 
         return "redirect:/post/{post_num}";
-    }
-
-    @ResponseBody
-    @GetMapping("/images/{filename}")
-    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 
     @Transactional(readOnly = true)
@@ -123,15 +104,11 @@ public class PostController {
         String jpql = "select distinct p from Post p join fetch p.account join fetch p.imageFiles";
         List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
 
-        List<Likes> likes = likeRepository.findByAccount(account);
-        List<Long> postNumList = new ArrayList<>();
-
-        for (Likes like : likes) {
-            postNumList.add(like.getPost().getPost_num());
-        }
+        List<Likes> likes = likeService.getLikeList(account);
+        List<Long> postNumList = likeService.getLikePostNum(likes);
 
         model.addAttribute(postList);
-        model.addAttribute("likes", likeRepository.findByAccount(account));
+        model.addAttribute("likes", likes);
         model.addAttribute("postNumList", postNumList);
         model.addAttribute(account);
 
@@ -141,7 +118,7 @@ public class PostController {
     @GetMapping("/post-update/{post_num}")
     public String postUpdateView(@PathVariable Long post_num, @CurrentUser Account account, Model model){
 
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당하는 글이 없습니다."));
+        Post post = postService.getPost(post_num);
 
         PostForm postForm = PostForm.builder()
                             .title(post.getTitle())
@@ -149,12 +126,8 @@ public class PostController {
                             .content(post.getContent())
                             .build();
 
-        List<PostTag> tagList = postTagRepository.findByPost(post);
-        List<String> tags = new ArrayList<>();
-
-        for (PostTag postTag : tagList) {
-            tags.add(postTag.getTag().getTagTitle());
-        }
+        List<PostTag> tagList = postTagService.getPostTagList(post);
+        List<String> tags = tagService.getTagList(tagList);
 
         model.addAttribute(account);
         model.addAttribute(post_num);
@@ -196,59 +169,4 @@ public class PostController {
         return "redirect:/postList";
     }
 
-    @PostMapping("/post-update/{post_num}/tags/add")
-    @ResponseBody
-    public ResponseEntity addTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
-
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-
-        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
-        postTagService.postTagSave(post, tag);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @Transactional
-    @PostMapping("/post-update/{post_num}/tags/remove")
-    @ResponseBody
-    public ResponseEntity removeTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
-
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        Tag tag = tagRepository.findByTagTitle(tagForm.getTagTitle());
-
-        if (tag == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        PostTag postTag = postTagRepository.findByPostAndTag(post, tag);
-        postTagService.deleteTag(postTag);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/like/add")
-    @ResponseBody
-    public Long addLike(Long post_num, @CurrentUser Account account) {
-
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-
-        postService.increaseLikes(post); //게시글 좋아요 수 증가
-
-        likeService.addLike(post, account);
-
-        return post.getLikes();
-    }
-
-    @GetMapping("/like/remove")
-    @ResponseBody
-    public Long removeLike(Long post_num, @CurrentUser Account account) {
-
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-
-        postService.decreaseLikes(post); //게시글 좋아요 수 감소
-
-        likeService.removeLike(post, account);
-
-        return post.getLikes();
-    }
 }

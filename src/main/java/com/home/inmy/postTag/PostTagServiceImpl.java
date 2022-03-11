@@ -3,7 +3,6 @@ package com.home.inmy.postTag;
 import com.home.inmy.domain.Post;
 import com.home.inmy.domain.PostTag;
 import com.home.inmy.domain.Tag;
-import com.home.inmy.tag.TagRepository;
 import com.home.inmy.tag.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
@@ -11,7 +10,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +19,6 @@ public class PostTagServiceImpl implements PostTagService{
     private final PostTagRepository postTagRepository;
 
     private final TagService tagService;
-
-    private final EntityManager em;
 
     @Override
     public void tagSave(Post post, String tags) throws JSONException {
@@ -53,5 +50,11 @@ public class PostTagServiceImpl implements PostTagService{
     @Override
     public void deletePost(Post post) {
         postTagRepository.deleteInBatch(post.getPostTags());
+    }
+
+    @Override
+    public List<PostTag> getPostTagList(Post post) {
+
+        return  postTagRepository.findByPost(post);
     }
 }

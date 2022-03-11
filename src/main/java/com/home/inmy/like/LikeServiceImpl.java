@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -40,7 +42,24 @@ public class LikeServiceImpl implements LikeService{
     public boolean accountPostLike(Post post , Account account){
         Likes likes = likeRepository.findByPostAndAccount(post, account);
 
-        return likes == null ? false : true;
+        return likes != null;
+    }
+
+    @Override
+    public List<Long> getLikePostNum(List<Likes> likes) {
+
+        List<Long> postNumList = new ArrayList<>();
+
+        for (Likes like : likes) {
+            postNumList.add(like.getPost().getPost_num());
+        }
+        return postNumList;
+    }
+
+    @Override
+    public List<Likes> getLikeList(Account account) {
+
+        return likeRepository.findByAccount(account);
     }
 
 }
