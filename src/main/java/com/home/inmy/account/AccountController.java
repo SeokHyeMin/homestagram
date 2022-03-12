@@ -2,6 +2,7 @@ package com.home.inmy.account;
 
 import com.home.inmy.account.form.SignUpForm;
 import com.home.inmy.account.validator.SignUpFormValidator;
+import com.home.inmy.domain.Follow;
 import com.home.inmy.domain.Likes;
 import com.home.inmy.domain.Post;
 import com.home.inmy.domain.Account;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -72,12 +74,20 @@ public class AccountController {
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 
         List<Post> postList = postRepository.findByAccount(account);
+        Boolean follow = followService.findFollow(loginId, account); //로그인 계정, 프로필 주인 계정
+        List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
+        List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로잉 리스트
+
+
+        log.info(String.valueOf(follow));
 
         model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        model.addAttribute(accountByLoginId);
+        model.addAttribute("account",accountByLoginId);
+        model.addAttribute("follow",follow);
+        model.addAttribute("following",following);
+        model.addAttribute("follower",follower);
         model.addAttribute(postList);
         model.addAttribute("count", postList.size());
-        log.info(String.valueOf(postList.size()));
 
         return "account/profile";
     }
@@ -88,13 +98,21 @@ public class AccountController {
 
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 
-        List<Likes> postList = likeService.getLikeList(accountByLoginId);
+        List<Likes> postLists = likeService.getLikeList(accountByLoginId);
+        List<Post> postList = new ArrayList<>();
+        for (Likes list : postLists) {
+            postList.add(list.getPost());
+        }
         Boolean follow = followService.findFollow(account.getLoginId(), accountByLoginId); //로그인 계정, 프로필 주인 계정
+        List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
+        List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로잉 리스트
 
         model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
         model.addAttribute("follow",follow);
-        model.addAttribute("ownerLoginId",accountByLoginId.getLoginId());
-        model.addAttribute(postList);
+        model.addAttribute("account",accountByLoginId);
+        model.addAttribute("following",following);
+        model.addAttribute("follower",follower);
+        model.addAttribute("postList", postList);
         model.addAttribute("count", postList.size());
 
         return "account/profile";

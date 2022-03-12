@@ -30,11 +30,9 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private AuthenticationManager authenticationManager;
 
     public Account processNewAccount(SignUpForm signUpForm){
-        Account newAccount = saveNewAccount(signUpForm);
-        return newAccount;
+        return saveNewAccount(signUpForm);
     }
 
     private Account saveNewAccount(SignUpForm signUpForm) {
@@ -75,25 +73,6 @@ public class AccountService implements UserDetailsService {
     public void updatePassword(Account account, String newPassword) {
 
         account.setPassword(passwordEncoder.encode(newPassword));
-        accountRepository.save(account);
-    }
-
-    public void updateNickname(Account account, String newNickname) {
-
-        account.setNickname(newNickname);
-        accountRepository.save(account);
-
-    }
-
-    public void updateLoginId(Account account, String newLoginId) {
-
-        account.setLoginId(newLoginId);
-        accountRepository.save(account);
-    }
-
-    public void updatePhoneNumber(Account account, String newPhoneNumber) {
-
-        account.setPhoneNumber(newPhoneNumber);
         accountRepository.save(account);
     }
 

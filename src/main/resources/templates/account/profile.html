@@ -8,7 +8,7 @@
 <div class="container">
     <br>
     <div class="row justify-content-center">
-        <div class="card col-3 mt-5" th:align="center" id="profile-box">
+        <div class="card col-3 mt-2" th:align="center" id="profile-box">
             <div class="mt-2">
                 <svg th:if="${#strings.isEmpty(account.profile?.image)}" class="profile-img"
                      th:data-jdenticon-value="${account.loginId}" width="125" height="125"></svg>
@@ -17,22 +17,26 @@
                      width="125" height="125"/>
             </div>
             <h4 class="display-8" th:text="${account.nickname}">nickname</h4>
-            <div class="row mt-2 mb-2 justify-content-center">
-                <div class="col-3">팔로워</div>
-                <div class="col-3">팔로잉</div>
+            <div class="row mt-2 justify-content-center">
+                    <dl style="display: flex; font-size: 13px;" class="justify-content-center">
+                        <dt style="gray; font-weight: lighter">팔로잉</dt>
+                        <dd th:text="${following.size()}" style="margin-left:10px;">팔로잉 수</dd>
+                        <dt style="font-weight: lighter; margin-left:10px;">팔로워</dt>
+                        <dd th:text="${follower.size()}" style="margin-left:10px;">팔로워 수</dd>
+                    </dl>
             </div>
             <div th:if="${isOwner}">
-                <a class="btn home follow white-font" href="#" th:href="@{/settings/profile}">프로필 수정</a>
+                <a class="btn home follow white-font" th:href="@{/settings/profile}">프로필 수정</a>
             </div>
             <div th:if="${!isOwner}">
-                <a th:if="${!follow}" class="btn home follow" th:href="@{'/follow/'+${ownerLoginId}}" th:style="500px">팔로우</a>
-                <a th:if="${follow}" class="btn home follow" th:href="@{'/unfollow/'+${ownerLoginId}}" th:style="500px">언팔로우</a>
+                <a th:if="${!follow}" class="btn home follow" th:href="@{'/follow/'+${account.loginId}}" th:style="500px">팔로우</a>
+                <a th:if="${follow}" class="btn home white-font unfollow" th:href="@{'/unfollow/'+${account.loginId}}" th:style="500px">언팔로우</a>
             </div>
             <br>
             <div class="card-text">
                 <small th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</small>
             </div>
-            <div class="card-text mb-3" style="text-align: center">
+            <div class="card-text" style="text-align: center">
                 <p th:if="${!#strings.isEmpty(account.profile?.url)}">
                             <span style="font-size: 20px;">
                                 <i class="fa fa-link col-1"></i>

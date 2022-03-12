@@ -4,14 +4,20 @@ import com.home.inmy.account.AccountRepository;
 import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Follow;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class FollowServiceImpl implements FollowService {
 
-    private FollowRepository followRepository;
-    private AccountRepository accountRepository;
+    private final FollowRepository followRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public void save(String toLoginId, Account fromAccount) {
@@ -42,5 +48,16 @@ public class FollowServiceImpl implements FollowService {
         Account toAccount = accountRepository.findByLoginId(toLoginId);
 
         followRepository.deleteByFromAccountAndToAccount(fromAccount, toAccount);
+    }
+
+    @Override
+    public List<Follow> getFollowerList(Account account) { //팔로워 리스트
+
+        return followRepository.findAllByToAccount(account);
+    }
+
+    @Override
+    public List<Follow> getFollowList(Account account) { //팔로잉 리스트
+        return followRepository.findAllByFromAccount(account);
     }
 }
