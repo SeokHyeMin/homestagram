@@ -9,13 +9,27 @@
 </div>
 <div class="container justify-content-center">
     <div class="row justify-content-center">
-        <div class="col-8">
-            <div class="main-img">
-                <img th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" style="width: 950px; height: 565px; border-radius: 10px">
-                <div class="carousel-caption d-none d-md-block" style="width: 950px; text-align: left">
-                    <h4 th:text="${post.getTitle()}">title</h4>
-                    <p th:text="${post.getWriter()}">Some representative placeholder content for the first slide.</p>
+        <div class="col-12">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner main-page-title" style="width: 1900px; height: 380px">
+                    <div class="carousel-item active main-page-div">
+                        <img src="/image/main/restaurant-6730811_1920.jpg" class="main-page-img">
+                    </div>
+                    <div class="carousel-item main-page-div">
+                        <img src="/image/main/surf-3104869_1920.jpg" class="main-page-img">
+                    </div>
+                    <div class="carousel-item main-page-div">
+                        <img src="/image/main/email-marketing-2362038_1920.png" class="main-page-img">
+                    </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
     </div>
@@ -70,7 +84,7 @@
     <h4 style="margin-top: 5%">인기 게시물</h4>
     <div>
         <div class="col-sm-12" style="width: 1245px">
-            <div class="row" style="margin-right: 4%;">
+            <div class="row" th:if="${#lists.isEmpty(postList)}" style="margin-right: 4%;">
                 <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px; padding-bottom: 15px; width: 300px;">
                     <div class="card mb-3" style="width: 260px; border: white">
                         <div class="post-detail">

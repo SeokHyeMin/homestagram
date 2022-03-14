@@ -1,8 +1,9 @@
 package com.home.inmy.post;
 
 import com.home.inmy.account.CurrentUser;
+import com.home.inmy.bookmark.BookmarkServiceImpl;
 import com.home.inmy.domain.*;
-import com.home.inmy.like.LikeService;
+import com.home.inmy.like.LikeServiceImpl;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.post.form.PostForm;
 import com.home.inmy.tag.TagService;
@@ -29,8 +30,9 @@ public class PostController {
 
     private final PostServiceImpl postService;
     private final PostTagServiceImpl postTagService;
-    private final LikeService likeService;
+    private final LikeServiceImpl likeService;
     private final TagService tagService;
+    private final BookmarkServiceImpl bookmarkService;
 
     private final EntityManager em;
 
@@ -70,6 +72,7 @@ public class PostController {
 
         model.addAttribute("isOwner",post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
         model.addAttribute("like",likeService.accountPostLike(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true
+        model.addAttribute("bookmark",bookmarkService.accountPostBookmark(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true
 
         return "posts/post-detail";
     }
@@ -104,9 +107,14 @@ public class PostController {
         List<Likes> likes = likeService.getLikeList(account);
         List<Long> postNumList = likeService.getLikePostNum(likes);
 
+        List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
+        List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
+
         model.addAttribute(postList);
         model.addAttribute("likes", likes);
+        model.addAttribute("bookmarks", bookmarks);
         model.addAttribute("postNumList", postNumList);
+        model.addAttribute("bookmarkPostNum", bookmarkPostNum);
         model.addAttribute(account);
 
         return "posts/post-list";

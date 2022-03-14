@@ -34,6 +34,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Likes> likesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<Bookmark> bookmarkList = new ArrayList<>();
+
     private String content;
 
     private LocalDateTime writeTime;
@@ -42,19 +45,9 @@ public class Post {
 
     private String writer;
 
-    private Long views;
-
-    private Long likes;
+    private Long views; //조회수
 
     public void updateViews(){
         views++;
-    }
-
-    public void increaseLikes() {
-        likes++;
-    }
-
-    public void decreaseLikes() {
-        likes--;
-    }
+    } //조회수 증가
 }

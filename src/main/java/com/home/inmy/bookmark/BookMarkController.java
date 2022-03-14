@@ -1,4 +1,4 @@
-package com.home.inmy.like;
+package com.home.inmy.bookmark;
 
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.domain.Account;
@@ -11,28 +11,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
-public class LikeController {
+public class BookMarkController {
 
     private final PostService postService;
-    private final LikeService likeService;
+    private final BookmarkServiceImpl bookmarkService;
 
-    @GetMapping("/like/add")
+    @GetMapping("/bookmark/add")
     @ResponseBody
-    public int addLike(Long post_num, @CurrentUser Account account) {
+    public int addBookmark(Long post_num, @CurrentUser Account account) {
 
         Post post = postService.getPost(post_num);
-        likeService.addLike(post, account);
+        bookmarkService.addBookmark(post, account);
 
-        return post.getLikesList().size();
+        return post.getBookmarkList().size();
     }
 
-    @GetMapping("/like/remove")
+    @GetMapping("/bookmark/remove")
     @ResponseBody
-    public int removeLike(Long post_num, @CurrentUser Account account) {
+    public int removeBookmark(Long post_num, @CurrentUser Account account) {
 
         Post post =  postService.getPost(post_num);
-        likeService.removeLike(post, account);
+        bookmarkService.removeBookmark(post, account);
 
-        return post.getLikesList().size();
+        return post.getBookmarkList().size();
     }
 }

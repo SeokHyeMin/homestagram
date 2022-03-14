@@ -29,11 +29,14 @@ public class MainController {
         Post post = postService.HighestViews();
         List<Post> posts = postService.DescLikes();
         List<Post> postList = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            postList.add(posts.get(i));
+
+        if(!posts.isEmpty()){
+            postList.addAll(posts);
+
         }
-        model.addAttribute(post);
-        model.addAttribute(postList);
+
+        model.addAttribute("post",post);
+        model.addAttribute("postList",postList);
 
         return "index";
     }

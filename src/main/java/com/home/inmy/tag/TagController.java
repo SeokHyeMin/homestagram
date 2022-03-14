@@ -23,8 +23,8 @@ public class TagController {
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
 
-    private PostTagServiceImpl postTagService;
-    private TagService tagService;
+    private final PostTagServiceImpl postTagService;
+    private final TagService tagService;
 
     @PostMapping("/post-update/{post_num}/tags/add")
     @ResponseBody
