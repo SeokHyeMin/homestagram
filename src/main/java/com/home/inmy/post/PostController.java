@@ -11,6 +11,7 @@ import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -18,7 +19,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
@@ -33,8 +33,6 @@ public class PostController {
     private final LikeServiceImpl likeService;
     private final TagService tagService;
     private final BookmarkServiceImpl bookmarkService;
-
-    private final EntityManager em;
 
     @ModelAttribute("categories")
     public List<Category> categories() {
@@ -99,10 +97,11 @@ public class PostController {
 
     @Transactional(readOnly = true)
     @GetMapping("/postList")
-    public String postList(Model model, @CurrentUser Account account){
+    public String postList(Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
-        String jpql = "select distinct p from Post p join fetch p.account join fetch p.imageFiles";
-        List<Post> postList = em.createQuery(jpql, Post.class).getResultList();
+        Page<Post> postList = postService.pageList(page);
+
+        int totalPage = postList.getTotalPages();
 
         List<Likes> likes = likeService.getLikeList(account);
         List<Long> postNumList = likeService.getLikePostNum(likes);
@@ -110,7 +109,8 @@ public class PostController {
         List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
         List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
 
-        model.addAttribute(postList);
+        model.addAttribute("postList", postList);
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("likes", likes);
         model.addAttribute("bookmarks", bookmarks);
         model.addAttribute("postNumList", postNumList);

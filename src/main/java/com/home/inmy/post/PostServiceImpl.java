@@ -12,6 +12,8 @@ import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,6 +101,11 @@ public class PostServiceImpl implements PostService{
         Sort sort = Sort.by(Sort.Direction.DESC, "bookmarkList.size()");
 
         return postRepository.findAll(sort);
+    }
+
+    public Page<Post> pageList(int page){
+
+        return postRepository.findAll(PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime")));
     }
 
 }
