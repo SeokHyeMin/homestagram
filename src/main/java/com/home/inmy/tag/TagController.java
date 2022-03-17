@@ -26,11 +26,11 @@ public class TagController {
     private final PostTagServiceImpl postTagService;
     private final TagService tagService;
 
-    @PostMapping("/post-update/{post_num}/tags/add")
+    @PostMapping("/post-update/{id}/tags/add")
     @ResponseBody
-    public ResponseEntity addTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
+    public ResponseEntity addTag(@PathVariable Long id, @RequestBody TagForm tagForm) {
 
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
 
         Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
         postTagService.postTagSave(post, tag);
@@ -39,11 +39,11 @@ public class TagController {
     }
 
     @Transactional
-    @PostMapping("/post-update/{post_num}/tags/remove")
+    @PostMapping("/post-update/{id}/tags/remove")
     @ResponseBody
-    public ResponseEntity removeTag(@PathVariable Long post_num, @RequestBody TagForm tagForm) {
+    public ResponseEntity removeTag(@PathVariable Long id, @RequestBody TagForm tagForm) {
 
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
         Tag tag = tagRepository.findByTagTitle(tagForm.getTagTitle());
 
         if (tag == null) {

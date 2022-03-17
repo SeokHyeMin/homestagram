@@ -16,12 +16,12 @@ public class Bookmark {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
-    @JoinColumn(name = "account_num")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
-    @JoinColumn(name = "post_num")
+    @JoinColumn(name = "post_id")
     private Post post;
 
 }

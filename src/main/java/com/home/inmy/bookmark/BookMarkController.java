@@ -18,9 +18,9 @@ public class BookMarkController {
 
     @GetMapping("/bookmark/add")
     @ResponseBody
-    public int addBookmark(Long post_num, @CurrentUser Account account) {
+    public int addBookmark(Long id, @CurrentUser Account account) {
 
-        Post post = postService.getPost(post_num);
+        Post post = postService.getPost(id);
         bookmarkService.addBookmark(post, account);
 
         return post.getBookmarkList().size();
@@ -28,9 +28,9 @@ public class BookMarkController {
 
     @GetMapping("/bookmark/remove")
     @ResponseBody
-    public int removeBookmark(Long post_num, @CurrentUser Account account) {
+    public int removeBookmark(Long id, @CurrentUser Account account) {
 
-        Post post =  postService.getPost(post_num);
+        Post post =  postService.getPost(id);
         bookmarkService.removeBookmark(post, account);
 
         return post.getBookmarkList().size();

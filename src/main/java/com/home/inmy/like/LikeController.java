@@ -18,9 +18,9 @@ public class LikeController {
 
     @GetMapping("/like/add")
     @ResponseBody
-    public int addLike(Long post_num, @CurrentUser Account account) {
+    public int addLike(Long id, @CurrentUser Account account) {
 
-        Post post = postService.getPost(post_num);
+        Post post = postService.getPost(id);
         likeService.addLike(post, account);
 
         return post.getLikesList().size();
@@ -28,9 +28,9 @@ public class LikeController {
 
     @GetMapping("/like/remove")
     @ResponseBody
-    public int removeLike(Long post_num, @CurrentUser Account account) {
+    public int removeLike(Long id, @CurrentUser Account account) {
 
-        Post post =  postService.getPost(post_num);
+        Post post =  postService.getPost(id);
         likeService.removeLike(post, account);
 
         return post.getLikesList().size();

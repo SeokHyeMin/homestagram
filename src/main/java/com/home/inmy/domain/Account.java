@@ -16,7 +16,8 @@ public class Account {
 
     //회원가입
     @Id @GeneratedValue
-    private Long account_num;
+    @Column(name = "account_id")
+    private Long id;
 
     @Column(unique = true)
     private String nickname;

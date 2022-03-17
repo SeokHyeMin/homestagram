@@ -55,10 +55,10 @@ public class PostController {
     }
 
     @Transactional
-    @GetMapping("/post/{post_num}")
-    public String postView(@PathVariable Long post_num, Model model, @CurrentUser Account account) {
+    @GetMapping("/post/{id}")
+    public String postView(@PathVariable Long id, Model model, @CurrentUser Account account) {
 
-        Post post = postService.getPost(post_num);
+        Post post = postService.getPost(id);
 
         List<PostTag> postTagList = postTagService.getPostTagList(post);
 
@@ -90,9 +90,9 @@ public class PostController {
         postTagService.tagSave(newPost, tags);
 
         model.addAttribute(account);
-        redirectAttributes.addAttribute("post_num", newPost.getPost_num());
+        redirectAttributes.addAttribute("id", newPost.getId());
 
-        return "redirect:/post/{post_num}";
+        return "redirect:/post/{id}";
     }
 
     @Transactional(readOnly = true)
@@ -100,7 +100,6 @@ public class PostController {
     public String postList(Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
         Page<Post> postList = postService.pageList(page);
-
         int totalPage = postList.getTotalPages();
 
         List<Likes> likes = likeService.getLikeList(account);
@@ -120,10 +119,10 @@ public class PostController {
         return "posts/post-list";
     }
 
-    @GetMapping("/post-update/{post_num}")
-    public String postUpdateView(@PathVariable Long post_num, @CurrentUser Account account, Model model){
+    @GetMapping("/post-update/{id}")
+    public String postUpdateView(@PathVariable Long id, @CurrentUser Account account, Model model){
 
-        Post post = postService.getPost(post_num);
+        Post post = postService.getPost(id);
 
         PostForm postForm = PostForm.builder()
                             .title(post.getTitle())
@@ -135,7 +134,7 @@ public class PostController {
         List<String> tags = tagService.getTagList(tagList);
 
         model.addAttribute(account);
-        model.addAttribute(post_num);
+        model.addAttribute(id);
         model.addAttribute(postForm);
         model.addAttribute("tagStr", String.join("," ,tags));
 
@@ -143,8 +142,8 @@ public class PostController {
     }
 
 
-    @PostMapping("/post-update/{post_num}")
-    public String postUpdate(@PathVariable Long post_num, @CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,
+    @PostMapping("/post-update/{id}")
+    public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,
                              RedirectAttributes redirectAttributes) throws IOException{
 
         if (errors.hasErrors()) {
@@ -155,17 +154,17 @@ public class PostController {
         model.addAttribute(account);
 
         PostDto postDto = postForm.createBoardPostDto(account);
-        Post post = postService.updatePost(postDto, post_num);
+        Post post = postService.updatePost(postDto, id);
 
-       redirectAttributes.addAttribute("post_num", post.getPost_num());
+       redirectAttributes.addAttribute("id", post.getId());
 
-        return "redirect:/post/{post_num}";
+        return "redirect:/post/{id}";
     }
 
-    @GetMapping("/post-delete/{post_num}")
-    public String postDelete(@PathVariable Long post_num, @CurrentUser Account account, Model model, RedirectAttributes redirectAttributes){
+    @GetMapping("/post-delete/{id}")
+    public String postDelete(@PathVariable Long id, @CurrentUser Account account, Model model, RedirectAttributes redirectAttributes){
 
-        postService.deletePost(post_num);
+        postService.deletePost(id);
 
         model.addAttribute(account);
 

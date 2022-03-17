@@ -56,7 +56,7 @@
                             <div class="col-sm-4 justify-content-center pt-4">
                                 <div class="row mx-auto" style="border-radius: 20px;">
                                     <div class="col-3">
-                                        <a th:value="${post.post_num}" href="javascript:" class="heart-click heart_icon${post.post_num}">
+                                        <a th:value="${post.id}" href="javascript:" class="heart-click heart_icon${post.id}">
                                             <svg th:if="${like}" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="crimson" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
                                             </svg>
@@ -66,14 +66,14 @@
                                         </a>
                                     </div>
                                     <div class="col-1">
-                                        <span style="font-size: 13px; width: 13px; height: 13px" th:id="${post.post_num}">[[${post.likesList.size()}]]</span>
+                                        <span style="font-size: 13px; width: 13px; height: 13px" th:id="${post.id}">[[${post.likesList.size()}]]</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 justify-content-center pt-4">
                                 <div class="row mx-auto" style="border-radius: 20px;">
                                     <div class="col-3">
-                                        <a th:value="${post.post_num}" href="javascript:" class="bookmark-click bookmark_icon${post.post_num}">
+                                        <a th:value="${post.id}" href="javascript:" class="bookmark-click bookmark_icon${post.id}">
                                             <svg th:if="${bookmark}" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
                                                 <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
                                             </svg>
@@ -83,7 +83,7 @@
                                         </a>
                                     </div>
                                     <div class="col-1">
-                                        <span style="font-size: 13px; width: 13px; height: 13px" th:id="'bookmark'+${post.post_num}">[[${post.bookmarkList.size()}]]</span>
+                                        <span style="font-size: 13px; width: 13px; height: 13px" th:id="'bookmark'+${post.id}">[[${post.bookmarkList.size()}]]</span>
                                     </div>
                                 </div>
                             </div>
@@ -92,8 +92,8 @@
                                         style="width: 30px; height: 30px; border-radius: 70%; background-color: gray"></a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="width: 50px">
                                         <li><a class="dropdown-item" th:href="@{'/'}" >신고하기</a></li>
-                                        <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-update/' + ${post_num}}">수정하기</a></li>
-                                        <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-delete/' + ${post_num}}">삭제하기</a></li>
+                                        <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-update/' + ${id}}">수정하기</a></li>
+                                        <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-delete/' + ${id}}">삭제하기</a></li>
                                     </ul>
                             </div>
                         </div>

@@ -53,7 +53,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         List<Long> postNumList = new ArrayList<>();
 
         for (Bookmark bookmark : bookmarks) {
-            postNumList.add(bookmark.getPost().getPost_num());
+            postNumList.add(bookmark.getPost().getId());
         }
         return postNumList;
     }

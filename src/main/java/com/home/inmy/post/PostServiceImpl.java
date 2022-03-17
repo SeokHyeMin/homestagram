@@ -3,11 +3,8 @@ package com.home.inmy.post;
 import com.home.inmy.bookmark.BookmarkServiceImpl;
 import com.home.inmy.domain.Post;
 import com.home.inmy.images.ImageFileRepository;
-import com.home.inmy.images.ImageFileService;
 import com.home.inmy.images.ImageFileServiceImpl;
-import com.home.inmy.like.LikeService;
 import com.home.inmy.like.LikeServiceImpl;
-import com.home.inmy.postTag.PostTagService;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +41,9 @@ public class PostServiceImpl implements PostService{
         return postRepository.save(newPost);
     }
 
-    public Post updatePost(PostDto postDto, Long post_num) throws IOException {
+    public Post updatePost(PostDto postDto, Long id) throws IOException {
 
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
 
         modelMapper.map(postDto, post); //변경감지
 
@@ -62,8 +59,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void deletePost(Long post_num) { //post와 연관되어 있는 것들 함께 삭제
-        Post post = postRepository.findById(post_num).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+    public void deletePost(Long id) { //post와 연관되어 있는 것들 함께 삭제
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
         imageFileService.deleteImageFile(post);
         likeService.deletePostLike(post);
         bookmarkService.deletePostBookmark(post);
@@ -72,9 +69,9 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Post getPost(Long post_num) {
+    public Post getPost(Long id) {
 
-        return postRepository.findById(post_num).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
+        return postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
     }
 
     public Post HighestViews(){
@@ -105,7 +102,8 @@ public class PostServiceImpl implements PostService{
 
     public Page<Post> pageList(int page){
 
-        return postRepository.findAll(PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime")));
+        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime"));
+        return postRepository.findPostAllCountBy(pageRequest);
     }
 
 }

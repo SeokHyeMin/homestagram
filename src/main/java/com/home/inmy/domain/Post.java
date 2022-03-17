@@ -16,13 +16,14 @@ import java.util.Set;
 public class Post {
 
     @Id @GeneratedValue
-    private Long post_num;
+    @Column(name = "post_id")
+    private Long id;
 
     @Length(min = 2, max = 20)
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_num")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)

@@ -51,7 +51,7 @@ public class LikeServiceImpl implements LikeService{
         List<Long> postNumList = new ArrayList<>();
 
         for (Likes like : likes) {
-            postNumList.add(like.getPost().getPost_num());
+            postNumList.add(like.getPost().getId());
         }
         return postNumList;
     }

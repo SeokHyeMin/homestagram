@@ -26,7 +26,6 @@ public class MainController {
             model.addAttribute(account);
         }
 
-        Post post = postService.HighestViews();
         List<Post> posts = postService.DescLikes();
         List<Post> postList = new ArrayList<>();
 
@@ -35,7 +34,6 @@ public class MainController {
 
         }
 
-        model.addAttribute("post",post);
         model.addAttribute("postList",postList);
 
         return "index";

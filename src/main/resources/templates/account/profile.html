@@ -53,7 +53,7 @@
                 </div>
                 <div class="row" style="margin-right: 8%; padding-top: 15px">
                     <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px;">
-                        <a th:href="@{'/post/'+${post.post_num}}">
+                        <a th:href="@{'/post/'+${post.id}}">
                             <img class="profile-postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="170" height="170"/>
                         </a>
                     </div>

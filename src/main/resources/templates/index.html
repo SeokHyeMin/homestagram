@@ -95,15 +95,15 @@
             </nav>
         </div>
     </div>
-    <h4 style="margin-top: 5%">인기 게시물</h4>
+    <h4 style="margin-top: 5%; font-size: 20px">인기 게시물</h4>
     <div>
         <div class="col-sm-12" style="width: 1245px">
-            <div class="row" th:if="${#lists.isEmpty(postList)}" style="margin-right: 4%;">
+            <div class="row" th:if="${!#lists.isEmpty(postList)}" style="margin-right: 4%;">
                 <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px; padding-bottom: 15px; width: 300px;">
                     <div class="card mb-3" style="width: 260px; border: white">
                         <div class="post-detail">
                             <div style="padding-bottom: 15px;">
-                                <a th:href="@{'/post/'+${post.post_num}}">
+                                <a th:href="@{'/post/'+${post.id}}">
                                     <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="280" height="175" style="border-radius: 20px;"/>
                                 </a>
                             </div>
