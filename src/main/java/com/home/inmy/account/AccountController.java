@@ -88,36 +88,34 @@ public class AccountController {
         model.addAttribute("following",following);
         model.addAttribute("follower",follower);
         model.addAttribute(postList);
-        model.addAttribute("count", postList.size());
+        model.addAttribute("listText","사진");
 
         return "account/profile";
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/profile/like/{loginId}") //해당프로필에서 프로필 주인이 좋아요한 게시물만 보기.
-    public String profileLike(@PathVariable String loginId, Model model, @CurrentUser Account account) {
+    @GetMapping("/profile/{listType}/{loginId}")
+    public String profileLike(@PathVariable String loginId, @PathVariable String listType, Model model, @CurrentUser Account account) {
 
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
-
-        List<Likes> postLists = likeService.getLikeList(accountByLoginId);
         List<Post> postList = new ArrayList<>();
-        for (Likes list : postLists) {
-            postList.add(list.getPost());
+        String listText = null;
+
+        if(listType.equals("like")){
+            List<Likes> postLists = likeService.getLikeList(accountByLoginId);
+            for (Likes list : postLists) {
+                postList.add(list.getPost());
+            }
+            listText = "좋아요";
+        }else if(listType.equals("photoList")){
+            postList = postRepository.findByAccount(account);
+            listText = "사진";
         }
-        Boolean follow = followService.findFollow(account.getLoginId(), accountByLoginId); //로그인 계정, 프로필 주인 계정
-        List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
-        List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로잉 리스트
 
-        model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        model.addAttribute("follow",follow);
-        model.addAttribute("account",accountByLoginId);
-        model.addAttribute("following",following);
-        model.addAttribute("follower",follower);
         model.addAttribute("postList", postList);
-        model.addAttribute("count", postList.size());
+        model.addAttribute("listText",listText);
 
-        return "account/profile";
+        return "account/profile :: #profile-postList";
     }
-
 
 }

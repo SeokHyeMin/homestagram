@@ -45,11 +45,11 @@
                 </p>
             </div>
         </div>
-        <div class="col-8">
+        <div class="col-8" id="profile-postList">
             <div class="mt-5" style="margin-left: 10%;">
                 <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
-                        <span>사진</span>
-                        <span th:text="${count}" style="color: #35c5f0">글 개수</span>
+                        <span th:text="${listText}">사진</span>
+                        <span th:text="${postList.size()}" style="color: #35c5f0">글 개수</span>
                 </div>
                 <div class="row" style="margin-right: 8%; padding-top: 15px">
                     <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px;">
@@ -62,5 +62,6 @@
         </div>
     </div>
 </div>
+<div th:replace="fragments.html :: profile-list"></div>
 </body>
 </html>
