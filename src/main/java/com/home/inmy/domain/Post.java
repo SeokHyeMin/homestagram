@@ -1,6 +1,7 @@
 package com.home.inmy.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -48,7 +49,13 @@ public class Post {
 
     private Long views; //조회수
 
+    private Long likes; //좋아요 수
+
     public void updateViews(){
         views++;
     } //조회수 증가
+
+    public void increaseLikes(){likes++;}
+
+    public void decreaseLikes(){likes--;}
 }

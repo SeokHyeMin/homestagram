@@ -60,6 +60,7 @@ public class PostDto {
                 .category(category)
                 .writer(writer)
                 .views(0L)
+                .likes(0L)
                 .build();
     }
 }

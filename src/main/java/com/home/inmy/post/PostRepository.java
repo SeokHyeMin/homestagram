@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,12 @@ public interface PostRepository extends JpaRepository<Post, Long>{
 
     List<Post> findByAccount(Account account);
 
-    List<Post> findAll(Sort sort);
-
     @Query(value = "select p from Post p join fetch p.account join fetch p.imageFiles", countQuery = "select count(p.id) from Post p")
     Page<Post> findPostAllCountBy(Pageable pageable);
+
+    @Query(
+            value = "select p from Post p join fetch p.account join fetch p.imageFiles where p.category = :category",
+            countQuery = "select count(p.id) from Post p"
+    )
+    Page<Post> findByCategory(@Param("category") String category, Pageable pageable);
 }

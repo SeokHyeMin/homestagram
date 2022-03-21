@@ -100,6 +100,7 @@ public class PostController {
     public String postList(Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
         Page<Post> postList = postService.pageList(page);
+
         int totalPage = postList.getTotalPages();
 
         List<Likes> likes = likeService.getLikeList(account);
@@ -117,6 +118,58 @@ public class PostController {
         model.addAttribute(account);
 
         return "posts/post-list";
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/postList/{orderBy}")
+    public String postListOrderBy(@PathVariable String orderBy, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+
+        log.info("정렬시작");
+        Page<Post> postList = postService.pageList(page, orderBy);
+
+        int totalPage = postList.getTotalPages();
+
+        List<Likes> likes = likeService.getLikeList(account);
+        List<Long> postNumList = likeService.getLikePostNum(likes);
+
+        List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
+        List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
+
+        model.addAttribute("postList", postList);
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("likes", likes);
+        model.addAttribute("bookmarks", bookmarks);
+        model.addAttribute("postNumList", postNumList);
+        model.addAttribute("bookmarkPostNum", bookmarkPostNum);
+        model.addAttribute(account);
+
+        return "posts/post-list :: #postList-div";
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/postList/category/{category}")
+    public String postListByCategory(@PathVariable String category, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+
+        log.info("postListByCategory");
+        Page<Post> postList = postService.pageListByCategory(page, category);
+
+        int totalPage = postList.getTotalPages();
+
+        List<Likes> likes = likeService.getLikeList(account);
+        List<Long> postNumList = likeService.getLikePostNum(likes);
+
+        List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
+        List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
+
+        model.addAttribute("postList", postList);
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("likes", likes);
+        model.addAttribute("bookmarks", bookmarks);
+        model.addAttribute("postNumList", postNumList);
+        model.addAttribute("bookmarkPostNum", bookmarkPostNum);
+        model.addAttribute(account);
+
+        return "posts/post-list :: #postList-div";
     }
 
     @GetMapping("/post-update/{id}")
@@ -140,7 +193,6 @@ public class PostController {
 
         return "posts/post-update";
     }
-
 
     @PostMapping("/post-update/{id}")
     public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,

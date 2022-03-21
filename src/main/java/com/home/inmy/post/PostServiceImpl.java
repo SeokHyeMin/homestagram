@@ -1,13 +1,17 @@
 package com.home.inmy.post;
 
 import com.home.inmy.bookmark.BookmarkServiceImpl;
+import com.home.inmy.domain.Account;
+import com.home.inmy.domain.Follow;
 import com.home.inmy.domain.Post;
+import com.home.inmy.follow.FollowServiceImpl;
 import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.images.ImageFileServiceImpl;
 import com.home.inmy.like.LikeServiceImpl;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.List;
 
-@Service
+@Service @Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService{
@@ -30,6 +34,7 @@ public class PostServiceImpl implements PostService{
     private final ImageFileServiceImpl imageFileService;
     private final LikeServiceImpl likeService;
     private final BookmarkServiceImpl bookmarkService;
+    private final FollowServiceImpl followService;
 
     private final ModelMapper modelMapper;
 
@@ -88,7 +93,7 @@ public class PostServiceImpl implements PostService{
 
     public List<Post> DescLikes(){
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "likesList");
+        Sort sort = Sort.by(Sort.Direction.DESC, "likes");
 
         return postRepository.findAll(sort);
     }
@@ -104,6 +109,18 @@ public class PostServiceImpl implements PostService{
 
         PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime"));
         return postRepository.findPostAllCountBy(pageRequest);
+    }
+
+    public Page<Post> pageList(int page, String orderBy){
+
+        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, orderBy));
+        return postRepository.findPostAllCountBy(pageRequest);
+    }
+
+    public Page<Post> pageListByCategory(int page, String category){
+        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime"));
+        log.info(category);
+        return postRepository.findByCategory(category, pageRequest);
     }
 
 }

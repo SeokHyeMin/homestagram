@@ -464,5 +464,57 @@
         });
     </script>
 </div>
+<div th:fragment="selectbox-orderBy">
+    <script type="application/javascript" th:inline="javascript">
+
+        $("#selectBox-orderBy").change( function(){
+            console.log("정렬 클릭")
+            //최신순 눌렀을 때
+            if($(this).val() ===  "writeTime"){
+
+                console.log("최신순")
+                $.ajax({
+                    url : '/postList/writeTime',
+                    type : 'get',
+                    success : function(fragment) {
+                        console.log("최신순 정렬 성공")
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+
+                // 좋아요순 눌렀을 때
+            }else if($(this).val() === "likes"){
+                console.log("좋아요순")
+                $.ajax({
+                    url : '/postList/likes',
+                    type : 'get',
+                    success : function(fragment) {
+                        console.log("좋아요순 정렬 성공")
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+<div th:fragment="selectbox-category">
+    <script type="application/javascript" th:inline="javascript">
+
+        $("#selectBox-category").change( function(){
+            console.log("카테고리 클릭")
+
+                console.log($(this).val())
+
+                $.ajax({
+                    url : '/postList/category/'+$(this).val(),
+                    type : 'get',
+                    success : function(fragment) {
+
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+        });
+    </script>
+</div>
 </body>
 </html>

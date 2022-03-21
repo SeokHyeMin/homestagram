@@ -23,13 +23,14 @@ public class LikeServiceImpl implements LikeService{
                 .account(account)
                 .post(post)
                 .build();
-
+        post.increaseLikes();
         likeRepository.save(like);
     }
 
     @Override
     public void removeLike(Post post, Account account) {
         Likes likes = likeRepository.findByPostAndAccount(post, account);
+        post.decreaseLikes();
         likeRepository.delete(likes);
     }
 
