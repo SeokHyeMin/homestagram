@@ -78,12 +78,9 @@ public class AccountController {
         List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
         List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로잉 리스트
 
-
-        log.info(String.valueOf(follow));
-
         model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        model.addAttribute("account",accountByLoginId);
-        model.addAttribute("follow",follow);
+        model.addAttribute("account",accountByLoginId); //프로필 주인
+        model.addAttribute("follow",follow); //해당계정을 팔로잉하는지 안하는지
         model.addAttribute("following",following);
         model.addAttribute("follower",follower);
         model.addAttribute(postList);
@@ -100,21 +97,25 @@ public class AccountController {
         List<Post> postList = new ArrayList<>();
         String listText = null;
 
-        if(listType.equals("like")){
-            List<Likes> postLists = likeService.getLikeList(accountByLoginId);
-            for (Likes list : postLists) {
-                postList.add(list.getPost());
-            }
-            listText = "좋아요";
-        }else if(listType.equals("photoList")){
-            postList = postRepository.findByAccount(accountByLoginId);
-            listText = "게시물";
-        }else if(listType.equals("bookmarkList")){
-            List<Bookmark> bookmarkList = bookmarkService.getBookmarkList(accountByLoginId);
-            for (Bookmark bookmark : bookmarkList) {
-                postList.add(bookmark.getPost());
-            }
-            listText = "북마크";
+        switch (listType) { //sub-nav 누른 것에 따라 보여지는 list 변경.
+            case "like":
+                List<Likes> postLists = likeService.getLikeList(accountByLoginId);
+                for (Likes list : postLists) {
+                    postList.add(list.getPost());
+                }
+                listText = "좋아요";
+                break;
+            case "photoList":
+                postList = postRepository.findByAccount(accountByLoginId);
+                listText = "게시물";
+                break;
+            case "bookmarkList":
+                List<Bookmark> bookmarkList = bookmarkService.getBookmarkList(accountByLoginId);
+                for (Bookmark bookmark : bookmarkList) {
+                    postList.add(bookmark.getPost());
+                }
+                listText = "북마크";
+                break;
         }
 
         model.addAttribute("postList", postList);
