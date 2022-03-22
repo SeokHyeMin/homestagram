@@ -4,6 +4,9 @@ import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Likes;
 import com.home.inmy.domain.Post;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -61,6 +64,12 @@ public class LikeServiceImpl implements LikeService{
     public List<Likes> getLikeList(Account account) {
 
         return likeRepository.findByAccount(account);
+    }
+
+    public Page<Likes> getProfileLikeList(Account account, int page) {
+
+        PageRequest pageRequest = PageRequest.of(page, 8);
+        return likeRepository.findByAccount(account, pageRequest);
     }
 
 }

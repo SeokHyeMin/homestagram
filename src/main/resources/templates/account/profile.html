@@ -18,11 +18,13 @@
             </div>
             <h4 class="display-8" th:text="${account.nickname}">nickname</h4>
             <div class="row mt-2 justify-content-center">
-                    <dl style="display: flex; font-size: 13px;" class="justify-content-center">
+                    <dl style="display: flex; font-size: 13px;" class="justify-content-center follow-dl">
                         <dt style="font-weight: lighter">팔로잉</dt>
-                        <dd th:text="${following.size()}" style="margin-left:10px;">팔로잉 수</dd>
+                        <dd th:text="${following.size()}" style="margin-left:10px; font-weight: bold; cursor: pointer" id="following"
+                            onMouseover="this.style.color='blue';" onMouseout="this.style.color='black';">팔로잉 수</dd>
                         <dt style="font-weight: lighter; margin-left:10px;">팔로워</dt>
-                        <dd th:text="${follower.size()}" style="margin-left:10px;">팔로워 수</dd>
+                        <dd th:text="${follower.size()}" style="margin-left:10px; font-weight: bold; cursor: pointer" id="follower"
+                            onMouseover="this.style.color='blue';" onMouseout="this.style.color='black';">팔로워 수</dd>
                     </dl>
             </div>
             <div th:if="${isOwner}">
@@ -45,11 +47,11 @@
                 </p>
             </div>
         </div>
-        <div class="col-8" id="profile-postList">
+        <div class="col-8 profile-list" id="profile-postList">
             <div class="mt-5" style="margin-left: 10%;">
                 <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
                         <span th:text="${listText}">게시물</span>
-                        <span th:text="${postList.size()}" style="color: #35c5f0">글 개수</span>
+                        <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
                 </div>
                 <div class="row" style="margin-right: 8%; padding-top: 15px">
                     <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px;">
@@ -59,9 +61,23 @@
                     </div>
                 </div>
             </div>
+            <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
+                        <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
 <div th:replace="fragments.html :: profile-list"></div>
+<div th:replace="fragments.html :: follow-list"></div>
 </body>
 </html>

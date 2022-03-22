@@ -255,6 +255,101 @@
     </script>
 </div>
 
+<div th:fragment="followList" class="col-8 profile-list" id="followList">
+        <div class="mt-5" style="margin-left: 10%;">
+            <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+                <span>팔로잉</span>
+            </div>
+            <div th:if="${followList != null}" class="row" style="padding-left: 10px; padding-top: 15px" th:each="follow : ${followList}">
+                <div class="col-2" style="width: 60px">
+                    <a th:href="@{'/profile/'+${follow.toAccount.loginId}}">
+                        <svg th:if="${#strings.isEmpty(follow.toAccount.profile?.image)}"
+                             th:data-jdenticon-value="${follow.toAccount.loginId}" style="width: 60px; height: 60px; border-radius: 70%"></svg>
+                        <img th:if="${!#strings.isEmpty(follow.toAccount.profile?.image)}"
+                             th:src="${follow.toAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
+                    </a>
+                </div>
+                <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.toAccount.loginId}" style="text-align: center; font-weight: bold; margin-left: 10px">아이디</span></div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+    <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+            <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
+                <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:fragment="followerList" class="col-8 profile-list" id="followerList">
+    <div class="mt-5" style="margin-left: 10%;">
+        <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+            <span>팔로워</span>
+        </div>
+        <div th:if="${followerList != null}" class="row" style="padding-left: 10px; padding-top: 15px" th:each="follow : ${followerList}">
+            <div class="col-2" style="width: 60px">
+                <a th:href="@{'/profile/'+${follow.fromAccount.loginId}}">
+                    <svg th:if="${#strings.isEmpty(follow.fromAccount.profile?.image)}"
+                         th:data-jdenticon-value="${follow.fromAccount.loginId}" style="width: 60px; height: 60px; border-radius: 70%"></svg>
+                    <img th:if="${!#strings.isEmpty(follow.fromAccount.profile?.image)}"
+                         th:src="${follow.fromAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
+                </a>
+            </div>
+            <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.fromAccount.loginId}" style="text-align: center; font-weight: bold; margin-left: 10px">아이디</span></div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+            <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
+                <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:fragment="profileList" class="col-8 profile-list" id="profile-Lists">
+    <div class="mt-5" style="margin-left: 10%;">
+        <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+            <span th:text="${listText}">게시물</span>
+            <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
+        </div>
+        <div class="row" style="margin-right: 8%; padding-top: 15px">
+            <div class="col-md-3" th:each="list: ${postList}" style="padding-left: 10px;">
+                <a th:href="@{'/post/'+${list.post.id}}">
+                    <img class="profile-postList-img" th:src="|/images/${list.post.imageFiles[0].getStoreFilename()}|" width="170" height="170"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+            <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
+                <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
 <script type="application/javascript" th:fragment="form-validation">
     (function () {
         'use strict';
@@ -522,50 +617,73 @@
     <script type="application/javascript" th:inline="javascript">
 
         $("#likeList").click( function(){
-            console.log("좋아요 클릭")
             let loginId = $("#profileOwner").attr("value");
-            console.log(loginId)
 
             $.ajax({
                 url : '/profile/like/' + loginId,
                 type : 'get',
                 success : function(fragment) {
 
-                    $('#profile-postList').replaceWith(fragment);
+                    $('.profile-list').replaceWith(fragment);
                 }
             });
         });
 
         $("#photoList").click( function(){
-            console.log("사진 클릭")
             let loginId = $("#profileOwner").attr("value");
-            console.log(loginId)
 
             $.ajax({
                 url : '/profile/photoList/' + loginId,
                 type : 'get',
                 success : function(fragment) {
 
-                    $('#profile-postList').replaceWith(fragment);
+                    $('.profile-list').replaceWith(fragment);
                 }
             });
         });
 
         $("#bookmarkList").click( function(){
-            console.log("사진 클릭")
             let loginId = $("#profileOwner").attr("value");
-            console.log(loginId)
 
             $.ajax({
                 url : '/profile/bookmarkList/' + loginId,
                 type : 'get',
                 success : function(fragment) {
 
-                    $('#profile-postList').replaceWith(fragment);
+                    $('.profile-list').replaceWith(fragment);
                 }
             });
         });
     </script>
 </div>
+
+<div th:fragment="follow-list">
+    <script type="application/javascript" th:inline="javascript">
+        $('.follow-dl').on('click', 'dd', function(){
+
+            let loginId = $("#profileOwner").attr("value");
+            let list = $(this).attr("id");
+
+            if(list === "follower"){
+                $.ajax({
+                    url : '/followerList/' + loginId,
+                    type : 'get',
+                    success : function(fragment) {
+                        $('.profile-list').replaceWith(fragment);
+                    }
+                });
+            }else if(list === "following"){
+                $.ajax({
+                    url : '/followList/' + loginId,
+                    type : 'get',
+                    success : function(fragment) {
+                        $('.profile-list').replaceWith(fragment);
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+
 </body>
 </html>

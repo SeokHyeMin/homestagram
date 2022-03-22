@@ -4,6 +4,9 @@ import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Bookmark;
 import com.home.inmy.domain.Post;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -61,5 +64,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     public List<Bookmark> getBookmarkList(Account account) {
         return bookmarkRepository.findByAccount(account);
+    }
+
+    public Page<Bookmark> getProfileBookmarkList(Account account, int page) {
+
+        PageRequest pageRequest = PageRequest.of(page, 8);
+        return bookmarkRepository.findByAccount(account, pageRequest);
     }
 }

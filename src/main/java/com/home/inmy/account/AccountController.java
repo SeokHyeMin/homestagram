@@ -10,6 +10,8 @@ import com.home.inmy.post.PostRepository;
 import com.home.inmy.post.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,11 +71,12 @@ public class AccountController {
 
     @Transactional(readOnly = true)
     @GetMapping("/profile/{loginId}")
-    public String profile(@PathVariable String loginId, Model model, @CurrentUser Account account) {
+    public String profile(@PathVariable String loginId, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 
-        List<Post> postList = postRepository.findByAccount(accountByLoginId);
+        Page<Post> postList = postService.profilePageList(accountByLoginId,page);
+        int totalPage = postList.getTotalPages();
         Boolean follow = followService.findFollow(loginId, account); //로그인 계정, 프로필 주인 계정
         List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
         List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로잉 리스트
@@ -83,7 +86,8 @@ public class AccountController {
         model.addAttribute("follow",follow); //해당계정을 팔로잉하는지 안하는지
         model.addAttribute("following",following);
         model.addAttribute("follower",follower);
-        model.addAttribute(postList);
+        model.addAttribute("postList",postList);
+        model.addAttribute("totalPage",totalPage);
         model.addAttribute("listText","게시물");
 
         return "account/profile";
@@ -91,37 +95,41 @@ public class AccountController {
 
     @Transactional(readOnly = true)
     @GetMapping("/profile/{listType}/{loginId}")
-    public String profileLike(@PathVariable String loginId, @PathVariable String listType, Model model, @CurrentUser Account account) {
+    public String profileLike(@PathVariable String loginId, @PathVariable String listType, Model model, @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
-        List<Post> postList = new ArrayList<>();
         String listText = null;
+        String returnPage = null;
+        int totalPage = 0;
 
         switch (listType) { //sub-nav 누른 것에 따라 보여지는 list 변경.
             case "like":
-                List<Likes> postLists = likeService.getLikeList(accountByLoginId);
-                for (Likes list : postLists) {
-                    postList.add(list.getPost());
-                }
+                Page<Likes> likesList = likeService.getProfileLikeList(accountByLoginId, page);
+                totalPage = likesList.getTotalPages();
                 listText = "좋아요";
+                returnPage = "fragments :: #profile-Lists";
+                model.addAttribute("postList", likesList);
                 break;
             case "photoList":
-                postList = postRepository.findByAccount(accountByLoginId);
+                Page<Post> postList = postService.profilePageList(accountByLoginId, page);
+                totalPage = postList.getTotalPages();
                 listText = "게시물";
+                returnPage = "account/profile :: #profile-postList";
+                model.addAttribute("postList", postList);
                 break;
             case "bookmarkList":
-                List<Bookmark> bookmarkList = bookmarkService.getBookmarkList(accountByLoginId);
-                for (Bookmark bookmark : bookmarkList) {
-                    postList.add(bookmark.getPost());
-                }
+                Page<Bookmark> bookmarkList = bookmarkService.getProfileBookmarkList(accountByLoginId, page);
+                totalPage = bookmarkList.getTotalPages();
                 listText = "북마크";
+                returnPage = "fragments :: #profile-Lists";
+                model.addAttribute("postList", bookmarkList);
                 break;
         }
 
-        model.addAttribute("postList", postList);
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("listText",listText);
 
-        return "account/profile :: #profile-postList";
+        return returnPage;
     }
 
 }
