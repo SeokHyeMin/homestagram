@@ -6,11 +6,13 @@ import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Follow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -22,16 +24,15 @@ public class FollowController {
     private final AccountService accountService;
 
     @GetMapping("/follow/{ownerLoginId}")
-    public String follow(@CurrentUser Account account, @PathVariable String ownerLoginId){
+    @ResponseBody
+    public ResponseEntity follow(@CurrentUser Account account, @PathVariable String ownerLoginId){
 
         if(account == null){
-            //TODO 로그인 페이지 혹은 로그인 경고창 띄우기
             return null;
         }
-
         followService.save(ownerLoginId, account);
 
-        return "redirect:/profile/{ownerLoginId}";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/unfollow/{ownerLoginId}")

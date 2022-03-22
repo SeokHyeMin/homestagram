@@ -114,9 +114,11 @@
                                     <span th:text="${post.account.profile?.bio}" style="font-size: 11px; color: gray">한줄소개</span>
                                 </div>
                             </div>
-                              <div class="col-sm-3">
-                                <button type="button" class="btn home white-font" style="width: 80px;">팔로우</button>
+                              <div class="col-sm-3" th:if="${!isOwner}">
+                                <button th:if="${!follow}" type="button" class="btn home white-font followBtn" style="width: 80px;">팔로우</button>
+                                <button th:if="${follow}" type="button" class="btn btn-outline-secondary unfollowBtn" style="width: 80px;">팔로잉</button>
                             </div>
+                            <div id="ownerId" hidden th:value="${post.account.loginId}"></div>
                         </div>
                     </div>
                 </div>
@@ -125,5 +127,6 @@
         </div>
     <div th:replace="fragments.html :: like"></div>
     <div th:replace="fragments.html :: bookmark"></div>
+    <div th:replace="fragments.html :: followBtn"></div>
 </body>
 </html>

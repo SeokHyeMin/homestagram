@@ -31,9 +31,10 @@
                 <a class="btn home follow white-font" th:href="@{/settings/profile}">프로필 수정</a>
             </div>
             <div th:if="${!isOwner}">
-                <a th:if="${!follow}" class="btn home follow" th:href="@{'/follow/'+${account.loginId}}" th:style="500px">팔로우</a>
-                <a th:if="${follow}" class="btn home white-font unfollow" th:href="@{'/unfollow/'+${account.loginId}}" th:style="500px">언팔로우</a>
+                <button th:if="${!follow}" class="btn home followBtn" th:style="500px">팔로우</button>
+                <button th:if="${follow}" class="btn btn-outline-secondary unfollowBtn" th:style="500px;">팔로잉</button>
             </div>
+            <div hidden id="ownerId" th:value="${account.loginId}"></div>
             <br>
             <div class="card-text">
                 <small th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</small>
@@ -79,5 +80,6 @@
 </div>
 <div th:replace="fragments.html :: profile-list"></div>
 <div th:replace="fragments.html :: follow-list"></div>
+<div th:replace="fragments.html :: followBtn"></div>
 </body>
 </html>

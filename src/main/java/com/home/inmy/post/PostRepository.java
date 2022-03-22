@@ -19,6 +19,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
 
     List<Post> findByAccount(Account account);
 
+
     Page<Post> findByAccount(Account account, Pageable pageable);
 
     @Query(value = "select p from Post p join fetch p.account join fetch p.imageFiles", countQuery = "select count(p.id) from Post p")

@@ -1,8 +1,11 @@
 package com.home.inmy.post;
 
+import com.home.inmy.account.AccountRepository;
+import com.home.inmy.account.AccountService;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.bookmark.BookmarkServiceImpl;
 import com.home.inmy.domain.*;
+import com.home.inmy.follow.FollowServiceImpl;
 import com.home.inmy.like.LikeServiceImpl;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.post.form.PostForm;
@@ -33,6 +36,8 @@ public class PostController {
     private final LikeServiceImpl likeService;
     private final TagService tagService;
     private final BookmarkServiceImpl bookmarkService;
+    private final FollowServiceImpl followService;
+
 
     @ModelAttribute("categories")
     public List<Category> categories() {
@@ -61,13 +66,14 @@ public class PostController {
         Post post = postService.getPost(id);
 
         List<PostTag> postTagList = postTagService.getPostTagList(post);
+        Boolean follow = followService.findFollow(post.getAccount().getLoginId(), account); //로그인 계정, 프로필 주인 계정
 
         postService.updateViews(post); //조회수 증가
 
         model.addAttribute(post);
         model.addAttribute(postTagList);
         model.addAttribute(account);
-
+        model.addAttribute("follow",follow); //팔로우 여부
         model.addAttribute("isOwner",post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
         model.addAttribute("like",likeService.accountPostLike(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true
         model.addAttribute("bookmark",bookmarkService.accountPostBookmark(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true

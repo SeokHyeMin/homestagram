@@ -559,6 +559,39 @@
     </script>
 </div>
 
+<div th:fragment="followBtn">
+    <script type="application/javascript" th:inline="javascript">
+
+        $(document).on("click", ".followBtn", function(){
+            console.log("팔로우 클릭")
+            let ownerId = $("#ownerId").attr("value");
+
+                $.ajax({
+                    url : '/follow/' + ownerId,
+                    type : 'get',
+                });
+
+            $(this).html('팔로잉');
+            $(this).removeClass("home white-font followBtn");
+            $(this).addClass("btn-outline-secondary unfollowBtn");
+        });
+
+        $(document).on("click", ".unfollowBtn", function(){
+            console.log("언팔")
+            let ownerId = $("#ownerId").attr("value");
+
+            $.ajax({
+                url : '/unfollow/' + ownerId,
+                type : 'get',
+            });
+
+            $(this).html('팔로우');
+            $(this).removeClass("btn-outline-secondary unfollowBtn");
+            $(this).addClass("home white-font followBtn");
+        });
+    </script>
+</div>
+
 <div th:fragment="selectbox-orderBy">
     <script type="application/javascript" th:inline="javascript">
 
