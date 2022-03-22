@@ -211,15 +211,12 @@
         <div class="container-fluid justify-content-center">
                 <ul class="navbar-nav">
                     <li class="nav-item sub-nav-list">
-                        <a id="photoList" class="nav-link photoList" href="#">사진</a>
-                    </li>
-                    <li class="nav-item sub-nav-list">
-                        <a class="nav-link" href="#">게시물</a>
+                        <a id="photoList" class="nav-link photoList" href="#">게시물</a>
                     </li>
                     <li class="nav-item sub-nav-list">
                         <a id="likeList" class="nav-link likeList" href="#">좋아요</a></li>
-                    <li class="nav-item sub-nav-list" id="bookmarkList">
-                        <a class="nav-link bookmarkList" href="#">북마크</a>
+                    <li class="nav-item sub-nav-list">
+                        <a id="bookmarkList" class="nav-link bookmarkList" href="#">북마크</a>
                     </li>
                 </ul>
             <div id="profileOwner" th:value="${account.loginId}" hidden></div>
@@ -546,6 +543,21 @@
 
             $.ajax({
                 url : '/profile/photoList/' + loginId,
+                type : 'get',
+                success : function(fragment) {
+
+                    $('#profile-postList').replaceWith(fragment);
+                }
+            });
+        });
+
+        $("#bookmarkList").click( function(){
+            console.log("사진 클릭")
+            let loginId = $("#profileOwner").attr("value");
+            console.log(loginId)
+
+            $.ajax({
+                url : '/profile/bookmarkList/' + loginId,
                 type : 'get',
                 success : function(fragment) {
 

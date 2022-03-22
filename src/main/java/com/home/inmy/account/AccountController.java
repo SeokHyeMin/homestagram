@@ -2,10 +2,8 @@ package com.home.inmy.account;
 
 import com.home.inmy.account.form.SignUpForm;
 import com.home.inmy.account.validator.SignUpFormValidator;
-import com.home.inmy.domain.Follow;
-import com.home.inmy.domain.Likes;
-import com.home.inmy.domain.Post;
-import com.home.inmy.domain.Account;
+import com.home.inmy.bookmark.BookmarkServiceImpl;
+import com.home.inmy.domain.*;
 import com.home.inmy.follow.FollowServiceImpl;
 import com.home.inmy.like.LikeServiceImpl;
 import com.home.inmy.post.PostRepository;
@@ -37,6 +35,7 @@ public class AccountController {
     private final LikeServiceImpl likeService;
     private final FollowServiceImpl followService;
     private final PostServiceImpl postService;
+    private final BookmarkServiceImpl bookmarkService;
 
 
     @InitBinder("signUpForm") //
@@ -74,7 +73,7 @@ public class AccountController {
 
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 
-        List<Post> postList = postRepository.findByAccount(account);
+        List<Post> postList = postRepository.findByAccount(accountByLoginId);
         Boolean follow = followService.findFollow(loginId, account); //로그인 계정, 프로필 주인 계정
         List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
         List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로잉 리스트
@@ -88,7 +87,7 @@ public class AccountController {
         model.addAttribute("following",following);
         model.addAttribute("follower",follower);
         model.addAttribute(postList);
-        model.addAttribute("listText","사진");
+        model.addAttribute("listText","게시물");
 
         return "account/profile";
     }
@@ -108,8 +107,14 @@ public class AccountController {
             }
             listText = "좋아요";
         }else if(listType.equals("photoList")){
-            postList = postRepository.findByAccount(account);
-            listText = "사진";
+            postList = postRepository.findByAccount(accountByLoginId);
+            listText = "게시물";
+        }else if(listType.equals("bookmarkList")){
+            List<Bookmark> bookmarkList = bookmarkService.getBookmarkList(accountByLoginId);
+            for (Bookmark bookmark : bookmarkList) {
+                postList.add(bookmark.getPost());
+            }
+            listText = "북마크";
         }
 
         model.addAttribute("postList", postList);
