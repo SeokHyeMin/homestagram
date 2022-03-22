@@ -57,7 +57,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring() //static은 검증없이 접근가능하도록.
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .mvcMatchers("/node_modules/**", "/images/**")
+                .mvcMatchers("/node_modules/**", "/image/**")
                 .antMatchers("/h2-console/**");
     }
 
