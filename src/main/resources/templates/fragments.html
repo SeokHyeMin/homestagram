@@ -273,19 +273,7 @@
                 <div class="col-3"></div>
             </div>
         </div>
-    <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link">Previous</a>
-            </li>
-            <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
-                <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
+    <div th:replace="fragments.html :: pagination"></div>
 </div>
 
 <div th:fragment="followerList" class="col-8 profile-list" id="followerList">
@@ -306,19 +294,7 @@
             <div class="col-3"></div>
         </div>
     </div>
-    <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link">Previous</a>
-            </li>
-            <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
-                <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
+    <div th:replace="fragments.html :: pagination"></div>
 </div>
 
 <div th:fragment="profileList" class="col-8 profile-list" id="profile-Lists">
@@ -630,6 +606,21 @@
         });
     </script>
 </div>
+
+<nav th:fragment="pagination" aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
+            <a class="page-link" th:href="@{/postList(page=${postList.getNumber() - 1})}">Previous</a>
+        </li>
+        <li class="page-item" th:classappend="${i == postList.getNumber()}? active"
+            th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+            <a class="page-link" th:href="@{/postList(page=${i}-1)}" th:text="${i}"></a>
+        </li>
+        <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
+            <a class="page-link" th:href="@{/postList(page=${postList.getNumber() + 1})}">Next</a>
+        </li>
+    </ul>
+</nav>
 
 <div th:fragment="selectbox-orderBy">
     <script type="application/javascript" th:inline="javascript">

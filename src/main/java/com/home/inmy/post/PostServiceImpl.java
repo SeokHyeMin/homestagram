@@ -106,7 +106,7 @@ public class PostServiceImpl implements PostService{
     }
     public Page<Post> profilePageList(Account account, int page){
 
-        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime"));
+        PageRequest pageRequest = PageRequest.of(page, 6, Sort.by(Sort.Direction.DESC, "writeTime"));
         return postRepository.findByAccount(account, pageRequest);
     }
 

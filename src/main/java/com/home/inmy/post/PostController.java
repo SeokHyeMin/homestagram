@@ -106,8 +106,8 @@ public class PostController {
     public String postList(Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
         Page<Post> postList = postService.pageList(page);
+        log.info(String.valueOf(postList.hasPrevious()));
 
-        int totalPage = postList.getTotalPages();
 
         List<Likes> likes = likeService.getLikeList(account);
         List<Long> postNumList = likeService.getLikePostNum(likes);
@@ -115,10 +115,18 @@ public class PostController {
         List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
         List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
 
+        int pageNum = postList.getPageable().getPageNumber(); // 현재 페이지
+        int pageBlock = 5; // 블럭의 수
+        int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
+        int endBlockPage = startBlockPage + pageBlock - 1;
+        int totalPage = postList.getTotalPages();
+        endBlockPage = Math.min(totalPage, endBlockPage);
+
+        model.addAttribute("startBlockPage", startBlockPage);
+        model.addAttribute("endBlockPage", endBlockPage);
         model.addAttribute("postList", postList);
-        model.addAttribute("totalPage", totalPage);
-        model.addAttribute("likes", likes);
-        model.addAttribute("bookmarks", bookmarks);
+        model.addAttribute("likes", likes); //좋아요한 리스트
+        model.addAttribute("bookmarks", bookmarks); //북마크한 리스트트
         model.addAttribute("postNumList", postNumList);
         model.addAttribute("bookmarkPostNum", bookmarkPostNum);
         model.addAttribute(account);
