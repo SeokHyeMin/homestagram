@@ -1,5 +1,6 @@
 package com.home.inmy.post;
 
+import com.home.inmy.account.AccountController;
 import com.home.inmy.account.AccountRepository;
 import com.home.inmy.account.AccountService;
 import com.home.inmy.account.CurrentUser;
@@ -108,22 +109,17 @@ public class PostController {
         Page<Post> postList = postService.pageList(page);
         log.info(String.valueOf(postList.hasPrevious()));
 
-
         List<Likes> likes = likeService.getLikeList(account);
         List<Long> postNumList = likeService.getLikePostNum(likes);
 
         List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
         List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
 
-        int pageNum = postList.getPageable().getPageNumber(); // 현재 페이지
-        int pageBlock = 5; // 블럭의 수
-        int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
-        int endBlockPage = startBlockPage + pageBlock - 1;
-        int totalPage = postList.getTotalPages();
-        endBlockPage = Math.min(totalPage, endBlockPage);
+        Map<String, Integer> map = getPage(postList); //페이지 계산
 
-        model.addAttribute("startBlockPage", startBlockPage);
-        model.addAttribute("endBlockPage", endBlockPage);
+        model.addAttribute("startBlockPage", map.get("startBlockPage"));
+        model.addAttribute("endBlockPage", map.get("endBlockPage"));
+
         model.addAttribute("postList", postList);
         model.addAttribute("likes", likes); //좋아요한 리스트
         model.addAttribute("bookmarks", bookmarks); //북마크한 리스트트
@@ -141,16 +137,18 @@ public class PostController {
         log.info("정렬시작");
         Page<Post> postList = postService.pageList(page, orderBy);
 
-        int totalPage = postList.getTotalPages();
-
         List<Likes> likes = likeService.getLikeList(account);
         List<Long> postNumList = likeService.getLikePostNum(likes);
 
         List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
         List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
 
+        Map<String, Integer> map = getPage(postList); //페이지 계산
+
+        model.addAttribute("startBlockPage", map.get("startBlockPage"));
+        model.addAttribute("endBlockPage", map.get("endBlockPage"));
+
         model.addAttribute("postList", postList);
-        model.addAttribute("totalPage", totalPage);
         model.addAttribute("likes", likes);
         model.addAttribute("bookmarks", bookmarks);
         model.addAttribute("postNumList", postNumList);
@@ -167,16 +165,18 @@ public class PostController {
         log.info("postListByCategory");
         Page<Post> postList = postService.pageListByCategory(page, category);
 
-        int totalPage = postList.getTotalPages();
-
         List<Likes> likes = likeService.getLikeList(account);
         List<Long> postNumList = likeService.getLikePostNum(likes);
 
         List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
         List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
 
+        Map<String, Integer> map = getPage(postList);
+
+        model.addAttribute("startBlockPage", map.get("startBlockPage"));
+        model.addAttribute("endBlockPage", map.get("endBlockPage"));
+
         model.addAttribute("postList", postList);
-        model.addAttribute("totalPage", totalPage);
         model.addAttribute("likes", likes);
         model.addAttribute("bookmarks", bookmarks);
         model.addAttribute("postNumList", postNumList);
@@ -237,6 +237,23 @@ public class PostController {
         redirectAttributes.addAttribute("message","해당 글을 삭제하였습니다.");
 
         return "redirect:/postList";
+    }
+
+    private Map<String, Integer> getPage(Page<Post> postList){ //페이지 계산하여 시작블럭, 마지막 블럭 담아 반환.
+
+        Map<String, Integer> map = new HashMap<>();
+
+        int pageNum = postList.getPageable().getPageNumber(); // 현재 페이지
+        int pageBlock = 5; // 블럭의 수
+        int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
+        int endBlockPage = startBlockPage + pageBlock - 1;
+        int totalPage = postList.getTotalPages();
+        endBlockPage = Math.min(totalPage, endBlockPage);
+
+        map.put("startBlockPage",startBlockPage);
+        map.put("endBlockPage",endBlockPage);
+
+        return map;
     }
 
 }

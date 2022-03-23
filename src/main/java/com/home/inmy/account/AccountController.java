@@ -76,11 +76,19 @@ public class AccountController {
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 
         Page<Post> postList = postService.profilePageList(accountByLoginId,page);
-        int totalPage = postList.getTotalPages();
         Boolean follow = followService.findFollow(loginId, account); //로그인 계정, 프로필 주인 계정
         List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
         List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로워 리스트
 
+        int pageNum = postList.getPageable().getPageNumber(); // 현재 페이지
+        int pageBlock = 5; // 블럭의 수
+        int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
+        int endBlockPage = startBlockPage + pageBlock - 1;
+        int totalPage = postList.getTotalPages();
+        endBlockPage = Math.min(totalPage, endBlockPage);
+
+        model.addAttribute("startBlockPage", startBlockPage);
+        model.addAttribute("endBlockPage", endBlockPage);
         model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
         model.addAttribute("account",accountByLoginId); //프로필 주인
         model.addAttribute("follow",follow); //해당계정을 팔로잉하는지 안하는지
@@ -101,10 +109,12 @@ public class AccountController {
         String listText = null;
         String returnPage = null;
         int totalPage = 0;
+        int pageNum = 0;
 
         switch (listType) { //sub-nav 누른 것에 따라 보여지는 list 변경.
             case "like":
                 Page<Likes> likesList = likeService.getProfileLikeList(accountByLoginId, page);
+                pageNum = likesList.getPageable().getPageNumber(); // 현재 페이지
                 totalPage = likesList.getTotalPages();
                 listText = "좋아요";
                 returnPage = "fragments :: #profile-Lists";
@@ -112,6 +122,7 @@ public class AccountController {
                 break;
             case "photoList":
                 Page<Post> postList = postService.profilePageList(accountByLoginId, page);
+                pageNum = postList.getPageable().getPageNumber(); // 현재 페이지
                 totalPage = postList.getTotalPages();
                 listText = "게시물";
                 returnPage = "account/profile :: #profile-postList";
@@ -119,12 +130,21 @@ public class AccountController {
                 break;
             case "bookmarkList":
                 Page<Bookmark> bookmarkList = bookmarkService.getProfileBookmarkList(accountByLoginId, page);
+                pageNum = bookmarkList.getPageable().getPageNumber(); // 현재 페이지
                 totalPage = bookmarkList.getTotalPages();
                 listText = "북마크";
                 returnPage = "fragments :: #profile-Lists";
                 model.addAttribute("postList", bookmarkList);
                 break;
         }
+
+        int pageBlock = 5; // 블럭의 수
+        int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
+        int endBlockPage = startBlockPage + pageBlock - 1;
+        endBlockPage = Math.min(totalPage, endBlockPage);
+
+        model.addAttribute("startBlockPage", startBlockPage);
+        model.addAttribute("endBlockPage", endBlockPage);
 
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("listText",listText);
