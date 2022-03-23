@@ -219,7 +219,7 @@
                         <a id="bookmarkList" class="nav-link bookmarkList" href="#">북마크</a>
                     </li>
                 </ul>
-            <div id="profileOwner" th:value="${account.loginId}" hidden></div>
+            <div id="profileOwner" th:value="${owner.loginId}" hidden></div>
         </div>
     </nav>
 </div>
@@ -261,19 +261,34 @@
                 <span>팔로잉</span>
             </div>
             <div th:if="${followList != null}" class="row" style="padding-left: 10px; padding-top: 15px" th:each="follow : ${followList}">
-                <div class="col-2" style="width: 60px">
+                <div class="col-2" style="width: 60px" th:if="${#strings.isEmpty(follow.toAccount.profile?.image)}">
                     <a th:href="@{'/profile/'+${follow.toAccount.loginId}}">
-                        <svg th:if="${#strings.isEmpty(follow.toAccount.profile?.image)}"
-                             th:data-jdenticon-value="${follow.toAccount.loginId}" style="width: 60px; height: 60px; border-radius: 70%"></svg>
-                        <img th:if="${!#strings.isEmpty(follow.toAccount.profile?.image)}"
-                             th:src="${follow.toAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
+                        <img src="/image/profile.png" style="width: 60px; height: 60px; border-radius: 70%"/>
+                    </a>
+                </div>
+                <div class="col-2" style="width: 60px" th:if="${!#strings.isEmpty(follow.toAccount.profile?.image)}">
+                    <a th:href="@{'/profile/'+${follow.toAccount.loginId}}">
+                        <img th:src="${follow.toAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
                     </a>
                 </div>
                 <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.toAccount.loginId}" style="text-align: center; font-weight: bold; margin-left: 10px">아이디</span></div>
                 <div class="col-3"></div>
             </div>
         </div>
-    <div th:replace="fragments.html :: pagination"></div>
+    <nav aria-label="Page navigation example" th:if="${followList.getTotalPages() > 0}">
+        <ul class="pagination justify-content-center page-list">
+            <li class="page-item" th:classappend="${!followList.hasPrevious()}? disabled">
+                <span class="page-link follow-pre-page" th:value="${followList.getNumber() - 1}">Previous</span>
+            </li>
+            <li class="page-item" th:classappend="${i == followList.getNumber() + 1}? active"
+                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                <span class="page-link follow-cur-page" th:value="${i}-1" th:text="${i}"></span>
+            </li>
+            <li class="page-item" th:classappend="${!followList.hasNext()}? disabled">
+                <a class="page-link follow-next-page" th:value="${followList.getNumber() + 1}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <div th:fragment="followerList" class="col-8 profile-list" id="followerList">
@@ -282,25 +297,40 @@
             <span>팔로워</span>
         </div>
         <div th:if="${followerList != null}" class="row" style="padding-left: 10px; padding-top: 15px" th:each="follow : ${followerList}">
-            <div class="col-2" style="width: 60px">
+            <div class="col-2" style="width: 60px" th:if="${#strings.isEmpty(follow.fromAccount.profile?.image)}">
                 <a th:href="@{'/profile/'+${follow.fromAccount.loginId}}">
-                    <svg th:if="${#strings.isEmpty(follow.fromAccount.profile?.image)}"
-                         th:data-jdenticon-value="${follow.fromAccount.loginId}" style="width: 60px; height: 60px; border-radius: 70%"></svg>
-                    <img th:if="${!#strings.isEmpty(follow.fromAccount.profile?.image)}"
-                         th:src="${follow.fromAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
+                    <img src="/image/profile.png" style="width: 60px; height: 60px; border-radius: 70%"/>
+                </a>
+            </div>
+            <div class="col-2" style="width: 60px" th:if="${!#strings.isEmpty(follow.fromAccount.profile?.image)}">
+                <a th:href="@{'/profile/'+${follow.fromAccount.loginId}}">
+                    <img th:src="${follow.fromAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
                 </a>
             </div>
             <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.fromAccount.loginId}" style="text-align: center; font-weight: bold; margin-left: 10px">아이디</span></div>
             <div class="col-3"></div>
         </div>
     </div>
-    <div th:replace="fragments.html :: pagination"></div>
+    <nav aria-label="Page navigation example" th:if="${followerList.getTotalPages() > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!followerList.hasPrevious()}? disabled">
+                <a class="page-link follower-pre-page" th:value="${followerList.getNumber() - 1}">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${i == followerList.getNumber() + 1}? active"
+                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                <span class="page-link follower-cur-page" th:value="${i}-1" th:text="${i}">[[${i}]]</span>
+            </li>
+            <li class="page-item" th:classappend="${!followerList.hasNext()}? disabled">
+                <a class="page-link follower-next-page" th:value="${followerList.getNumber() + 1}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <div th:fragment="profileList" class="col-8 profile-list" id="profile-Lists">
-    <div class="mt-5" style="margin-left: 10%;">
+    <div class="mt-5" style="margin-left: 10%; margin-bottom: 30px">
         <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
-            <span th:text="${listText}">게시물</span>
+            <span th:value="${listText}" id="listText" th:text="${listText}">게시물</span>
             <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
         </div>
         <div class="row" style="margin-right: 8%; padding-top: 15px">
@@ -311,16 +341,17 @@
             </div>
         </div>
     </div>
-    <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
+    <nav aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
         <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link">Previous</a>
+            <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
+                <a class="page-link list-pre-page" th:value="${postList.getNumber() - 1}">Previous</a>
             </li>
-            <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
-                <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
+            <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
+                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                <span class="page-link list-cur-page" th:value="${i}-1" th:text="${i}"></span>
             </li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
+            <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
+                <a class="page-link list-next-page" th:value="${postList.getNumber() + 1}">Next</a>
             </li>
         </ul>
     </nav>
@@ -612,7 +643,7 @@
         <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
             <a class="page-link" th:href="@{/postList(page=${postList.getNumber() - 1})}">Previous</a>
         </li>
-        <li class="page-item" th:classappend="${i == postList.getNumber()}? active"
+        <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
             th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
             <a class="page-link" th:href="@{/postList(page=${i}-1)}" th:text="${i}"></a>
         </li>
@@ -722,7 +753,7 @@
 
 <div th:fragment="follow-list">
     <script type="application/javascript" th:inline="javascript">
-        $('.follow-dl').on('click', 'dd', function(){
+        $(document).on('click', 'dd', function(){
 
             let loginId = $("#profileOwner").attr("value");
             let list = $(this).attr("id");
@@ -748,5 +779,193 @@
     </script>
 </div>
 
+<div th:fragment="follow-list-page">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on("click", ".follow-cur-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let page = $(this).attr("value");
+            console.log("page = ");
+            console.log(page);
+
+                $.ajax({
+                    url : '/followList/' + loginId,
+                    type : 'get',
+                    data : {
+                        page : page
+                    },
+                    success : function(fragment) {
+                        $('.profile-list').replaceWith(fragment);
+                        console.log("페이지변경")
+                    }
+                });
+        });
+
+        $(document).on("click", ".follow-next-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let page = $(this).attr("value");
+            console.log(page);
+
+            $.ajax({
+                url : '/followList/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+        $(document).on("click", ".follow-pre-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let page = $(this).attr("value");
+            console.log(page);
+
+            $.ajax({
+                url : '/followList/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+        $(document).on("click", ".follower-cur-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let page = $(this).attr("value");
+            console.log(page);
+
+            $.ajax({
+                url : '/followerList/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+        $(document).on("click", ".follower-next-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let page = $(this).attr("value");
+            console.log(page);
+
+            $.ajax({
+                url : '/followerList/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+        $(document).on("click", ".follower-pre-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let page = $(this).attr("value");
+            console.log(page);
+
+            $.ajax({
+                url : '/followerList/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="list-page">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on("click", ".list-cur-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let listType = $("#listText").attr("value");
+            let page = $(this).attr("value");
+
+            console.log("page = ");
+            console.log(page);
+
+            $.ajax({
+                url : '/followList/' + listType + '/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+        $(document).on("click", ".list-next-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let listType = $("#listText").attr("value");
+            let page = $(this).attr("value");
+
+            console.log("page = ");
+            console.log(page);
+
+            $.ajax({
+                url : '/followList/' + listType + '/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+        $(document).on("click", ".list-pre-page", function(){
+            console.log("클릭")
+            let loginId = $("#profileOwner").attr("value");
+            let listType = $("#listText").attr("value");
+            let page = $(this).attr("value");
+
+            console.log("page = ");
+            console.log(page);
+
+            $.ajax({
+                url : '/followList/' + listType + '/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+    </script>
+</div>
 </body>
 </html>

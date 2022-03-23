@@ -64,7 +64,7 @@ public class FollowServiceImpl implements FollowService {
     }
 
     public Page<Follow> getFollowerList(Account account, int page) { //팔로워 리스트
-        PageRequest pageRequest = PageRequest.of(page, 6);
+        PageRequest pageRequest = PageRequest.of(page, 4);
         return followRepository.findAllByToAccount(account,pageRequest);
     }
 

@@ -10,13 +10,13 @@
     <div class="row justify-content-center">
         <div class="card col-3 mt-2" th:align="center" id="profile-box">
             <div class="mt-2">
-                <svg th:if="${#strings.isEmpty(account.profile?.image)}" class="profile-img"
-                     th:data-jdenticon-value="${account.loginId}" width="125" height="125"></svg>
-                <img th:if="${!#strings.isEmpty(account.profile?.image)}" class="profile-img"
-                     th:src="${account.profile.image}"
+                <svg th:if="${#strings.isEmpty(owner.profile?.image)}" class="profile-img"
+                     th:data-jdenticon-value="${owner.loginId}" width="125" height="125"></svg>
+                <img th:if="${!#strings.isEmpty(owner.profile?.image)}" class="profile-img"
+                     th:src="${owner.profile.image}"
                      width="125" height="125"/>
             </div>
-            <h4 class="display-8" th:text="${account.nickname}">nickname</h4>
+            <h4 class="display-8" th:text="${owner.nickname}">nickname</h4>
             <div class="row mt-2 justify-content-center">
                     <dl style="display: flex; font-size: 13px;" class="justify-content-center follow-dl">
                         <dt style="font-weight: lighter">팔로잉</dt>
@@ -34,22 +34,22 @@
                 <button th:if="${!follow}" class="btn home followBtn white-font" th:style="500px">팔로우</button>
                 <button th:if="${follow}" class="btn btn-outline-secondary unfollowBtn" th:style="500px">팔로잉</button>
             </div>
-            <div hidden id="ownerId" th:value="${account.loginId}"></div>
+            <div hidden id="ownerId" th:value="${owner.loginId}"></div>
             <br>
             <div class="card-text">
-                <small th:if="${!#strings.isEmpty(account.profile?.bio)}" th:text="${account.profile?.bio}">bio</small>
+                <small th:if="${!#strings.isEmpty(owner.profile?.bio)}" th:text="${owner.profile?.bio}">bio</small>
             </div>
             <div class="card-text" style="text-align: center">
-                <p th:if="${!#strings.isEmpty(account.profile?.url)}">
+                <p th:if="${!#strings.isEmpty(owner.profile?.url)}">
                             <span style="font-size: 20px;">
                                 <i class="fa fa-link col-1"></i>
                             </span>
-                    <small th:text="${account.profile.url}" class="col-11"></small>
+                    <small th:text="${owner.profile.url}" class="col-11"></small>
                 </p>
             </div>
         </div>
         <div class="col-8 profile-list" id="profile-postList">
-            <div class="mt-5" style="margin-left: 10%;">
+            <div class="mt-5" style="margin-left: 10%; margin-bottom: 30px">
                 <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
                         <span th:text="${listText}">게시물</span>
                         <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
@@ -62,16 +62,17 @@
                     </div>
                 </div>
             </div>
-            <nav aria-label="Page navigation example" th:if="${totalPage > 0}">
+            <nav aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
+                    <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
+                        <a class="page-link list-pre-page" th:value="${postList.getNumber() - 1}">Previous</a>
                     </li>
-                    <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPage - 1)}">
-                        <a class="page-link" th:href="@{/postList(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
+                    <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
+                        th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                        <span class="page-link list-cur-page" th:value="${i}-1" th:text="${i}"></span>
                     </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                    <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
+                        <a class="page-link list-next-page" th:value="${postList.getNumber() + 1}">Next</a>
                     </li>
                 </ul>
             </nav>
@@ -81,5 +82,6 @@
 <div th:replace="fragments.html :: profile-list"></div>
 <div th:replace="fragments.html :: follow-list"></div>
 <div th:replace="fragments.html :: followBtn-profile"></div>
+<div th:replace="fragments.html :: follow-list-page"></div>
 </body>
 </html>

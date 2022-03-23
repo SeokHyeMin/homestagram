@@ -109,11 +109,8 @@ public class PostController {
         Page<Post> postList = postService.pageList(page);
         log.info(String.valueOf(postList.hasPrevious()));
 
-        List<Likes> likes = likeService.getLikeList(account);
-        List<Long> postNumList = likeService.getLikePostNum(likes);
-
-        List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
-        List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
+        List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
+        List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
 
         Map<String, Integer> map = getPage(postList); //페이지 계산
 
@@ -121,10 +118,8 @@ public class PostController {
         model.addAttribute("endBlockPage", map.get("endBlockPage"));
 
         model.addAttribute("postList", postList);
-        model.addAttribute("likes", likes); //좋아요한 리스트
-        model.addAttribute("bookmarks", bookmarks); //북마크한 리스트트
-        model.addAttribute("postNumList", postNumList);
-        model.addAttribute("bookmarkPostNum", bookmarkPostNum);
+        model.addAttribute("postNumList", likePostNumList);
+        model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
         model.addAttribute(account);
 
         return "posts/post-list";
@@ -137,11 +132,8 @@ public class PostController {
         log.info("정렬시작");
         Page<Post> postList = postService.pageList(page, orderBy);
 
-        List<Likes> likes = likeService.getLikeList(account);
-        List<Long> postNumList = likeService.getLikePostNum(likes);
-
-        List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
-        List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
+        List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
+        List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
 
         Map<String, Integer> map = getPage(postList); //페이지 계산
 
@@ -149,10 +141,8 @@ public class PostController {
         model.addAttribute("endBlockPage", map.get("endBlockPage"));
 
         model.addAttribute("postList", postList);
-        model.addAttribute("likes", likes);
-        model.addAttribute("bookmarks", bookmarks);
-        model.addAttribute("postNumList", postNumList);
-        model.addAttribute("bookmarkPostNum", bookmarkPostNum);
+        model.addAttribute("postNumList", likePostNumList);
+        model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
         model.addAttribute(account);
 
         return "posts/post-list :: #postList-div";
@@ -165,11 +155,8 @@ public class PostController {
         log.info("postListByCategory");
         Page<Post> postList = postService.pageListByCategory(page, category);
 
-        List<Likes> likes = likeService.getLikeList(account);
-        List<Long> postNumList = likeService.getLikePostNum(likes);
-
-        List<Bookmark> bookmarks = bookmarkService.getBookmarkList(account);
-        List<Long> bookmarkPostNum = bookmarkService.getLikePostNum(bookmarks);
+        List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
+        List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
 
         Map<String, Integer> map = getPage(postList);
 
@@ -177,10 +164,8 @@ public class PostController {
         model.addAttribute("endBlockPage", map.get("endBlockPage"));
 
         model.addAttribute("postList", postList);
-        model.addAttribute("likes", likes);
-        model.addAttribute("bookmarks", bookmarks);
-        model.addAttribute("postNumList", postNumList);
-        model.addAttribute("bookmarkPostNum", bookmarkPostNum);
+        model.addAttribute("postNumList", likePostNumList);
+        model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
         model.addAttribute(account);
 
         return "posts/post-list :: #postList-div";

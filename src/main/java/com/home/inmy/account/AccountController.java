@@ -89,14 +89,16 @@ public class AccountController {
 
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
+
         model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        model.addAttribute("account",accountByLoginId); //프로필 주인
+        model.addAttribute("owner",accountByLoginId); //프로필 주인
         model.addAttribute("follow",follow); //해당계정을 팔로잉하는지 안하는지
         model.addAttribute("following",following);
         model.addAttribute("follower",follower);
         model.addAttribute("postList",postList);
         model.addAttribute("totalPage",totalPage);
         model.addAttribute("listText","게시물");
+        model.addAttribute("account",account);
 
         return "account/profile";
     }
@@ -145,6 +147,7 @@ public class AccountController {
 
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
+
 
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("listText",listText);
