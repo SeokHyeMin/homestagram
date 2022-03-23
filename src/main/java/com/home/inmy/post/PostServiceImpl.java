@@ -93,9 +93,7 @@ public class PostServiceImpl implements PostService{
 
     public List<Post> DescLikes(){
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "likes");
-
-        return postRepository.findAll(sort);
+        return postRepository.findTop4ByOrderByLikesDesc();
     }
 
     public List<Post> DescBookmark(){

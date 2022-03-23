@@ -26,13 +26,7 @@ public class MainController {
             model.addAttribute(account);
         }
 
-        List<Post> posts = postService.DescLikes();
-        List<Post> postList = new ArrayList<>();
-
-        if(!posts.isEmpty()){
-            postList.addAll(posts);
-
-        }
+        List<Post> postList = postService.DescLikes();
 
         model.addAttribute("postList",postList);
 

@@ -18,7 +18,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long>{
 
     List<Post> findByAccount(Account account);
-
+    List<Post> findTop4ByOrderByLikesDesc();
 
     Page<Post> findByAccount(Account account, Pageable pageable);
 
