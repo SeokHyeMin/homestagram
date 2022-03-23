@@ -23,6 +23,26 @@ public class FollowController {
     private final FollowServiceImpl followService;
     private final AccountService accountService;
 
+    @GetMapping("/profile/follow/{ownerLoginId}")
+    @ResponseBody
+    public Integer profileFollow(@CurrentUser Account account, @PathVariable String ownerLoginId){
+
+        followService.save(ownerLoginId, account);
+        Account profileOwner = accountService.getAccount(ownerLoginId);
+
+        return followService.getFollowerList(profileOwner).size(); //화면의 팔로워 숫자를 바꿔주기 위해 반환.
+    }
+
+    @GetMapping("/profile/unfollow/{ownerLoginId}")
+    @ResponseBody
+    public Integer profileUnfollow(@CurrentUser Account account, @PathVariable String ownerLoginId){
+
+        followService.unfollow(ownerLoginId, account);
+        Account profileOwner = accountService.getAccount(ownerLoginId);
+
+        return followService.getFollowerList(profileOwner).size(); //화면의 팔로워 숫자를 바꿔주기 위해 반환.
+    }
+
     @GetMapping("/follow/{ownerLoginId}")
     @ResponseBody
     public ResponseEntity follow(@CurrentUser Account account, @PathVariable String ownerLoginId){

@@ -79,7 +79,7 @@ public class AccountController {
         int totalPage = postList.getTotalPages();
         Boolean follow = followService.findFollow(loginId, account); //로그인 계정, 프로필 주인 계정
         List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
-        List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로잉 리스트
+        List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로워 리스트
 
         model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
         model.addAttribute("account",accountByLoginId); //프로필 주인

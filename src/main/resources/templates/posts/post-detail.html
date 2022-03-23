@@ -100,11 +100,13 @@
                         <br>
                         <div class="row post-profile" style="margin-top: 3%">
                             <div class="col-sm-2" style="margin-right: 1%">
-                                <svg th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
-                                     th:data-jdenticon-value="${post.account.loginId}" width="50" height="50"></svg>
-                                <img th:if="${!#strings.isEmpty(post.account.profile?.image)}" class="post-img"
-                                     th:src="${post.account.profile?.image}"
-                                     width="50" height="50" alt="name" th:alt="${post.account.loginId}"/>
+                                <a th:href="@{'/profile/'+${post.account.loginId}}">
+                                    <svg th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
+                                         th:data-jdenticon-value="${post.account.loginId}" width="50" height="50"></svg>
+                                    <img th:if="${!#strings.isEmpty(post.account.profile?.image)}" class="post-img"
+                                         th:src="${post.account.profile?.image}"
+                                         width="50" height="50" alt="name" th:alt="${post.account.loginId}"/>
+                                </a>
                             </div>
                             <div class="col-sm" style="text-align: left">
                                 <div>
