@@ -65,4 +65,29 @@ public class CommentController {
         return "posts/post-detail :: #comment-list";
 
     }
+
+    @PostMapping("/deleteComment/{comment_id}/{post_id}")
+    public String deleteComment(@PathVariable Long post_id, @PathVariable Long comment_id,
+                                @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                @CurrentUser Account account, Model model){
+
+        Post post = postService.getPost(post_id);
+
+        commentService.commentDelete(comment_id);
+
+        Page<Comments> comments = commentService.getComments(post, page); //댓글 작성하고 불러올 페이지는 댓글 첫 페이지
+        int pageNum = comments.getPageable().getPageNumber(); // 현재 페이지
+        int pageBlock = 5; // 블럭의 수
+        int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
+        int endBlockPage = startBlockPage + pageBlock - 1;
+        int totalPage = comments.getTotalPages();
+        endBlockPage = Math.min(totalPage, endBlockPage);
+
+        model.addAttribute("startBlockPage",startBlockPage);
+        model.addAttribute("endBlockPage",endBlockPage);
+        model.addAttribute("comments", comments);
+        model.addAttribute("account",account);
+
+        return "posts/post-detail :: #comment-list";
+    }
 }

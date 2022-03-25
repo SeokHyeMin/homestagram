@@ -876,7 +876,6 @@
         let id = $("#post_id").attr("value");
 
         $(document).on("click", ".comment-save", function(){
-            console.log("댓글 저장 클릭")
             let comment = $("#comment").val();
             console.log(comment);
             $.ajax({
@@ -888,13 +887,11 @@
                 },
                 success : function(fragment) {
                     $('.comment-list').replaceWith(fragment);
-                    console.log("페이지변경")
                 }
             });
         });
 
         $(document).on("click", ".comment-page", function(){
-            console.log("클릭")
             let page = $(this).attr("value");
 
             $.ajax({
@@ -905,9 +902,26 @@
                 },
                 success : function(fragment) {
                     $('.comment-list').replaceWith(fragment);
-                    console.log("페이지변경")
                 }
             });
+        });
+
+        $(document).on("click", ".comment-delete", function(){
+            let page = $(this).attr("name");
+            let comment_id = $(this).attr("value");
+            if(confirm("댓글을 삭제하시겠습니까?") === true){
+
+                $.ajax({
+                    url : '/deleteComment/' + comment_id + '/' + id,
+                    type : 'post',
+                    data : {
+                        page : page
+                    },
+                    success : function(fragment) {
+                        $('.comment-list').replaceWith(fragment);
+                    }
+                });
+            }
         });
 
 

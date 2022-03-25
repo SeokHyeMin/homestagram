@@ -32,4 +32,8 @@ public class CommentService {
 
         return commentRepository.findAllByPost(post, pageRequest);
     }
+
+    public void commentDelete(Long comment_id) {
+        commentRepository.deleteById(comment_id);
+    }
 }

@@ -152,12 +152,12 @@
                             <div class="col-sm" style="text-align: left; margin-bottom: 18px">
                                 <div>
                                     <span th:text="${comment.account.nickname}" style="font-weight: bold;">닉네임</span>
-                                    <span th:text="${comment.comment}">댓글내용</span>
+                                    <span th:value="${comment.id}" th:text="${comment.comment}">댓글내용</span>
                                 </div>
                                 <div>
                                     <span th:text="${#temporals.format(comment.writeTime,'yyyy-MM-dd HH:mm')}" style="font-size: 11px; color: gray">댓글 작성시간</span>
-                                    <span th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">수정</span>
-                                    <span class="comment-delete" th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">삭제</span>
+                                    <span th:value="${comment.id}" th:name="${comments.getNumber()}" class="comment-update" th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">수정</span>
+                                    <span th:value="${comment.id}" th:name="${comments.getNumber()}" class="comment-delete" th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">삭제</span>
                                 </div>
                             </div>
                         </div>
