@@ -7,6 +7,7 @@ import com.home.inmy.domain.Post;
 import com.home.inmy.post.PostServiceImpl;
 import com.home.inmy.web.dto.CommentDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
+@RequiredArgsConstructor @Slf4j
 public class CommentController {
 
     private final CommentService commentService;
@@ -72,8 +73,8 @@ public class CommentController {
                                 @CurrentUser Account account, Model model){
 
         Post post = postService.getPost(post_id);
-
-        commentService.commentDelete(comment_id);
+        log.info(String.valueOf(comment_id));
+        commentService.commentDelete(comment_id); //댓글 삭제
 
         Page<Comments> comments = commentService.getComments(post, page); //댓글 작성하고 불러올 페이지는 댓글 첫 페이지
         int pageNum = comments.getPageable().getPageNumber(); // 현재 페이지

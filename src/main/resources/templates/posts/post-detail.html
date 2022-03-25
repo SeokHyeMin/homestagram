@@ -137,7 +137,7 @@
                                  width="35" height="35" alt="name" th:alt="${account.loginId}"/>
                         </div>
                         <div class="col-sm-9 input-group"  style="width: 760px">
-                                <input type="text" name="comment" id="comment"  class="form-control" placeholder="댓글을 입력해보세요 :)" aria-describedby="button-addon2" maxlength="10">
+                                <input type="text" name="comment" id="comment"  class="form-control" placeholder="댓글을 입력해보세요 :)" aria-describedby="button-addon2" maxlength="20">
                                 <button class="btn btn-outline-secondary comment-save" type="submit" id="button-addon2">등록</button>
                         </div>
                     </div>
@@ -156,8 +156,12 @@
                                 </div>
                                 <div>
                                     <span th:text="${#temporals.format(comment.writeTime,'yyyy-MM-dd HH:mm')}" style="font-size: 11px; color: gray">댓글 작성시간</span>
-                                    <span th:value="${comment.id}" th:name="${comments.getNumber()}" class="comment-update" th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">수정</span>
-                                    <span th:value="${comment.id}" th:name="${comments.getNumber()}" class="comment-delete" th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">삭제</span>
+                                    <span th:value="${comment.id}" th:name="${comments.getNumber()}" class="comment-update"
+                                          th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">수정</span>
+                                    <button th:if="${comment.account.loginId == account.loginId}" data-toggle="modal" data-target="#myModal"
+                                            th:value="${comment.id}" th:name="${comments.getNumber()}" class="btn btn-outline-light comment-delete"
+                                           style="font-size: 11px; color: gray; width: 50px">삭제</button>
+                                    <div th:replace="fragments.html :: modal"></div>
                                 </div>
                             </div>
                         </div>

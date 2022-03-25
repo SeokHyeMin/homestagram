@@ -34,6 +34,7 @@ public class CommentService {
     }
 
     public void commentDelete(Long comment_id) {
+
         commentRepository.deleteById(comment_id);
     }
 }

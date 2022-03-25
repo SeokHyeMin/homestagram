@@ -17,7 +17,6 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-
      <style>
         .container {
             max-width: 100%;
@@ -863,11 +862,28 @@
     </script>
 </div>
 
+<div th:fragment="modal" class="modal" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">확인</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>삭제하시겠습니까?.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary delete-ok">삭제</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:fragment="comments">
     <script type="application/javascript" th:inline="javascript">
-
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
         $(function() {
             $(document).ajaxSend(function(e, xhr, options) {
                 xhr.setRequestHeader(header, token);
@@ -893,7 +909,6 @@
 
         $(document).on("click", ".comment-page", function(){
             let page = $(this).attr("value");
-
             $.ajax({
                 url : '/commentList/' + id,
                 type : 'get',
@@ -909,8 +924,10 @@
         $(document).on("click", ".comment-delete", function(){
             let page = $(this).attr("name");
             let comment_id = $(this).attr("value");
-            if(confirm("댓글을 삭제하시겠습니까?") === true){
+            console.log(comment_id);
+            $('#myModal').fadeIn();
 
+            $( ".delete-ok").on("click", function(){
                 $.ajax({
                     url : '/deleteComment/' + comment_id + '/' + id,
                     type : 'post',
@@ -921,12 +938,13 @@
                         $('.comment-list').replaceWith(fragment);
                     }
                 });
-            }
+            });
+
+            $(".close").on("click",  function(){
+                $('#myModal').fadeOut();
+            });
         });
-
-
     </script>
 </div>
-
 </body>
 </html>
