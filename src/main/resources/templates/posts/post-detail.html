@@ -127,7 +127,7 @@
                 <div class="comments col-9 comment-list" style="padding-top: 3%;" id="comment-list">
                     <div class="comments-count">
                         <span style="font-weight: bold; font-size: 18px">댓글 수 </span>
-                        <span style="font-weight: bold; font-size: 18px" th:text="${comments.getTotalElements()}">댓글 수</span>
+                        <span style="font-weight: bold; font-size: 18px; color: #35c5f0" th:text="${comments.getTotalElements()}">댓글 수</span>
                     </div>
                     <div class="row" style="margin-top: 25px; margin-bottom: 5%">
                         <div class="col-sm-1" style="width: 50px">
@@ -144,10 +144,12 @@
                     <div>
                         <div id="comment-list-box" class="row" th:if="${comments != null}" th:each="comment: ${comments}">
                             <div class="col-sm-1" style="width: 50px">
-                                <img th:if="${#strings.isEmpty(comment.account.profile?.image)}" class="post-img"
-                                     src="/image/profile.png" width="35" height="35"/>
-                                <img th:if="${!#strings.isEmpty(comment.account.profile?.image)}" th:src="${comment.account.profile.image}" class="post-img"
-                                     width="35" height="35" alt="name" th:alt="${comment.account.loginId}"/>
+                                <a th:href="@{'/profile/'+${comment.account.loginId}}">
+                                    <img th:if="${#strings.isEmpty(comment.account.profile?.image)}" class="post-img"
+                                         src="/image/profile.png" width="35" height="35"/>
+                                    <img th:if="${!#strings.isEmpty(comment.account.profile?.image)}" th:src="${comment.account.profile.image}" class="post-img"
+                                         width="35" height="35" alt="name" th:alt="${comment.account.loginId}"/>
+                                </a>
                             </div>
                             <div class="col-sm" style="text-align: left; margin-bottom: 18px">
                                 <div>

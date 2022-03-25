@@ -76,9 +76,10 @@ public class PostServiceImpl implements PostService{
         return postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
     }
 
-    public List<Post> DescLikes(){
+    public Page<Post> top4PostOrderByViews(){
 
-        return postRepository.findTop4ByOrderByLikesDesc();
+        PageRequest pageRequest = PageRequest.of(0, 4, Sort.by(Sort.Direction.DESC, "views"));
+        return postRepository.findTopByViews(pageRequest);
     }
 
     public Page<Post> profilePageList(Account account, int page){

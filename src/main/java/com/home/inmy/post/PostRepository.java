@@ -17,8 +17,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface PostRepository extends JpaRepository<Post, Long>{
 
-    List<Post> findByAccount(Account account);
-    List<Post> findTop4ByOrderByLikesDesc();
+    @Query(value = "select p from Post p join fetch p.account join fetch p.imageFiles", countQuery = "select count(p.id) from Post p")
+    Page<Post> findTopByViews(Pageable pageable);
 
     Page<Post> findByAccount(Account account, Pageable pageable);
 

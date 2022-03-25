@@ -6,6 +6,7 @@ import com.home.inmy.domain.Post;
 import com.home.inmy.post.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class MainController {
             model.addAttribute(account);
         }
 
-        List<Post> postList = postService.DescLikes();
+        Page<Post> postList = postService.top4PostOrderByViews(); //조회수 높은 글 4개
 
         model.addAttribute("postList",postList);
 

@@ -102,13 +102,26 @@
                 <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px; padding-bottom: 15px; width: 300px;">
                     <div class="card mb-3" style="width: 260px; border: white">
                         <div class="post-detail">
-                            <div style="padding-bottom: 15px;">
+                            <div style="padding-bottom: 10px;">
                                 <a th:href="@{'/post/'+${post.id}}">
                                     <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="280" height="175" style="border-radius: 20px;"/>
                                 </a>
                             </div>
-                            <div>
-                                <span class="card-text" th:text="${post.title}">글 제목</span>
+                            <div style="padding-bottom: 5px;">
+                                <span class="card-text" th:text="${post.title}" style="font-weight: bold; font-size: 15px">글 제목</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-1" style="width: 30px">
+                                    <a th:href="@{'/profile/'+${post.account.loginId}}">
+                                        <img th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
+                                             src="/image/profile.png" width="25" height="25"/>
+                                        <img th:if="${!#strings.isEmpty(post.account.profile?.image)}" th:src="${post.account.profile.image}" class="post-img"
+                                             width="22" height="22" alt="name" th:alt="${post.account.loginId}"/>
+                                    </a>
+                                </div>
+                                <div class="col-sm" style="text-align: left">
+                                    <span class="card-text" th:text="${post.account.nickname}">닉네임</span>
+                                </div>
                             </div>
                         </div>
                     </div>
