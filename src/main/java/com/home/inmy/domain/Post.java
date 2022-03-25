@@ -43,8 +43,6 @@ public class Post {
 
     private LocalDateTime writeTime;
 
-    private String category;
-
     private String writer;
 
     private Long views; //조회수

@@ -1,8 +1,5 @@
 package com.home.inmy.post;
 
-import com.home.inmy.account.AccountController;
-import com.home.inmy.account.AccountRepository;
-import com.home.inmy.account.AccountService;
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.bookmark.BookmarkServiceImpl;
 import com.home.inmy.domain.*;
@@ -38,18 +35,6 @@ public class PostController {
     private final TagService tagService;
     private final BookmarkServiceImpl bookmarkService;
     private final FollowServiceImpl followService;
-
-
-    @ModelAttribute("categories")
-    public List<Category> categories() {
-        List<Category> categories = new ArrayList<>();
-        categories.add(new Category("원룸"));
-        categories.add(new Category("아파트"));
-        categories.add(new Category("주택"));
-        categories.add(new Category("빌라"));
-
-        return categories;
-    }
 
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
@@ -148,29 +133,6 @@ public class PostController {
         return "posts/post-list :: #postList-div";
     }
 
-    @Transactional(readOnly = true)
-    @GetMapping("/postList/category/{category}")
-    public String postListByCategory(@PathVariable String category, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
-
-        log.info("postListByCategory");
-        Page<Post> postList = postService.pageListByCategory(page, category);
-
-        List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
-        List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
-
-        Map<String, Integer> map = getPage(postList);
-
-        model.addAttribute("startBlockPage", map.get("startBlockPage"));
-        model.addAttribute("endBlockPage", map.get("endBlockPage"));
-
-        model.addAttribute("postList", postList);
-        model.addAttribute("postNumList", likePostNumList);
-        model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
-        model.addAttribute(account);
-
-        return "posts/post-list :: #postList-div";
-    }
-
     @GetMapping("/post-update/{id}")
     public String postUpdateView(@PathVariable Long id, @CurrentUser Account account, Model model){
 
@@ -178,7 +140,6 @@ public class PostController {
 
         PostForm postForm = PostForm.builder()
                             .title(post.getTitle())
-                            .category(post.getCategory())
                             .content(post.getContent())
                             .build();
 

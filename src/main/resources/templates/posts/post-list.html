@@ -6,27 +6,20 @@
 
 <div th:replace="fragments.html :: main-nav"></div>
 <div class="container">
-    <div class="row" style="margin-left: 8%; margin-right: 8%; padding-top: 35px">
+    <div class="row" style="margin-left: 12%; margin-right: 12%; padding-top: 35px">
         <div class="col-sm-1">
             <select class="form-select" id="selectBox-orderBy" aria-label="Default select example" style="width: 100px">
                 <option selected>정렬</option>
                 <option class="recent" value="writeTime">최신순</option>
                 <option class="likes" value="likes">좋아요순</option>
-                <option class="follow" value="follow">팔로잉</option>
-            </select>
-        </div>
-        <div class="col-sm-4">
-            <select class="form-select" id="selectBox-category" aria-label="Default select example" style="width: 130px">
-                <option selected>공간</option>
-                <option th:each="category : ${categories}" th:value="${category.categoryName}"
-                        th:text="${category.categoryName}">원룸</option>
             </select>
         </div>
     </div>
     <div class="row justify-content-center pt-4">
        <div id="postList-div" class="col-sm-12">
-           <div class="row" style="margin-left: 8%; margin-right: 8%; padding-top: 15px">
-               <div id="postList-box" class="col-md-3 postList-div" th:each="post: ${postList}" style="padding-left: 10px; padding-bottom: 15px;">
+           <div class="row" style="margin-left: 12%; margin-right: 12%; padding-top: 15px;">
+               <div id="postList-box" class="col-md-3 postList-div" th:each="post: ${postList}">
+                   <div id="postList-box-style">
                    <div class="card mb-3" style="width: 260px; border: white">
                        <div class="row">
                            <div class="row postList-profile card-text" style="padding-bottom: 16px;" >
@@ -52,7 +45,7 @@
                        <div class="post-detail">
                            <div style="padding-bottom: 15px;">
                                <a th:href="@{'/post/'+${post.id}}">
-                                   <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="290" height="285" style="border-radius: 20px;"/>
+                                   <img class="rounded card-img postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="380" height="265" style="border-radius: 20px;"/>
                                </a>
                            </div>
                            <div class="row card-text" style="text-align: center; padding-bottom: 12px">
@@ -112,6 +105,7 @@
                        </div>
                    </div>
                </div>
+               </div>
            </div>
        </div>
     </div>
@@ -134,6 +128,5 @@
 <div th:replace="fragments.html :: like"></div>
 <div th:replace="fragments.html :: bookmark"></div>
 <div th:replace="fragments.html :: selectbox-orderBy"></div>
-<div th:replace="fragments.html :: selectbox-category"></div>
 </body>
 </html>

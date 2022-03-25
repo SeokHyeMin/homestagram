@@ -10,11 +10,8 @@
         <div class="container mt-5">
             <div class="row justify-content-md-center">
                 <div class="col-sm-1"></div>
-                <div class="col-sm-7"  style="margin-top: 5%">
+                <div class="col-sm-7"  style="margin-top: 20px">
                     <div class="post-category row" style="color: gray">
-                        <div class="col">
-                            <span th:text="${post?.category}">카테고리</span>
-                        </div>
                         <div class="col" style="text-align: right; margin-right: 10%" >
                             <span th:text="${#temporals.format(post.writeTime,'yyyy-MM-dd HH:mm')}">작성시간</span>
                         </div>
@@ -87,9 +84,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="dropdown col-sm-2" style="text-align: center">
+                            <div class="dropdown col-sm-2 pt-3" style="text-align: center">
                                 <a role="button" class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
-                                        style="width: 30px; height: 30px; border-radius: 70%; background-color: gray"></a>
+                                        style="width: 30px; height: 30px; border-radius: 70%; background-color: white"></a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="width: 50px">
                                         <li><a class="dropdown-item" th:href="@{'/'}" >신고하기</a></li>
                                         <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-update/' + ${id}}">수정하기</a></li>

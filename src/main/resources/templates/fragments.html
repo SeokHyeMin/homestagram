@@ -74,6 +74,9 @@
         #nav-list{
            margin-left: auto;
         }
+        #postList-box{
+            padding: 7px;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR","Century Gothic", "Jeju Gothic",
             "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
@@ -147,7 +150,7 @@
                 </form>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/" th:href="@{/}">Home</a>
+                <a class="nav-link" th:href="@{/}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/postList}">커뮤니티</a>
@@ -165,7 +168,7 @@
                 <a class="nav-link" th:href="@{/sign-up}">가입</a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/}">
+                <a class="nav-link" th:href="@{'/profile/'+${account.loginId}}">
                     <i class="fa fa-plus" aria-hidden="true"></i> 내 게시물
                 </a>
             </li>
@@ -333,8 +336,8 @@
             <span th:value="${listText}" id="listText" th:text="${listText}">게시물</span>
             <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
         </div>
-        <div class="row" style="margin-right: 8%; padding-top: 15px">
-            <div class="col-md-3" th:each="list: ${postList}" style="padding-left: 10px;">
+        <div class="row" style="margin-right: 8%; padding-top: 15px;">
+            <div class="col-md-3" th:each="list: ${postList}" style="padding-left: 10px; padding-bottom: 15px">
                 <a th:href="@{'/post/'+${list.post.id}}">
                     <img class="profile-postList-img" th:src="|/images/${list.post.imageFiles[0].getStoreFilename()}|" width="170" height="170"/>
                 </a>
@@ -683,26 +686,6 @@
                     }
                 });
             }
-        });
-    </script>
-</div>
-
-<div th:fragment="selectbox-category">
-    <script type="application/javascript" th:inline="javascript">
-
-        $("#selectBox-category").change( function(){
-            console.log("카테고리 클릭")
-
-                console.log($(this).val())
-
-                $.ajax({
-                    url : '/postList/category/'+$(this).val(),
-                    type : 'get',
-                    success : function(fragment) {
-
-                        $('#postList-div').replaceWith(fragment);
-                    }
-                });
         });
     </script>
 </div>

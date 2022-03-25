@@ -31,19 +31,15 @@ public class PostDto {
 
     private Set<String> tags;
 
-    @NotBlank
-    private String category;
-
     private Account account;
 
     private String writer;
 
     @Builder
-    public PostDto(String title, String content, String category, String writer, Account account, List<MultipartFile> imageFiles, Set<String> tags) {
+    public PostDto(String title, String content, String writer, Account account, List<MultipartFile> imageFiles, Set<String> tags) {
         this.title = title;
         this.content = content;
         this.account = account;
-        this.category = category;
         this.imageFiles = imageFiles;
         this.tags = tags;
         this.writer = writer;
@@ -57,7 +53,6 @@ public class PostDto {
                 .postTags(new HashSet<>())
                 .writeTime(LocalDateTime.now())
                 .content(content)
-                .category(category)
                 .writer(writer)
                 .views(0L)
                 .likes(0L)

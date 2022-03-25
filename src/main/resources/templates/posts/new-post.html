@@ -23,14 +23,7 @@
                         <small class="invalid-feedback">제목을 입력하세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
                     </div>
-                    <div class="col">
-                        <select th:field="*{category}" class="form-select" required>
-                            <option value="">공간(필수)</option>
-                            <option th:each="category : ${categories}" th:value="${category.categoryName}"
-                                    th:text="${category.categoryName}">원룸</option>
-                        </select>
-                    </div>
-                    </div>
+                </div>
             <br>
             <div class="row justify-content-center mx-auto col-9">
                 <div class="col">

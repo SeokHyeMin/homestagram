@@ -33,18 +33,14 @@ public class PostForm {
 
     private Set<String> tags;
 
-    @NotBlank
-    private String category;
-
     private String writer;
 
 
 
     @Builder
-    public PostForm(String title, String content, String writer, String category, List<MultipartFile> imageFiles, Set<String> tags) {
+    public PostForm(String title, String content, String writer, List<MultipartFile> imageFiles, Set<String> tags) {
         this.title = title;
         this.content = content;
-        this.category = category;
         this.writer = writer;
         this.imageFiles = (imageFiles != null) ? imageFiles : new ArrayList<>();
         this.tags = (tags != null) ? tags : new HashSet<>();
@@ -56,7 +52,6 @@ public class PostForm {
         return PostDto.builder()
                 .title(title)
                 .account(account)
-                .category(category)
                 .content(content)
                 .imageFiles(imageFiles)
                 .tags(tags)

@@ -2,9 +2,7 @@ package com.home.inmy.post;
 
 import com.home.inmy.bookmark.BookmarkServiceImpl;
 import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Follow;
 import com.home.inmy.domain.Post;
-import com.home.inmy.follow.FollowServiceImpl;
 import com.home.inmy.images.ImageFileRepository;
 import com.home.inmy.images.ImageFileServiceImpl;
 import com.home.inmy.like.LikeServiceImpl;
@@ -34,7 +32,6 @@ public class PostServiceImpl implements PostService{
     private final ImageFileServiceImpl imageFileService;
     private final LikeServiceImpl likeService;
     private final BookmarkServiceImpl bookmarkService;
-    private final FollowServiceImpl followService;
 
     private final ModelMapper modelMapper;
 
@@ -79,29 +76,11 @@ public class PostServiceImpl implements PostService{
         return postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
     }
 
-    public Post HighestViews(){
-
-        Sort sort = Sort.by(Sort.Direction.DESC, "views");
-        List<Post> postList = postRepository.findAll(sort);
-
-        if(postList.isEmpty()){
-            return null;
-        }
-
-        return postList.get(0) ;
-    }
-
     public List<Post> DescLikes(){
 
         return postRepository.findTop4ByOrderByLikesDesc();
     }
 
-    public List<Post> DescBookmark(){
-
-        Sort sort = Sort.by(Sort.Direction.DESC, "bookmarkList.size()");
-
-        return postRepository.findAll(sort);
-    }
     public Page<Post> profilePageList(Account account, int page){
 
         PageRequest pageRequest = PageRequest.of(page, 6, Sort.by(Sort.Direction.DESC, "writeTime"));
@@ -118,12 +97,6 @@ public class PostServiceImpl implements PostService{
 
         PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, orderBy));
         return postRepository.findPostAllCountBy(pageRequest);
-    }
-
-    public Page<Post> pageListByCategory(int page, String category){
-        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime"));
-        log.info(category);
-        return postRepository.findByCategory(category, pageRequest);
     }
 
 }
