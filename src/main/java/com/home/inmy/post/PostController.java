@@ -2,6 +2,7 @@ package com.home.inmy.post;
 
 import com.home.inmy.account.CurrentUser;
 import com.home.inmy.bookmark.BookmarkServiceImpl;
+import com.home.inmy.comments.CommentService;
 import com.home.inmy.domain.*;
 import com.home.inmy.follow.FollowServiceImpl;
 import com.home.inmy.like.LikeServiceImpl;
@@ -35,6 +36,7 @@ public class PostController {
     private final TagService tagService;
     private final BookmarkServiceImpl bookmarkService;
     private final FollowServiceImpl followService;
+    private final CommentService commentService;
 
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
@@ -53,12 +55,28 @@ public class PostController {
 
         List<PostTag> postTagList = postTagService.getPostTagList(post);
         Boolean follow = followService.findFollow(post.getAccount().getLoginId(), account); //로그인 계정, 프로필 주인 계정
+        Page<Comments> comments = commentService.getComments(post, 0); //댓글 작성하고 불러올 페이지는 댓글 첫 페이지
 
+
+        int pageNum = comments.getPageable().getPageNumber(); // 현재 페이지
+        int pageBlock = 5; // 블럭의 수
+        int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
+        int endBlockPage = startBlockPage + pageBlock - 1;
+        int totalPage = comments.getTotalPages();
+        endBlockPage = Math.min(totalPage, endBlockPage);
+
+        model.addAttribute("startBlockPage",startBlockPage);
+        model.addAttribute("endBlockPage",endBlockPage);
+
+
+
+        model.addAttribute("comments", comments);
         postService.updateViews(post); //조회수 증가
 
         model.addAttribute(post);
         model.addAttribute(postTagList);
-        model.addAttribute(account);
+        model.addAttribute("account",account);
+        model.addAttribute("comments",comments);
         model.addAttribute("follow",follow); //팔로우 여부
         model.addAttribute("isOwner",post.getAccount().getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
         model.addAttribute("like",likeService.accountPostLike(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true

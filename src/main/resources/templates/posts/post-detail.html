@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments.html :: head"></head>
-
 <body class="bg-white">
 
     <div th:replace="fragments.html :: main-nav"></div>
@@ -12,19 +11,23 @@
                 <div class="col-sm-1"></div>
                 <div class="col-sm-7"  style="margin-top: 20px">
                     <div class="post-category row" style="color: gray">
-                        <div class="col" style="text-align: right; margin-right: 10%" >
+                        <div class="col" style="text-align: left;">
+                            <span>조회수 </span>
+                            <span th:text="${post.views}"></span>
+                        </div>
+                        <div class="col" style="text-align: right; margin-right: 3%" >
                             <span th:text="${#temporals.format(post.writeTime,'yyyy-MM-dd HH:mm')}">작성시간</span>
                         </div>
                     </div>
                     <br>
-                    <div class="titleImage" style="width: 750px">
+                    <div class="titleImage" style="width: 850px">
                         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <img  th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" class="d-block"  style="width: 750px; height: 750px">
+                                    <img  th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" class="d-block"  style="width: 830px; height: 750px">
                                 </div>
                                 <div th:if="${post.imageFiles.size() > 1}" class="carousel-item"  th:each="i: ${#numbers.sequence(1,post.imageFiles.size()-1)}">
-                                    <img th:src="|/images/${post.imageFiles[i].getStoreFilename()}|" class="d-block"  style="width: 750px; height: 750px">
+                                    <img th:src="|/images/${post.imageFiles[i].getStoreFilename()}|" class="d-block"  style="width: 830px; height: 750px">
                                 </div>
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -45,7 +48,6 @@
                     <div>
                         <span th:text="${post.content}">내용</span>
                     </div>
-
                 </div>
                 <div class="col-sm-4" style="border-left: 1px solid lightgray; margin-top: 5%; width: 365px">
                     <div style="margin-left: 7%">
@@ -98,8 +100,8 @@
                         <div class="row post-profile" style="margin-top: 3%">
                             <div class="col-sm-2" style="margin-right: 1%">
                                 <a th:href="@{'/profile/'+${post.account.loginId}}">
-                                    <svg th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
-                                         th:data-jdenticon-value="${post.account.loginId}" width="50" height="50"></svg>
+                                    <img th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
+                                         src="/image/profile.png" width="50" height="50"/>
                                     <img th:if="${!#strings.isEmpty(post.account.profile?.image)}" class="post-img"
                                          th:src="${post.account.profile?.image}"
                                          width="50" height="50" alt="name" th:alt="${post.account.loginId}"/>
@@ -118,7 +120,61 @@
                                 <button th:if="${follow}" type="button" class="btn btn-outline-secondary unfollowBtn" style="width: 80px;">팔로잉</button>
                             </div>
                             <div id="ownerId" hidden th:value="${post.account.loginId}"></div>
+                            <div id="post_id" hidden th:value="${post.id}"></div>
                         </div>
+                    </div>
+                </div>
+                <div class="comments col-9 comment-list" style="padding-top: 3%;" id="comment-list">
+                    <div class="comments-count">
+                        <span style="font-weight: bold; font-size: 18px">댓글 수 </span>
+                        <span style="font-weight: bold; font-size: 18px" th:text="${comments.getTotalElements()}">댓글 수</span>
+                    </div>
+                    <div class="row" style="margin-top: 25px; margin-bottom: 5%">
+                        <div class="col-sm-1" style="width: 50px">
+                            <img th:if="${#strings.isEmpty(account?.profile?.image)}" class="post-img"
+                                 src="/image/profile.png" width="35" height="35"/>
+                            <img th:if="${!#strings.isEmpty(account?.profile?.image)}" th:src="${account.profile.image}" class="post-img"
+                                 width="35" height="35" alt="name" th:alt="${account.loginId}"/>
+                        </div>
+                        <div class="col-sm-9 input-group"  style="width: 760px">
+                                <input type="text" name="comment" id="comment"  class="form-control" placeholder="댓글을 입력해보세요 :)" aria-describedby="button-addon2" maxlength="10">
+                                <button class="btn btn-outline-secondary comment-save" type="submit" id="button-addon2">등록</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="comment-list-box" class="row" th:if="${comments != null}" th:each="comment: ${comments}">
+                            <div class="col-sm-1" style="width: 50px">
+                                <img th:if="${#strings.isEmpty(comment.account.profile?.image)}" class="post-img"
+                                     src="/image/profile.png" width="35" height="35"/>
+                                <img th:if="${!#strings.isEmpty(comment.account.profile?.image)}" th:src="${comment.account.profile.image}" class="post-img"
+                                     width="35" height="35" alt="name" th:alt="${comment.account.loginId}"/>
+                            </div>
+                            <div class="col-sm" style="text-align: left; margin-bottom: 18px">
+                                <div>
+                                    <span th:text="${comment.account.nickname}" style="font-weight: bold;">닉네임</span>
+                                    <span th:text="${comment.comment}">댓글내용</span>
+                                </div>
+                                <div>
+                                    <span th:text="${#temporals.format(comment.writeTime,'yyyy-MM-dd HH:mm')}" style="font-size: 11px; color: gray">댓글 작성시간</span>
+                                    <span th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">수정</span>
+                                    <span class="comment-delete" th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">삭제</span>
+                                </div>
+                            </div>
+                        </div>
+                        <nav aria-label="Page navigation example" th:if="${comments.getTotalPages() > 0}">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${!comments.hasPrevious()}? disabled">
+                                    <a class="page-link comment-page" th:value="${comments.getNumber() - 1}">Previous</a>
+                                </li>
+                                <li class="page-item" th:classappend="${i == comments.getNumber() + 1}? active"
+                                    th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                                    <span class="page-link comment-page" th:value="${i}-1" th:text="${i}"></span>
+                                </li>
+                                <li class="page-item" th:classappend="${!comments.hasNext()}? disabled">
+                                    <a class="page-link comment-page" th:value="${comments.getNumber() + 1}">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -127,5 +183,6 @@
     <div th:replace="fragments.html :: like"></div>
     <div th:replace="fragments.html :: bookmark"></div>
     <div th:replace="fragments.html :: followBtn"></div>
+    <div th:replace="fragments.html :: comments"></div>
 </body>
 </html>

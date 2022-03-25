@@ -14,6 +14,9 @@
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
      <style>
         .container {
@@ -281,14 +284,14 @@
     <nav aria-label="Page navigation example" th:if="${followList.getTotalPages() > 0}">
         <ul class="pagination justify-content-center page-list">
             <li class="page-item" th:classappend="${!followList.hasPrevious()}? disabled">
-                <span class="page-link follow-pre-page" th:value="${followList.getNumber() - 1}">Previous</span>
+                <span class="page-link follow-page" th:value="${followList.getNumber() - 1}">Previous</span>
             </li>
             <li class="page-item" th:classappend="${i == followList.getNumber() + 1}? active"
                 th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-                <span class="page-link follow-cur-page" th:value="${i}-1" th:text="${i}"></span>
+                <span class="page-link follow-page" th:value="${i}-1" th:text="${i}"></span>
             </li>
             <li class="page-item" th:classappend="${!followList.hasNext()}? disabled">
-                <a class="page-link follow-next-page" th:value="${followList.getNumber() + 1}">Next</a>
+                <a class="page-link follow-page" th:value="${followList.getNumber() + 1}">Next</a>
             </li>
         </ul>
     </nav>
@@ -317,14 +320,14 @@
     <nav aria-label="Page navigation example" th:if="${followerList.getTotalPages() > 0}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!followerList.hasPrevious()}? disabled">
-                <a class="page-link follower-pre-page" th:value="${followerList.getNumber() - 1}">Previous</a>
+                <a class="page-link follower-page" th:value="${followerList.getNumber() - 1}">Previous</a>
             </li>
             <li class="page-item" th:classappend="${i == followerList.getNumber() + 1}? active"
                 th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-                <span class="page-link follower-cur-page" th:value="${i}-1" th:text="${i}">[[${i}]]</span>
+                <span class="page-link follower-page" th:value="${i}-1" th:text="${i}">[[${i}]]</span>
             </li>
             <li class="page-item" th:classappend="${!followerList.hasNext()}? disabled">
-                <a class="page-link follower-next-page" th:value="${followerList.getNumber() + 1}">Next</a>
+                <a class="page-link follower-page" th:value="${followerList.getNumber() + 1}">Next</a>
             </li>
         </ul>
     </nav>
@@ -695,12 +698,10 @@
 
         $("#likeList").click( function(){
             let loginId = $("#profileOwner").attr("value");
-
             $.ajax({
                 url : '/profile/like/' + loginId,
                 type : 'get',
                 success : function(fragment) {
-
                     $('.profile-list').replaceWith(fragment);
                 }
             });
@@ -708,7 +709,6 @@
 
         $("#photoList").click( function(){
             let loginId = $("#profileOwner").attr("value");
-
             $.ajax({
                 url : '/profile/photoList/' + loginId,
                 type : 'get',
@@ -721,12 +721,10 @@
 
         $("#bookmarkList").click( function(){
             let loginId = $("#profileOwner").attr("value");
-
             $.ajax({
                 url : '/profile/bookmarkList/' + loginId,
                 type : 'get',
                 success : function(fragment) {
-
                     $('.profile-list').replaceWith(fragment);
                 }
             });
@@ -737,10 +735,8 @@
 <div th:fragment="follow-list">
     <script type="application/javascript" th:inline="javascript">
         $(document).on('click', 'dd', function(){
-
             let loginId = $("#profileOwner").attr("value");
             let list = $(this).attr("id");
-
             if(list === "follower"){
                 $.ajax({
                     url : '/followerList/' + loginId,
@@ -764,32 +760,10 @@
 
 <div th:fragment="follow-list-page">
     <script type="application/javascript" th:inline="javascript">
-        $(document).on("click", ".follow-cur-page", function(){
-            console.log("클릭")
-            let loginId = $("#profileOwner").attr("value");
+
+        $(document).on("click", ".follow-page", function(){
             let page = $(this).attr("value");
-            console.log("page = ");
-            console.log(page);
-
-                $.ajax({
-                    url : '/followList/' + loginId,
-                    type : 'get',
-                    data : {
-                        page : page
-                    },
-                    success : function(fragment) {
-                        $('.profile-list').replaceWith(fragment);
-                        console.log("페이지변경")
-                    }
-                });
-        });
-
-        $(document).on("click", ".follow-next-page", function(){
-            console.log("클릭")
             let loginId = $("#profileOwner").attr("value");
-            let page = $(this).attr("value");
-            console.log(page);
-
             $.ajax({
                 url : '/followList/' + loginId,
                 type : 'get',
@@ -798,36 +772,13 @@
                 },
                 success : function(fragment) {
                     $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
                 }
             });
         });
 
-        $(document).on("click", ".follow-pre-page", function(){
-            console.log("클릭")
-            let loginId = $("#profileOwner").attr("value");
+        $(document).on("click", ".follower-page", function(){
             let page = $(this).attr("value");
-            console.log(page);
-
-            $.ajax({
-                url : '/followList/' + loginId,
-                type : 'get',
-                data : {
-                    page : page
-                },
-                success : function(fragment) {
-                    $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
-                }
-            });
-        });
-
-        $(document).on("click", ".follower-cur-page", function(){
-            console.log("클릭")
             let loginId = $("#profileOwner").attr("value");
-            let page = $(this).attr("value");
-            console.log(page);
-
             $.ajax({
                 url : '/followerList/' + loginId,
                 type : 'get',
@@ -836,45 +787,6 @@
                 },
                 success : function(fragment) {
                     $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
-                }
-            });
-        });
-
-        $(document).on("click", ".follower-next-page", function(){
-            console.log("클릭")
-            let loginId = $("#profileOwner").attr("value");
-            let page = $(this).attr("value");
-            console.log(page);
-
-            $.ajax({
-                url : '/followerList/' + loginId,
-                type : 'get',
-                data : {
-                    page : page
-                },
-                success : function(fragment) {
-                    $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
-                }
-            });
-        });
-
-        $(document).on("click", ".follower-pre-page", function(){
-            console.log("클릭")
-            let loginId = $("#profileOwner").attr("value");
-            let page = $(this).attr("value");
-            console.log(page);
-
-            $.ajax({
-                url : '/followerList/' + loginId,
-                type : 'get',
-                data : {
-                    page : page
-                },
-                success : function(fragment) {
-                    $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
                 }
             });
         });
@@ -950,5 +862,57 @@
         });
     </script>
 </div>
+
+<div th:fragment="comments">
+    <script type="application/javascript" th:inline="javascript">
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(function() {
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+        });
+        let id = $("#post_id").attr("value");
+
+        $(document).on("click", ".comment-save", function(){
+            console.log("댓글 저장 클릭")
+            let comment = $("#comment").val();
+            console.log(comment);
+            $.ajax({
+                url : '/comment/save/'+id,
+                type : 'post',
+                dataType : 'text',
+                data : {
+                    comment : comment
+                },
+                success : function(fragment) {
+                    $('.comment-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+        $(document).on("click", ".comment-page", function(){
+            console.log("클릭")
+            let page = $(this).attr("value");
+
+            $.ajax({
+                url : '/commentList/' + id,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.comment-list').replaceWith(fragment);
+                    console.log("페이지변경")
+                }
+            });
+        });
+
+
+    </script>
+</div>
+
 </body>
 </html>

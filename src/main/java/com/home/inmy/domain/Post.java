@@ -39,6 +39,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<Comments> commentsList = new ArrayList<>();
+
     private String content;
 
     private LocalDateTime writeTime;
