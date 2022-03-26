@@ -692,7 +692,7 @@
     </script>
 </div>
 
-<div th:fragment="profile-list">
+<div th:fragment="profile-sub-nav-list">
     <script type="application/javascript" th:inline="javascript">
 
         $("#likeList").click( function(){
@@ -792,76 +792,6 @@
     </script>
 </div>
 
-<div th:fragment="list-page">
-    <script type="application/javascript" th:inline="javascript">
-        $(document).on("click", ".list-cur-page", function(){
-            console.log("클릭")
-            let loginId = $("#profileOwner").attr("value");
-            let listType = $("#listText").attr("value");
-            let page = $(this).attr("value");
-
-            console.log("page = ");
-            console.log(page);
-
-            $.ajax({
-                url : '/followList/' + listType + '/' + loginId,
-                type : 'get',
-                data : {
-                    page : page
-                },
-                success : function(fragment) {
-                    $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
-                }
-            });
-        });
-
-        $(document).on("click", ".list-next-page", function(){
-            console.log("클릭")
-            let loginId = $("#profileOwner").attr("value");
-            let listType = $("#listText").attr("value");
-            let page = $(this).attr("value");
-
-            console.log("page = ");
-            console.log(page);
-
-            $.ajax({
-                url : '/followList/' + listType + '/' + loginId,
-                type : 'get',
-                data : {
-                    page : page
-                },
-                success : function(fragment) {
-                    $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
-                }
-            });
-        });
-
-        $(document).on("click", ".list-pre-page", function(){
-            console.log("클릭")
-            let loginId = $("#profileOwner").attr("value");
-            let listType = $("#listText").attr("value");
-            let page = $(this).attr("value");
-
-            console.log("page = ");
-            console.log(page);
-
-            $.ajax({
-                url : '/followList/' + listType + '/' + loginId,
-                type : 'get',
-                data : {
-                    page : page
-                },
-                success : function(fragment) {
-                    $('.profile-list').replaceWith(fragment);
-                    console.log("페이지변경")
-                }
-            });
-        });
-    </script>
-</div>
-
 <div th:fragment="modal" class="modal" id="myModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -893,7 +823,6 @@
 
         $(document).on("click", ".comment-save", function(){
             let comment = $("#comment").val();
-            console.log(comment);
             $.ajax({
                 url : '/comment/save/'+id,
                 type : 'post',
@@ -924,7 +853,6 @@
         $(document).on("click", ".comment-delete", function(){
             let page = $(this).attr("name");
             let comment_id = $(this).attr("value");
-            console.log(comment_id);
             $('#myModal').fadeIn();
 
             $( ".delete-ok").on("click", function(){
@@ -959,7 +887,6 @@
 
                 $(".delete-ok").on("click", function () {
                     let profileOwnerLoginId = $("#profile-owner").attr("value");
-                    console.log(profileOwnerLoginId)
 
                     $.ajax({
                         url: '/delete-account',

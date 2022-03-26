@@ -41,4 +41,5 @@ public class CommentService {
     public void commentDeleteByPost(Post post){
         commentRepository.deleteAllByPost(post);
     }
+
 }

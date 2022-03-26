@@ -158,8 +158,6 @@
                                 </div>
                                 <div>
                                     <span th:text="${#temporals.format(comment.writeTime,'yyyy-MM-dd HH:mm')}" style="font-size: 11px; color: gray">댓글 작성시간</span>
-                                    <span th:value="${comment.id}" th:name="${comments.getNumber()}" class="comment-update"
-                                          th:if="${comment.account.loginId == account.loginId}" style="font-size: 11px; color: gray">수정</span>
                                     <button th:if="${comment.account.loginId == account.loginId}" data-toggle="modal" data-target="#myModal"
                                             th:value="${comment.id}" th:name="${comments.getNumber()}" class="btn btn-outline-light comment-delete"
                                            style="font-size: 11px; color: gray; width: 50px">삭제</button>
