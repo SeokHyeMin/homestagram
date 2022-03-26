@@ -27,19 +27,19 @@ public class Post {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<ImageFile> imageFiles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private Set<PostTag> postTags = new HashSet<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comments> commentsList = new ArrayList<>();
 
     private String content;

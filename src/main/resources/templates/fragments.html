@@ -870,7 +870,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>삭제하시겠습니까?</p>
+                <p class="modal-text">삭제하시겠습니까?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">취소</button>
@@ -944,6 +944,43 @@
                 $('#myModal').fadeOut();
             });
         });
+    </script>
+</div>
+
+<div th:fragment="delete-account">
+    <script type="application/javascript" th:inline="javascript">
+        let header = [[${_csrf.headerName}]];
+        let token = [[${_csrf.token}]];
+
+            $("#delete-account").on("click", function () {
+
+                $(".modal-text").text("계정을 삭제하시겠습니까?");
+                $('#myModal').fadeIn();
+
+                $(".delete-ok").on("click", function () {
+                    let profileOwnerLoginId = $("#profile-owner").attr("value");
+                    console.log(profileOwnerLoginId)
+
+                    $.ajax({
+                        url: '/delete-account',
+                        type: 'post',
+                        data: {
+                            profileOwnerLoginId : profileOwnerLoginId,
+                        },
+                        dataType: 'text',
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader(header, token);
+                        },
+                        success: function () {
+                            location.href = "index.html";
+                        }
+                    });
+                });
+
+                $(".close").on("click", function () {
+                    $('#myModal').fadeOut();
+                });
+            });
     </script>
 </div>
 </body>

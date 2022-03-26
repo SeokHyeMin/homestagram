@@ -46,14 +46,13 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account")
-    @JsonBackReference
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Likes> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     //프로필

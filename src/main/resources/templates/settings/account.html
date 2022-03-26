@@ -13,6 +13,7 @@
                 <span th:text="${message}">완료</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            <div id="profile-owner" th:value="${account.loginId}" hidden></div>
             <div class="row">
                 <form class="needs-validation col-12" th:object="${accountForm}" th:action="@{/settings/account}" method="post" novalidate>
                     <div class="form-group">
@@ -62,16 +63,18 @@
                 <div class="col-sm-12">
                     <h2 class="text-danger">계정 삭제</h2>
                     <div class="alert alert-danger" role="alert">
-                        이 계정은 삭제할 수 없습니다.
+                        탈퇴를 원하시면 계정 삭제를 눌러주세요.
                     </div>
-                    <button class="btn btn-outline-danger disabled">계정 삭제</button>
+                    <button class="btn btn-outline-danger" id="delete-account">계정 삭제</button>
+                    <div th:replace="fragments.html :: modal"></div>
                 </div>
             </div>
         </div>
     </div>
-
     <div th:replace="fragments.html :: footer"></div>
+    <div th:replace="fragments.html :: delete-account"></div>
 </div>
 <script th:replace="fragments.html :: form-validation"></script>
+
 </body>
 </html>

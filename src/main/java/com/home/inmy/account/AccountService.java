@@ -96,4 +96,8 @@ public class AccountService implements UserDetailsService {
 
         return account;
     }
+
+    public void deleteAccount(Long account_id) {
+        accountRepository.deleteById(account_id);
+    }
 }

@@ -69,6 +69,16 @@ public class AccountController {
         return "login";
     }
 
+    @PostMapping("/delete-account")
+    public void deleteAccount(@CurrentUser Account account, @RequestParam String profileOwnerLoginId){
+
+        if(profileOwnerLoginId.equals(account.getLoginId())){
+            accountService.deleteAccount(account.getId());
+        }else{
+            throw new IllegalArgumentException("계정을 삭제할 권한이 없습니다.");
+        }
+    }
+
     @Transactional(readOnly = true)
     @GetMapping("/profile/{loginId}")
     public String profile(@PathVariable String loginId, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
