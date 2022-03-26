@@ -1,6 +1,7 @@
 package com.home.inmy.post;
 
 import com.home.inmy.bookmark.BookmarkServiceImpl;
+import com.home.inmy.comments.CommentService;
 import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Post;
 import com.home.inmy.images.ImageFileRepository;
@@ -32,6 +33,7 @@ public class PostServiceImpl implements PostService{
     private final ImageFileServiceImpl imageFileService;
     private final LikeServiceImpl likeService;
     private final BookmarkServiceImpl bookmarkService;
+    private final CommentService commentService;
 
     private final ModelMapper modelMapper;
 
@@ -67,6 +69,7 @@ public class PostServiceImpl implements PostService{
         likeService.deletePostLike(post);
         bookmarkService.deletePostBookmark(post);
         postTagService.deletePost(post);
+        commentService.commentDeleteByPost(post);
         postRepository.delete(post);
     }
 

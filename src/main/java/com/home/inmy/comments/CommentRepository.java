@@ -1,5 +1,6 @@
 package com.home.inmy.comments;
 
+import com.home.inmy.domain.Account;
 import com.home.inmy.domain.Comments;
 import com.home.inmy.domain.Post;
 import org.springframework.data.domain.Page;
@@ -12,4 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends JpaRepository<Comments, Long> {
 
     Page<Comments> findAllByPost(Post post, Pageable pageable);
+
+    void deleteAllByPost(Post post);
+
+    void deleteAllByAccount(Account account);
 }
