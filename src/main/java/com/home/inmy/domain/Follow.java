@@ -4,6 +4,10 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@NamedEntityGraph(name = "Follow.withAll", attributeNodes = {
+        @NamedAttributeNode("fromAccount"),
+        @NamedAttributeNode("toAccount"),
+})
 @Entity
 @Getter @Setter
 @Builder
@@ -22,11 +26,11 @@ public class Follow {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fromAccountId")
     private Account fromAccount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "toAccountId")
     private Account toAccount;
 }

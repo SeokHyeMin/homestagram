@@ -1,7 +1,6 @@
 package com.home.inmy.domain;
 
 import lombok.*;
-import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -11,6 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@NamedEntityGraph(name = "Post.withAccountAndImageFiles", attributeNodes = {
+        @NamedAttributeNode("account"),
+        @NamedAttributeNode("imageFiles")
+})
 @Entity
 @Getter @Setter @Builder
 @NoArgsConstructor @AllArgsConstructor

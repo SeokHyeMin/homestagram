@@ -1,6 +1,5 @@
 package com.home.inmy.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Getter @Setter
-@Builder @AllArgsConstructor(access = AccessLevel.PROTECTED) @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder @AllArgsConstructor() @NoArgsConstructor()
 public class Account {
 
     //회원가입
