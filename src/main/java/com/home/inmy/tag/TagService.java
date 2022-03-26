@@ -1,8 +1,12 @@
 package com.home.inmy.tag;
 
+import com.home.inmy.domain.Post;
 import com.home.inmy.domain.PostTag;
 import com.home.inmy.domain.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -34,4 +38,5 @@ public class TagService {
 
         return tags;
     }
+
 }

@@ -8,6 +8,7 @@ import com.home.inmy.follow.FollowServiceImpl;
 import com.home.inmy.like.LikeServiceImpl;
 import com.home.inmy.postTag.PostTagServiceImpl;
 import com.home.inmy.post.form.PostForm;
+import com.home.inmy.tag.TagRepository;
 import com.home.inmy.tag.TagService;
 import com.home.inmy.web.dto.PostDto;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,8 @@ public class PostController {
     private final BookmarkServiceImpl bookmarkService;
     private final FollowServiceImpl followService;
     private final CommentService commentService;
+
+    private final TagRepository tagRepository;
 
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
@@ -130,7 +133,8 @@ public class PostController {
 
     @Transactional(readOnly = true)
     @GetMapping("/postList/{orderBy}")
-    public String postListOrderBy(@PathVariable String orderBy, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+    public String postListOrderBy(@PathVariable String orderBy, Model model, @CurrentUser Account account,
+                                  @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
         log.info("정렬시작");
         Page<Post> postList = postService.pageList(page, orderBy);

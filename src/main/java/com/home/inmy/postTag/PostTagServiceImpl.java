@@ -8,9 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -57,4 +62,12 @@ public class PostTagServiceImpl implements PostTagService{
 
         return  postTagRepository.findByPost(post);
     }
+
+    public Page<PostTag> searchPostByTag(Tag tag, int page){
+
+        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "id"));
+
+        return postTagRepository.findByTag(tag,pageRequest);
+    }
+
 }
