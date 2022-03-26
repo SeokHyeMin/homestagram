@@ -25,8 +25,8 @@
                            <div class="row postList-profile card-text" style="padding-bottom: 16px;" >
                                <div class="col-sm-2" style="margin: auto;">
                                    <a th:href="@{'/profile/'+${post.account.loginId}}">
-                                       <svg th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
-                                            th:data-jdenticon-value="${post.writer}" width="36" height="36"></svg>
+                                       <img th:if="${#strings.isEmpty(post.account.profile?.image)}" class="post-img"
+                                            src="/image/profile.png" width="36" height="36"/>
                                        <img th:if="${!#strings.isEmpty(post.account.profile?.image)}" class="post-img"
                                             th:src="${post.account.profile?.image}"
                                             width="36" height="36" alt="name" th:alt="${post.writer}"/>

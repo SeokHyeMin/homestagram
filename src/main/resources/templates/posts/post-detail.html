@@ -122,6 +122,11 @@
                             <div id="ownerId" hidden th:value="${post.account.loginId}"></div>
                             <div id="post_id" hidden th:value="${post.id}"></div>
                         </div>
+                        <div class="img-4cut row" style="padding-top: 20px">
+                            <div class="col-5" th:each="image : ${post.imageFiles}" th:if="${imageStat.index < 4}" style="margin-bottom: 5px">
+                                <img class="rounded" th:src="|/images/${image.getStoreFilename()}|" width="140" height="140"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="comments col-9 comment-list" style="padding-top: 3%;" id="comment-list">
