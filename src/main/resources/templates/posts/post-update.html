@@ -48,11 +48,11 @@
                     <br>
                     <div>
                         <div>
-                            <input id="tags" type="text" name="tags" th:value="${tagStr}"
+                            <input id="tags" type="text" name="tags" th:value="${tagStr}" maxlength="6"
                                    class="tagify-outside" aria-describedby="tagHelp" />
                         </div>
                     </div>
-                    <small class="form-text text-muted">키워드를 입력해보세요 :)</small>
+                    <small class="form-text text-muted">6자 이내로 키워드를 입력해보세요 :)</small>
                 </div>
             </div>
                 <div class="form-group">

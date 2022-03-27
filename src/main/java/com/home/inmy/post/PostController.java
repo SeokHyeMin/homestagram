@@ -140,7 +140,6 @@ public class PostController {
 
         List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
         List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
-
         Map<String, Integer> map = getPage(postList); //페이지 계산
 
         model.addAttribute("startBlockPage", map.get("startBlockPage"));
