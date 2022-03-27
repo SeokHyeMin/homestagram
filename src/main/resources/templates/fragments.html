@@ -287,7 +287,7 @@
             </li>
             <li class="page-item" th:classappend="${i == followList.getNumber() + 1}? active"
                 th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-                <span class="page-link follow-page" th:value="${i}-1" th:text="${i}"></span>
+                <a class="page-link follow-page" th:value="${i}-1" th:text="${i}"></a>
             </li>
             <li class="page-item" th:classappend="${!followList.hasNext()}? disabled">
                 <a class="page-link follow-page" th:value="${followList.getNumber() + 1}">Next</a>
@@ -643,17 +643,17 @@
     </script>
 </div>
 
-<nav th:fragment="pagination" aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
+<nav th:fragment="postList-pagination" aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
     <ul class="pagination justify-content-center">
         <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
-            <a class="page-link" th:href="@{/postList(page=${postList.getNumber() - 1})}">Previous</a>
+            <a class="page-link post-page" th:value="${postList.getNumber() - 1}">Previous</a>
         </li>
         <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
             th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-            <a class="page-link" th:href="@{/postList(page=${i}-1)}" th:text="${i}"></a>
+            <a class="page-link post-page" th:value="${i}-1" th:text="${i}"></a>
         </li>
         <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
-            <a class="page-link" th:href="@{/postList(page=${postList.getNumber() + 1})}">Next</a>
+            <a class="page-link post-page" th:value="${postList.getNumber() + 1}">Next</a>
         </li>
     </ul>
 </nav>
@@ -662,28 +662,30 @@
     <script type="application/javascript" th:inline="javascript">
 
         $("#selectBox-orderBy").change( function(){
-            console.log("정렬 클릭")
             //최신순 눌렀을 때
             if($(this).val() ===  "writeTime"){
-
-                console.log("최신순")
                 $.ajax({
-                    url : '/postList/writeTime',
+                    url : '/postList/orderBy',
                     type : 'get',
+                    data : {
+                        orderBy : "writeTime"
+                    },
                     success : function(fragment) {
-                        console.log("최신순 정렬 성공")
+                        $(".select-box").attr("value","writeTime");
                         $('#postList-div').replaceWith(fragment);
                     }
                 });
 
                 // 좋아요순 눌렀을 때
             }else if($(this).val() === "likes"){
-                console.log("좋아요순")
                 $.ajax({
-                    url : '/postList/likes',
+                    url : '/postList/orderBy',
                     type : 'get',
+                    data : {
+                        orderBy : "likes"
+                    },
                     success : function(fragment) {
-                        console.log("좋아요순 정렬 성공")
+                        $(".select-box").attr("value","likes");
                         $('#postList-div').replaceWith(fragment);
                     }
                 });
@@ -753,6 +755,27 @@
                     }
                 });
             }
+        });
+    </script>
+</div>
+
+<div th:fragment="post-list-page">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on("click", ".post-page", function(){
+            let page = $(this).attr("value");
+            let orderBy = $(".select-box").val();
+            console.log(orderBy);
+            $.ajax({
+                url : '/postList/orderBy',
+                type : 'get',
+                data : {
+                    page : page,
+                    orderBy : orderBy
+                },
+                success : function(fragment) {
+                    $('#postList-div').replaceWith(fragment);
+                }
+            });
         });
     </script>
 </div>

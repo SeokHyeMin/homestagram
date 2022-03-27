@@ -92,13 +92,13 @@ public class PostServiceImpl implements PostService{
     public Page<Post> pageList(int page){
 
         PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime"));
-        return postRepository.findPostAllCountBy(pageRequest);
+        return postRepository.findAll(pageRequest);
     }
 
     public Page<Post> pageList(int page, String orderBy){
 
         PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, orderBy));
-        return postRepository.findPostAllCountBy(pageRequest);
+        return postRepository.findAll(pageRequest);
     }
 
 

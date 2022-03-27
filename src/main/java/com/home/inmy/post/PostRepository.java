@@ -22,6 +22,6 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     Page<Post> findByAccount(Account account, Pageable pageable);
 
     @EntityGraph(value = "Post.withAccountAndImageFiles")
-    Page<Post> findPostAllCountBy(Pageable pageable);
+    Page<Post> findAll(Pageable pageable);
 
 }

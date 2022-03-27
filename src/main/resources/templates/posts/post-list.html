@@ -8,8 +8,8 @@
 <div class="container">
     <div class="row" style="margin-left: 12%; margin-right: 12%; padding-top: 35px">
         <div class="col-sm-1">
-            <select class="form-select" id="selectBox-orderBy" aria-label="Default select example" style="width: 100px">
-                <option selected>정렬</option>
+            <select class="form-select" id="selectBox-orderBy" aria-label="Default select example" style="width: 130px">
+                <option class="select-box" value="writeTime" selected>정렬</option>
                 <option class="recent" value="writeTime">최신순</option>
                 <option class="likes" value="likes">좋아요순</option>
             </select>
@@ -18,7 +18,7 @@
     <div class="row justify-content-center pt-4">
        <div id="postList-div" class="col-sm-12">
            <div class="row" style="margin-left: 12%; margin-right: 12%; padding-top: 15px;">
-               <div id="postList-box" class="col-md-3 postList-div" th:each="post: ${postList}">
+               <div id="postList-box" class="col-md-3" th:each="post: ${postList}">
                    <div id="postList-box-style">
                    <div class="card mb-3" style="width: 260px; border: white">
                        <div class="row">
@@ -107,26 +107,14 @@
                </div>
                </div>
            </div>
+           <div th:replace="fragments.html :: postList-pagination"></div>
        </div>
     </div>
-    <nav aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
-                <a class="page-link" th:href="@{/postList(page=${postList.getNumber() - 1})}">Previous</a>
-            </li>
-            <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
-                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-                <a class="page-link" th:href="@{/postList(page=${i}-1)}" th:text="${i}"></a>
-            </li>
-            <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
-                <a class="page-link" th:href="@{/postList(page=${postList.getNumber() + 1})}">Next</a>
-            </li>
-        </ul>
-    </nav>
     <div th:replace="fragments.html :: footer"></div>
 </div>
 <div th:replace="fragments.html :: like"></div>
 <div th:replace="fragments.html :: bookmark"></div>
 <div th:replace="fragments.html :: selectbox-orderBy"></div>
+<div th:replace="fragments.html :: post-list-page"></div>
 </body>
 </html>
