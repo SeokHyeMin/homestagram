@@ -54,6 +54,15 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "fromAccount", cascade = CascadeType.REMOVE)
+    private List<Follow> followList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toAccount", cascade = CascadeType.REMOVE)
+    private List<Follow> followerList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private List<Comments> commentsList = new ArrayList<>();
+
     //프로필
     @Embedded
     private Profile profile = new Profile();

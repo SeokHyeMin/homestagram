@@ -1,6 +1,5 @@
 package com.home.inmy.domain;
 
-import com.home.inmy.domain.PostTag;
 import lombok.*;
 
 import javax.persistence.*;

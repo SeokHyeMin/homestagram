@@ -161,7 +161,7 @@
                 <a class="nav-link" th:href="@{/postList}">커뮤니티</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Q&A</a>
+                <a class="nav-link" th:href="@{/management/account}">회원관리</a>
             </li>
         </ul>
 
@@ -767,6 +767,60 @@
     </script>
 </div>
 
+<div th:fragment="management-account">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on("click", ".management-page", function(){
+            let page = $(this).attr("value");
+            let pageSelect = "true";
+            $.ajax({
+                url : '/management/account',
+                type : 'get',
+                data : {
+                    page : page,
+                    pageSelect : pageSelect
+                },
+                success : function(fragment) {
+                    $('#account-table').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".account-delete", function(){
+
+            let accountId = $(this).attr("value");
+            let page = $(".current-page").attr("value");
+
+            $(".modal-text").text("회원을 탈퇴시키겠습니까?");
+            $('#myModal').fadeIn();
+
+            $(".delete-ok").on("click", function () {
+
+                let header = [[${_csrf.headerName}]];
+                let token = [[${_csrf.token}]];
+                $.ajax({
+                    url : '/management/account/delete',
+                    type : 'post',
+                    data : {
+                        page : page,
+                        accountId : accountId
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success : function(fragment) {
+                        $('#myModal').hide();
+                        $('#account-table').replaceWith(fragment);
+                    }
+                });
+            });
+
+            $(".close").on("click", function () {
+                $('#myModal').fadeOut();
+            });
+        });
+    </script>
+</div>
+
 <div th:fragment="search-post-list">
     <script type="application/javascript" th:inline="javascript">
         $("#selectBox-orderBy").change( function(){
@@ -859,14 +913,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">확인</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p class="modal-text">삭제하시겠습니까?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary delete-ok">삭제</button>
+                <button type="button" class="btn btn-primary delete-ok">확인</button>
             </div>
         </div>
     </div>

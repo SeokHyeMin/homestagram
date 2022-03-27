@@ -8,6 +8,9 @@ import com.home.inmy.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -99,5 +102,10 @@ public class AccountService implements UserDetailsService {
 
     public void deleteAccount(Long account_id) {
         accountRepository.deleteById(account_id);
+    }
+
+    public Page<Account> getAccountList(int page){
+        PageRequest pageRequest = PageRequest.of(page, 5);
+        return accountRepository.findAll(pageRequest);
     }
 }
