@@ -85,8 +85,35 @@ public class TagController {
         model.addAttribute("postNumList", likePostNumList);
         model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
         model.addAttribute("account",account);
+        model.addAttribute("message",tagTitle);
 
         return "posts/search-post-list";
+    }
+
+    @GetMapping("/searchTag/orderBy")
+    public String searchTagOrderBy(Model model, @CurrentUser Account account, @RequestParam String tagTitle,
+                                  @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
+                                  @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+
+        Tag tag = tagRepository.findByTagTitle(tagTitle);
+
+        Page<PostTag> postTagList = postTagService.searchPostByTag(tag, page, orderBy);
+
+        List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
+        List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
+
+        Map<String, Integer> map = getPage(postTagList); //페이지 계산
+
+        model.addAttribute("startBlockPage", map.get("startBlockPage"));
+        model.addAttribute("endBlockPage", map.get("endBlockPage"));
+
+        model.addAttribute("postTagList", postTagList);
+        model.addAttribute("postNumList", likePostNumList);
+        model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
+        model.addAttribute("account",account);
+        model.addAttribute("message",tagTitle);
+
+        return "posts/search-post-list :: #postList-div";
     }
 
     private Map<String, Integer> getPage(Page<PostTag> postList){ //페이지 계산하여 시작블럭, 마지막 블럭 담아 반환.
@@ -105,4 +132,5 @@ public class TagController {
 
         return map;
     }
+
 }

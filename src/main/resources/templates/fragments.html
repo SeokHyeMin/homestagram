@@ -32,6 +32,9 @@
             padding: 0;
             margin: 0;
         }
+        .page-link:hover{
+            cursor: pointer;
+        }
         #homestagram-logo {
             height: 200px;
             width: 100%;
@@ -643,21 +646,6 @@
     </script>
 </div>
 
-<nav th:fragment="postList-pagination" aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
-    <ul class="pagination justify-content-center">
-        <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
-            <a class="page-link post-page" th:value="${postList.getNumber() - 1}">Previous</a>
-        </li>
-        <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
-            th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-            <a class="page-link post-page" th:value="${i}-1" th:text="${i}"></a>
-        </li>
-        <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
-            <a class="page-link post-page" th:value="${postList.getNumber() + 1}">Next</a>
-        </li>
-    </ul>
-</nav>
-
 <div th:fragment="selectbox-orderBy">
     <script type="application/javascript" th:inline="javascript">
 
@@ -764,13 +752,64 @@
         $(document).on("click", ".post-page", function(){
             let page = $(this).attr("value");
             let orderBy = $(".select-box").val();
-            console.log(orderBy);
             $.ajax({
                 url : '/postList/orderBy',
                 type : 'get',
                 data : {
                     page : page,
                     orderBy : orderBy
+                },
+                success : function(fragment) {
+                    $('#postList-div').replaceWith(fragment);
+                }
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="search-post-list">
+    <script type="application/javascript" th:inline="javascript">
+        $("#selectBox-orderBy").change( function(){
+            let tagTitle = $("#tagTitle").attr("value");
+            if($(this).val() ===  "writeTime"){
+                $.ajax({
+                    url : '/searchTag/orderBy',
+                    type : 'get',
+                    data : {
+                        orderBy : "writeTime",
+                        tagTitle : tagTitle
+                    },
+                    success : function(fragment) {
+                        $(".select-box").attr("value","writeTime");
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+            }else if($(this).val() === "likes"){
+                $.ajax({
+                    url : '/searchTag/orderBy',
+                    type : 'get',
+                    data : {
+                        orderBy : "likes",
+                        tagTitle : tagTitle
+                    },
+                    success : function(fragment) {
+                        $(".select-box").attr("value","likes");
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+            }
+        });
+        $(document).on("click", ".post-page", function(){
+            let page = $(this).attr("value");
+            let orderBy = $(".select-box").val();
+            let tagTitle = $("#tagTitle").attr("value");
+            $.ajax({
+                url : '/searchTag/orderBy',
+                type : 'get',
+                data : {
+                    page : page,
+                    orderBy : orderBy,
+                    tagTitle : tagTitle
                 },
                 success : function(fragment) {
                     $('#postList-div').replaceWith(fragment);

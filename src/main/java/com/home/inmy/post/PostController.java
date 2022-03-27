@@ -136,11 +136,7 @@ public class PostController {
                                   @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
                                   @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
-        log.info("정렬 시작");
-        log.info(orderBy);
-        log.info(String.valueOf(page));
         Page<Post> postList = postService.pageList(page, orderBy);
-        log.info(String.valueOf(postList.getSize()));
 
         List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
         List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환

@@ -70,4 +70,10 @@ public class PostTagServiceImpl implements PostTagService{
         return postTagRepository.findByTag(tag,pageRequest);
     }
 
+    public Page<PostTag> searchPostByTag(Tag tag, int page, String orderBy) {
+
+        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "post."+orderBy));
+
+        return postTagRepository.findByTag(tag,pageRequest);
+    }
 }

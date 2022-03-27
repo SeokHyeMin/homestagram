@@ -6,19 +6,20 @@
 
 <div th:replace="fragments.html :: main-nav"></div>
 <div class="container">
-    <div class="row" style="margin-left: 12%; margin-right: 12%; padding-top: 35px">
-        <div class="col-sm-1">
-            <select class="form-select" id="selectBox-orderBy" aria-label="Default select example" style="width: 100px">
-                <option selected>정렬</option>
-                <option class="recent" value="writeTime">최신순</option>
-                <option class="likes" value="likes">좋아요순</option>
-            </select>
-        </div>
+    <div style="margin-left: 12%; margin-right: 12%; padding-top: 35px; padding-bottom: 20px">
+        <select class="form-select" id="selectBox-orderBy" aria-label="Default select example" style="width: 130px">
+            <option class="select-box" value="writeTime" selected>정렬</option>
+            <option class="recent" value="writeTime">최신순</option>
+            <option class="likes" value="likes">좋아요순</option>
+        </select>
+    </div>
+    <div class="alert alert-info" role="alert" th:if="${message != null}" style="margin-left: 12%; width: 500px">
+        #<span style="font-weight: bold" th:text="${message}" id="tagTitle" th:value="${message}"></span> 검색결과 입니다.
     </div>
     <div class="row justify-content-center pt-4">
        <div id="postList-div" class="col-sm-12">
            <div class="row" style="margin-left: 12%; margin-right: 12%; padding-top: 15px;">
-               <div id="postList-box" class="col-md-3 postList-div" th:each="postTag: ${postTagList}">
+               <div id="postList-box" class="col-md-3" th:each="postTag: ${postTagList}">
                    <div id="postList-box-style">
                    <div class="card mb-3" style="width: 260px; border: white">
                        <div class="row">
@@ -107,26 +108,26 @@
                </div>
                </div>
            </div>
+           <nav th:fragment="postList-pagination" aria-label="Page navigation example" th:if="${postTagList.getTotalPages() > 0}">
+               <ul class="pagination justify-content-center">
+                   <li class="page-item" th:classappend="${!postTagList.hasPrevious()}? disabled">
+                       <a class="page-link post-page" th:value="${postTagList.getNumber() - 1}">Previous</a>
+                   </li>
+                   <li class="page-item" th:classappend="${i == postTagList.getNumber() + 1}? active"
+                       th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                       <a class="page-link post-page" th:value="${i}-1" th:text="${i}"></a>
+                   </li>
+                   <li class="page-item" th:classappend="${!postTagList.hasNext()}? disabled">
+                       <a class="page-link post-page" th:value="${postTagList.getNumber() + 1}">Next</a>
+                   </li>
+               </ul>
+           </nav>
        </div>
     </div>
-    <nav aria-label="Page navigation example" th:if="${postTagList.getTotalPages() > 0}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!postTagList.hasPrevious()}? disabled">
-                <a class="page-link" th:href="@{/postTagList(page=${postTagList.getNumber() - 1})}">Previous</a>
-            </li>
-            <li class="page-item" th:classappend="${i == postTagList.getNumber() + 1}? active"
-                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-                <a class="page-link" th:href="@{/postList(page=${i}-1)}" th:text="${i}"></a>
-            </li>
-            <li class="page-item" th:classappend="${!postTagList.hasNext()}? disabled">
-                <a class="page-link" th:href="@{/postTagList(page=${postTagList.getNumber() + 1})}">Next</a>
-            </li>
-        </ul>
-    </nav>
     <div th:replace="fragments.html :: footer"></div>
 </div>
 <div th:replace="fragments.html :: like"></div>
 <div th:replace="fragments.html :: bookmark"></div>
-<div th:replace="fragments.html :: selectbox-orderBy"></div>
+<div th:replace="fragments.html :: search-post-list"></div>
 </body>
 </html>
