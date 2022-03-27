@@ -29,8 +29,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final PostRepository postRepository;
-
     private final AccountService accountService;
     private final SignUpFormValidator signUpFormValidator;
 
@@ -87,8 +85,6 @@ public class AccountController {
 
         Page<Post> postList = postService.profilePageList(accountByLoginId,page);
         Boolean follow = followService.findFollow(loginId, account); //로그인 계정, 프로필 주인 계정
-        List<Follow> following = followService.getFollowList(accountByLoginId); //팔로잉 리스트
-        List<Follow> follower = followService.getFollowerList(accountByLoginId); //팔로워 리스트
 
         int pageNum = postList.getPageable().getPageNumber(); // 현재 페이지
         int pageBlock = 5; // 블럭의 수
@@ -100,15 +96,11 @@ public class AccountController {
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
 
-        model.addAttribute("isOwner", accountByLoginId.getLoginId().equals(account.getLoginId())); //현재 로그인한 계정과 프로필 주인이 같으면 true
-        model.addAttribute("owner",accountByLoginId); //프로필 주인
+        model.addAttribute("owner",accountByLoginId); //프로필 주인 계정
         model.addAttribute("follow",follow); //해당계정을 팔로잉하는지 안하는지
-        model.addAttribute("following",following);
-        model.addAttribute("follower",follower);
         model.addAttribute("postList",postList);
-        model.addAttribute("totalPage",totalPage);
         model.addAttribute("listText","게시물");
-        model.addAttribute("account",account);
+        model.addAttribute("account",account); //현재 로그인 계정
 
         return "account/profile";
     }
@@ -157,8 +149,6 @@ public class AccountController {
 
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
-
-
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("listText",listText);
 

@@ -39,8 +39,6 @@ public class PostController {
     private final FollowServiceImpl followService;
     private final CommentService commentService;
 
-    private final TagRepository tagRepository;
-
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
 
@@ -70,8 +68,6 @@ public class PostController {
 
         model.addAttribute("startBlockPage",startBlockPage);
         model.addAttribute("endBlockPage",endBlockPage);
-
-
 
         model.addAttribute("comments", comments);
         postService.updateViews(post); //조회수 증가
@@ -110,36 +106,16 @@ public class PostController {
 
     @Transactional(readOnly = true)
     @GetMapping("/postList")
-    public String postList(Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
-
-        Page<Post> postList = postService.pageList(page);
-
-        List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
-        List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
-
-        Map<String, Integer> map = getPage(postList); //페이지 계산
-
-        model.addAttribute("startBlockPage", map.get("startBlockPage"));
-        model.addAttribute("endBlockPage", map.get("endBlockPage"));
-
-        model.addAttribute("postList", postList);
-        model.addAttribute("postNumList", likePostNumList);
-        model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
-        model.addAttribute(account);
-
-        return "posts/post-list";
-    }
-
-    @Transactional(readOnly = true)
-    @GetMapping("/postList/orderBy")
-    public String postListOrderBy(Model model, @CurrentUser Account account,
-                                  @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
-                                  @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+    public String postList(Model model, @CurrentUser Account account,
+                           @RequestParam(required = false, defaultValue = "false") String pageSelect,
+                           @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
+                           @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
         Page<Post> postList = postService.pageList(page, orderBy);
 
         List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
         List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
+
         Map<String, Integer> map = getPage(postList); //페이지 계산
 
         model.addAttribute("startBlockPage", map.get("startBlockPage"));
@@ -150,7 +126,11 @@ public class PostController {
         model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
         model.addAttribute(account);
 
-        return "posts/post-list :: #postList-div";
+        if(pageSelect.equals("true")){
+            return "posts/post-list :: #postList-div";
+        }
+
+        return "posts/post-list";
     }
 
     @GetMapping("/post-update/{id}")

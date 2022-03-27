@@ -20,17 +20,17 @@
             <div class="row mt-2 justify-content-center">
                     <dl style="display: flex; font-size: 13px;" class="justify-content-center follow-dl">
                         <dt style="font-weight: lighter">팔로잉</dt>
-                        <dd th:text="${following.size()}" style="margin-left:10px; font-weight: bold; cursor: pointer" id="following"
+                        <dd th:text="${owner.followList.size()}" style="margin-left:10px; font-weight: bold; cursor: pointer" id="following"
                             onMouseover="this.style.color='blue';" onMouseout="this.style.color='black';">팔로잉 수</dd>
                         <dt style="font-weight: lighter; margin-left:10px;">팔로워</dt>
-                        <dd th:text="${follower.size()}" style="margin-left:10px; font-weight: bold; cursor: pointer" id="follower"
+                        <dd th:text="${owner.followerList.size()}" style="margin-left:10px; font-weight: bold; cursor: pointer" id="follower"
                             onMouseover="this.style.color='blue';" onMouseout="this.style.color='black';">팔로워 수</dd>
                     </dl>
             </div>
-            <div th:if="${isOwner}">
+            <div th:if="${owner.id == account.id}">
                 <a class="btn home follow white-font" th:href="@{/settings/profile}">프로필 수정</a>
             </div>
-            <div th:if="${!isOwner}">
+            <div th:if="${!(owner.id == account.id)}">
                 <button th:if="${!follow}" class="btn home followBtn white-font" th:style="500px">팔로우</button>
                 <button th:if="${follow}" class="btn btn-outline-secondary unfollowBtn" th:style="500px">팔로잉</button>
             </div>
@@ -55,7 +55,7 @@
                         <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
                 </div>
                 <div class="row" style="margin-right: 8%; padding-top: 15px">
-                    <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px;">
+                    <div class="col-md-3" th:each="post: ${postList}" style="padding-left: 10px; padding-bottom: 15px">
                         <a th:href="@{'/post/'+${post.id}}">
                             <img class="profile-postList-img" th:src="|/images/${post.imageFiles[0].getStoreFilename()}|" width="170" height="170"/>
                         </a>

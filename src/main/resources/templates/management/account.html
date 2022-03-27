@@ -25,7 +25,7 @@
                 <td>가입일</td>
                 <td>회원권한</td>
                 <td><button type="button" class="btn btn-secondary">관리자로 등록</button></td>
-                <td><button type="button" class="btn btn-danger account-delete" th:value="${account.id}">강제탈퇴</button></td>
+                <td><button type="button" th:name="${accountList.getNumber()}" class="btn btn-danger account-delete" th:value="${account.id}">강제탈퇴</button></td>
             </tr>
             </tbody>
         </table>

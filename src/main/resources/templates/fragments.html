@@ -235,32 +235,7 @@
 <div th:fragment="settings-menu (currentMenu)" class="list-group">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">프로필</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">비밀번호</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">알림</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">계정</a>
-</div>
-
-<div th:fragment="editor-script">
-    <script src="/node_modules/summernote/dist/summernote-bs5.js"></script>
-    <script type="application/javascript">
-        $(function () {
-            $('#content').summernote({
-                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-                placeholder: '글 내용을 작성해주세요. :)',
-                tabsize: 2,
-                height: 200,
-                maxHeight: 250,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
-        });
-    </script>
 </div>
 
 <div th:fragment="followList" class="col-8 profile-list" id="followList">
@@ -279,7 +254,7 @@
                         <img th:src="${follow.toAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
                     </a>
                 </div>
-                <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.toAccount.loginId}" style="text-align: center; font-weight: bold; margin-left: 10px">아이디</span></div>
+                <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.toAccount.nickname}" style="text-align: center; font-weight: bold; margin-left: 10px">닉네임</span></div>
                 <div class="col-3"></div>
             </div>
         </div>
@@ -315,7 +290,7 @@
                     <img th:src="${follow.fromAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
                 </a>
             </div>
-            <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.fromAccount.loginId}" style="text-align: center; font-weight: bold; margin-left: 10px">아이디</span></div>
+            <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.fromAccount.nickname}" style="text-align: center; font-weight: bold; margin-left: 10px">닉네임</span></div>
             <div class="col-3"></div>
         </div>
     </div>
@@ -466,11 +441,8 @@
 
 <div th:fragment="like">
     <script type="application/javascript" th:inline="javascript">
-
-        $(".heart-click").click(function() {
-            console.log("하트 클릭")
+        $(document).on("click",".heart-click",function() {
             let id = $(this).attr('value');
-
             // 빈하트를 눌렀을때
             if($(this).children('svg').attr('class') === "bi bi-heart"){
                 console.log("빈하트")
@@ -481,9 +453,6 @@
                         id : id,
                     },
                     success : function(likes) {
-
-                        console.log("좋아요 추가 성공");
-                        console.log(likes);
                         $('#'+id).text(likes);
                     }
                 });
@@ -492,10 +461,8 @@
                 $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
                 $('.heart_icon'+id).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
 
-
                 // 꽉찬 하트를 눌렀을 때
             }else if($(this).children('svg').attr('class') === "bi bi-heart-fill"){
-                console.log("꽉찬 하트")
                 $.ajax({
                     url : '/like/remove',
                     type : 'get',
@@ -503,12 +470,7 @@
                         id : id,
                     },
                     success : function(likes) {
-
-                        console.log("좋아요 삭제 성공");
-                        console.log(likes);
-
                         $('#'+id).text(likes);
-
                     }
                 });
                 // 빈하트로 바꾸기
@@ -522,13 +484,12 @@
 <div th:fragment="bookmark">
     <script type="application/javascript" th:inline="javascript">
 
-        $(".bookmark-click").click(function() {
+        $(document).on("click",".bookmark-click",function() {
             console.log("북마크 클릭")
             let id = $(this).attr('value');
 
             // 빈하트를 눌렀을때
             if($(this).children('svg').attr('class') === "bi bi-bookmark"){
-                console.log("빈 북마크")
                 $.ajax({
                     url : '/bookmark/add',
                     type : 'get',
@@ -536,21 +497,15 @@
                         id : id,
                     },
                     success : function(bookmark) {
-
-                        console.log("북마크 추가 성공");
-                        console.log(bookmark);
                         $('#bookmark'+id).text(bookmark);
                     }
                 });
-
                 // 꽉찬 북마크로 바꾸기
                 $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='#005baf' class='bi bi-bookmark-fill' viewBox='0 0 16 16'><path d='M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'/></svg>");
                 $('.bookmark_icon'+id).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='#005baf' class='bi bi-bookmark-fill' viewBox='0 0 16 16'><path d='M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'/></svg>");
 
-
                 // 꽉찬 북마크를 눌렀을 때
             }else if($(this).children('svg').attr('class') === "bi bi-bookmark-fill"){
-                console.log("꽉찬 북마크")
                 $.ajax({
                     url : '/bookmark/remove',
                     type : 'get',
@@ -558,12 +513,7 @@
                         id : id,
                     },
                     success : function(bookmark) {
-
-                        console.log("북마크 삭제 성공");
-                        console.log(bookmark);
-
                         $('#bookmark'+id).text(bookmark);
-
                     }
                 });
                 // 빈 북마크로 바꾸기
@@ -650,13 +600,15 @@
     <script type="application/javascript" th:inline="javascript">
 
         $("#selectBox-orderBy").change( function(){
+            let pageSelect = "true";
             //최신순 눌렀을 때
             if($(this).val() ===  "writeTime"){
                 $.ajax({
-                    url : '/postList/orderBy',
+                    url : '/postList',
                     type : 'get',
                     data : {
-                        orderBy : "writeTime"
+                        orderBy : "writeTime",
+                        pageSelect : pageSelect
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","writeTime");
@@ -666,11 +618,13 @@
 
                 // 좋아요순 눌렀을 때
             }else if($(this).val() === "likes"){
+                let pageSelect = "true";
                 $.ajax({
-                    url : '/postList/orderBy',
+                    url : '/postList',
                     type : 'get',
                     data : {
-                        orderBy : "likes"
+                        orderBy : "likes",
+                        pageSelect : pageSelect
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","likes");
@@ -752,18 +706,21 @@
         $(document).on("click", ".post-page", function(){
             let page = $(this).attr("value");
             let orderBy = $(".select-box").val();
+            let pageSelect = "true";
             $.ajax({
-                url : '/postList/orderBy',
+                url : '/postList',
                 type : 'get',
                 data : {
                     page : page,
-                    orderBy : orderBy
+                    orderBy : orderBy,
+                    pageSelect : pageSelect
                 },
                 success : function(fragment) {
                     $('#postList-div').replaceWith(fragment);
                 }
             });
         });
+
     </script>
 </div>
 
@@ -788,7 +745,7 @@
         $(document).on("click", ".account-delete", function(){
 
             let accountId = $(this).attr("value");
-            let page = $(".current-page").attr("value");
+            let page = $(this).attr("name");
 
             $(".modal-text").text("회원을 탈퇴시키겠습니까?");
             $('#myModal').fadeIn();
@@ -968,6 +925,7 @@
 
         $(document).on("click", ".comment-delete", function(){
             let page = $(this).attr("name");
+            console.log(page);
             let comment_id = $(this).attr("value");
             $('#myModal').fadeIn();
 
