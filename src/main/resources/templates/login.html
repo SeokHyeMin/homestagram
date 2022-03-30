@@ -11,7 +11,7 @@
   </div>
   <div class="row justify-content-center">
     <div th:if="${param.error}" class="alert alert-danger" role="alert" style="width: 1000px">
-      <p>아이디 또는 패스워드가 정확하지 않습니다.</p>
+      <p><span th:text="${exception}">예외메시지</span></p>
       <p>
         비밀번호를 잊으셨다면, <a href="#" th:href="@{/find-passsword}">패스워드 찾기</a>를 이용해주세요.
       </p>

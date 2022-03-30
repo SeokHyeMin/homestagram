@@ -21,6 +21,8 @@ public class Account {
     @Column(unique = true)
     private String nickname;
 
+    private String role;
+
     private String dateToBirth;
 
     @Column(unique = true)
@@ -35,13 +37,6 @@ public class Account {
 
     @Column(unique = true)
     private String phoneNumber;
-
-    //이메일 체크
-    private boolean emailCheckVerified;
-
-    private String emailCheckToken;
-
-    private LocalDateTime e_tokenGeneratedAt;
 
     private LocalDateTime joinedAt;
 
@@ -66,16 +61,6 @@ public class Account {
     //프로필
     @Embedded
     private Profile profile = new Profile();
-
-    public void generateEmailToken() {
-        this.emailCheckToken = UUID.randomUUID().toString();
-        this.e_tokenGeneratedAt = LocalDateTime.now();
-    }
-
-    public void completeSignUp(){
-        this.emailCheckVerified = true;
-        this.joinedAt = LocalDateTime.now();
-    }
 
     public Profile getProfile(){
         return this.profile == null ? new Profile() : this.profile;
