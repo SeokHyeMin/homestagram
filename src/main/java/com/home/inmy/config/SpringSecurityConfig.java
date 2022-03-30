@@ -1,7 +1,7 @@
 package com.home.inmy.config;
 
 import com.home.inmy.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
-import com.home.inmy.security.provider.CustomAuthenticationProvider;
+import com.home.inmy.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +12,6 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,8 +21,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -40,8 +36,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
     private final UserDetailsService userDetailsService;
-    private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    private final AuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -56,23 +50,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/","/login*","/sign-up","check-email-token","/post-list","/post-detail").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/profile/**").permitAll()
+                .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.formLogin() //로그인 인증 기능
                 .loginPage("/login") //로그인 페이지
                 .usernameParameter("loginId") //loginId로 파라미터 변경
                 .defaultSuccessUrl("/")
-                .successHandler(customAuthenticationSuccessHandler)
-                .failureHandler(customAuthenticationFailureHandler)
                 .permitAll();
 
         http.logout()
@@ -81,8 +69,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe() //로그인 유지 관한 설정
                 .tokenValiditySeconds(3600) //로그인 유지 시간 1시간으로 설정
                 .alwaysRemember(false)
-                .userDetailsService(userDetailsService)
-                .tokenRepository(tokenRepository());
+                .userDetailsService(userDetailsService);
 
         http.sessionManagement()
                 .maximumSessions(1) //최대 허용 가능한 세션 수 : 1
@@ -92,18 +79,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         //필터설정
         http.addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class); //기존에 있던 필터보다 먼저 실행된다.
     }
-    @Bean
+    /*@Bean
     public PersistentTokenRepository tokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        return new CustomAuthenticationProvider();
-    }
-
+    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder() { //기본 인코더 등록.
@@ -122,8 +103,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private AccessDecisionManager affirmativeBased() {
-        AffirmativeBased affirmativeBased = new AffirmativeBased(getAccessDecisionVoters());
-        return affirmativeBased;
+        return new AffirmativeBased(getAccessDecisionVoters());
     }
 
     private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {

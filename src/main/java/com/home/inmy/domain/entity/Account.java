@@ -57,8 +57,9 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Comments> commentsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account")
-    private Set<AccountRole> accountRoles = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role accountRole;
 
     //프로필
     @Embedded

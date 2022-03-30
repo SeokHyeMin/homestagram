@@ -4,9 +4,6 @@
 <head th:replace="fragments.html :: head"></head>
 <body class="bg-white">
 <div th:replace="fragments.html :: main-nav"></div>
-<div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailCheckVerified}">
-    가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
-</div>
 <div class="container justify-content-center" style="width: 1200px">
     <div class="row justify-content-center">
         <div class="col-12">

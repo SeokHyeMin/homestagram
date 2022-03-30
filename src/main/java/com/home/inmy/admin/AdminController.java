@@ -21,7 +21,7 @@ public class AdminController {
 
     private final AccountServiceImpl accountService;
 
-    @GetMapping("/management/account")
+    @GetMapping("/admin")
     public String managementAccountView(Model model, @CurrentUser Account account,
                                         @RequestParam(required = false, defaultValue = "false") String pageSelect,
                                         @RequestParam(required = false, defaultValue = "0", value = "page")int page){

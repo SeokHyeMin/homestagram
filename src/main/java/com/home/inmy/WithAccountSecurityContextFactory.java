@@ -1,9 +1,6 @@
 package com.home.inmy;
 
-
-import com.home.inmy.security.service.CustomUserDetailsService;
 import com.home.inmy.service.AccountService;
-import com.home.inmy.service.impl.AccountServiceImpl;
 import com.home.inmy.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,13 +8,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 @RequiredArgsConstructor
 public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
 
-    private final CustomUserDetailsService customUserDetailsService;
     private final AccountService accountService;
+    private final UserDetailsService userDetailService;
 
     @Override
     public SecurityContext createSecurityContext(WithAccount withAccount) {
@@ -34,7 +32,7 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
         signUpForm.setName("테스트");
         accountService.createAccount(signUpForm);
 
-        UserDetails principal = customUserDetailsService.loadUserByUsername(loginId);
+        UserDetails principal = userDetailService.loadUserByUsername(loginId);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);

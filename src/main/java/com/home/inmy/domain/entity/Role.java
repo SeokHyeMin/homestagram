@@ -22,8 +22,8 @@ public class Role{
     @Column(name = "role_desc")
     private String roleDesc;
 
-    @OneToMany(mappedBy = "role")
-    private Set<AccountRole> accounts = new HashSet<>();
+    @OneToMany(mappedBy = "accountRole")
+    private Set<Account> accounts = new HashSet<>();
 
 }
 

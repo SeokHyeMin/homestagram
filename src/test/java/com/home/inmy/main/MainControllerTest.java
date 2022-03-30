@@ -42,7 +42,7 @@ public class MainControllerTest {
         signUpForm.setEmail("test@naver.com");
         signUpForm.setNickname("nick");
         signUpForm.setDateToBirth("20220217");
-        accountService.processNewAccount(signUpForm);
+        accountService.createAccount(signUpForm);
     }
 
     @AfterEach()

@@ -143,7 +143,8 @@
     <a id = "logo-img" class="navbar-brand" href="/" th:href="@{/}">
         <img src="/image/logo.png" width="30" height="30">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -160,16 +161,13 @@
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/postList}">커뮤니티</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/management/account}">회원관리</a>
-            </li>
         </ul>
 
         <ul class="navbar-nav justify-content-end" id = "nav-list">
-            <li class="nav-item" sec:authorize="isAnonymouns()">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/login}">로그인</a>
             </li>
-            <li class="nav-item" sec:authorize="isAnonymouns()">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
@@ -177,10 +175,8 @@
                     <i class="fa fa-plus" aria-hidden="true"></i> 내 게시물
                 </a>
             </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/}">
-                    <i class="fa fa-bell" aria-hidden="true"></i>
-                </a>
+            <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                <a class="nav-link" th:href="@{/admin}">회원관리</a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <div class="btn-group">

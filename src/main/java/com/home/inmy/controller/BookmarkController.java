@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
-public class BookMarkController {
+public class BookmarkController {
 
     private final PostService postService;
     private final BookmarkServiceImpl bookmarkService;
