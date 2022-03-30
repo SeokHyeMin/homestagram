@@ -1,19 +1,18 @@
-package com.home.inmy.account;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.Profile;
-import com.home.inmy.domain.Account;
-import com.home.inmy.settings.form.AccountForm;
-import com.home.inmy.settings.form.ProfileForm;
-import com.home.inmy.account.form.SignUpForm;
+import com.home.inmy.domain.UserAccount;
+import com.home.inmy.domain.entity.Profile;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.repository.AccountRepository;
+import com.home.inmy.form.AccountForm;
+import com.home.inmy.form.ProfileForm;
+import com.home.inmy.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
