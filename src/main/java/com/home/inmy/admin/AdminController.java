@@ -1,8 +1,8 @@
-package com.home.inmy.managements;
+package com.home.inmy.admin;
 
-import com.home.inmy.account.AccountService;
-import com.home.inmy.account.CurrentUser;
-import com.home.inmy.domain.Account;
+import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.domain.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,9 +17,9 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-public class ManagementController {
+public class AdminController {
 
-    private final AccountService accountService;
+    private final AccountServiceImpl accountService;
 
     @GetMapping("/management/account")
     public String managementAccountView(Model model, @CurrentUser Account account,

@@ -1,6 +1,6 @@
-package com.home.inmy.settings.form;
+package com.home.inmy.form;
 
-import com.home.inmy.domain.Account;
+import com.home.inmy.domain.entity.Account;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;

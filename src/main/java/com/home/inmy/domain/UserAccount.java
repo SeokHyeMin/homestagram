@@ -1,6 +1,6 @@
-package com.home.inmy.account;
+package com.home.inmy.domain;
 
-import com.home.inmy.domain.Account;
+import com.home.inmy.domain.entity.Account;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

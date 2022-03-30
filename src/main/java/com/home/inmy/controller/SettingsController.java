@@ -1,13 +1,14 @@
-package com.home.inmy.settings;
+package com.home.inmy.controller;
 
-import com.home.inmy.account.AccountService;
-import com.home.inmy.account.CurrentUser;
-import com.home.inmy.settings.form.*;
-import com.home.inmy.domain.Account;
-import com.home.inmy.settings.validator.*;
+import com.home.inmy.form.AccountForm;
+import com.home.inmy.form.PasswordForm;
+import com.home.inmy.form.ProfileForm;
+import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.validator.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SettingsController {
 
-    private final AccountService accountService;
+    private final AccountServiceImpl accountService;
     private final AccountFormValidator accountFormValidator;
     private final ModelMapper modelMapper;
 

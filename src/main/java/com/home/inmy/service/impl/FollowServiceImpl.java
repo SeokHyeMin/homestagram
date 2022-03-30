@@ -1,8 +1,10 @@
-package com.home.inmy.follow;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.account.AccountRepository;
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Follow;
+import com.home.inmy.repository.AccountRepository;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Follow;
+import com.home.inmy.repository.FollowRepository;
+import com.home.inmy.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

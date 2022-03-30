@@ -1,8 +1,8 @@
-package com.home.inmy.bookmark;
+package com.home.inmy.repository;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Bookmark;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Bookmark;
+import com.home.inmy.domain.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

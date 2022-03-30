@@ -1,4 +1,4 @@
-package com.home.inmy.settings.form;
+package com.home.inmy.form;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

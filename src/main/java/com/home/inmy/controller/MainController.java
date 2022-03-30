@@ -1,18 +1,16 @@
-package com.home.inmy.main;
+package com.home.inmy.controller;
 
-import com.home.inmy.account.CurrentUser;
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
-import com.home.inmy.post.PostServiceImpl;
+import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

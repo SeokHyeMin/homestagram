@@ -1,8 +1,8 @@
 package com.home.inmy.settings;
 
 import com.home.inmy.WithAccount;
-import com.home.inmy.account.AccountRepository;
-import com.home.inmy.domain.Account;
+import com.home.inmy.repository.AccountRepository;
+import com.home.inmy.domain.entity.Account;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

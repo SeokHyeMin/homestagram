@@ -1,7 +1,10 @@
-package com.home.inmy.images;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.ImageFile;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.ImageFile;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.domain.FileStore;
+import com.home.inmy.repository.ImageFileRepository;
+import com.home.inmy.service.ImageFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

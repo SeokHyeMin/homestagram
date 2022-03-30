@@ -1,6 +1,7 @@
 package com.home.inmy.account;
 
-import com.home.inmy.domain.Account;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.repository.AccountRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

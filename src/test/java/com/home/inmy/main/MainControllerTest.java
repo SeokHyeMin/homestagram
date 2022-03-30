@@ -1,8 +1,8 @@
 package com.home.inmy.main;
 
-import com.home.inmy.account.AccountRepository;
-import com.home.inmy.account.AccountService;
-import com.home.inmy.account.form.SignUpForm;
+import com.home.inmy.repository.AccountRepository;
+import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,7 @@ public class MainControllerTest {
     MockMvc mvc;
 
     @Autowired
-    AccountService accountService;
+    AccountServiceImpl accountService;
 
     @Autowired
     AccountRepository accountRepository;

@@ -1,4 +1,4 @@
-package com.home.inmy.web.dto;
+package com.home.inmy.dto;
 
 import lombok.Data;
 

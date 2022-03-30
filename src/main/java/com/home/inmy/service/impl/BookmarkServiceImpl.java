@@ -1,12 +1,13 @@
-package com.home.inmy.bookmark;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Bookmark;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Bookmark;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.repository.BookmarkRepository;
+import com.home.inmy.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

@@ -1,9 +1,10 @@
-package com.home.inmy.postTag;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.Post;
-import com.home.inmy.domain.PostTag;
-import com.home.inmy.domain.Tag;
-import com.home.inmy.tag.TagService;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.domain.entity.PostTag;
+import com.home.inmy.domain.entity.Tag;
+import com.home.inmy.repository.PostTagRepository;
+import com.home.inmy.service.PostTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -13,13 +14,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class PostTagServiceImpl implements PostTagService{
+public class PostTagServiceImpl implements PostTagService {
 
     private final PostTagRepository postTagRepository;
 

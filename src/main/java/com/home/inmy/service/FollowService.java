@@ -1,7 +1,7 @@
-package com.home.inmy.follow;
+package com.home.inmy.service;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Follow;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Follow;
 
 import java.util.List;
 

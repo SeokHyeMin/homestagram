@@ -1,7 +1,6 @@
-package com.home.inmy.account;
+package com.home.inmy.repository;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

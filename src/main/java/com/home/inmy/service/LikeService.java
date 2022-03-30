@@ -1,8 +1,8 @@
-package com.home.inmy.like;
+package com.home.inmy.service;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Likes;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Likes;
+import com.home.inmy.domain.entity.Post;
 
 import java.util.List;
 

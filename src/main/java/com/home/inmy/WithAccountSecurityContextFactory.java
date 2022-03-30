@@ -1,8 +1,10 @@
 package com.home.inmy;
 
 
-import com.home.inmy.account.AccountService;
-import com.home.inmy.account.form.SignUpForm;
+import com.home.inmy.security.service.CustomUserDetailsService;
+import com.home.inmy.service.AccountService;
+import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 @RequiredArgsConstructor
 public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
 
+    private final CustomUserDetailsService customUserDetailsService;
     private final AccountService accountService;
 
     @Override
@@ -29,9 +32,9 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
         signUpForm.setDateToBirth("20220218");
         signUpForm.setPhoneNumber("01012345678");
         signUpForm.setName("테스트");
-        accountService.processNewAccount(signUpForm);
+        accountService.createAccount(signUpForm);
 
-        UserDetails principal = accountService.loadUserByUsername(loginId);
+        UserDetails principal = customUserDetailsService.loadUserByUsername(loginId);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);

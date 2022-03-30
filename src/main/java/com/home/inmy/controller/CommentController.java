@@ -1,10 +1,11 @@
-package com.home.inmy.comments;
+package com.home.inmy.controller;
 
-import com.home.inmy.account.CurrentUser;
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Comments;
-import com.home.inmy.domain.Post;
-import com.home.inmy.post.PostServiceImpl;
+import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.service.impl.CommentService;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Comments;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

@@ -1,12 +1,17 @@
 package com.home.inmy.service.impl;
 
 import com.home.inmy.domain.UserAccount;
+import com.home.inmy.domain.entity.AccountRole;
 import com.home.inmy.domain.entity.Profile;
 import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Role;
 import com.home.inmy.repository.AccountRepository;
 import com.home.inmy.form.AccountForm;
 import com.home.inmy.form.ProfileForm;
 import com.home.inmy.form.SignUpForm;
+import com.home.inmy.repository.RoleRepository;
+import com.home.inmy.service.AccountService;
+import com.home.inmy.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,40 +28,52 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AccountService implements UserDetailsService {
+public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public Account processNewAccount(SignUpForm signUpForm){
-        return saveNewAccount(signUpForm);
-    }
-
-    private Account saveNewAccount(SignUpForm signUpForm) {
-
-        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
-        Account account = modelMapper.map(signUpForm, Account.class);
-        account.setJoinedAt(LocalDateTime.now());
-        return accountRepository.save(account);
-    }
+    private final RoleService roleService;
 
 
     @Override
-    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+    public Account createAccount(SignUpForm signUpForm) {
+        return saveNewAccount(signUpForm);
+    }
 
-        Account account = accountRepository.findByLoginId(loginId);
-        if(account == null){
-            throw new UsernameNotFoundException(loginId);
-        }
+    @Override
+    public void deleteAccount(Long account_id) {
+        accountRepository.deleteById(account_id);
+    }
 
-        return new UserAccount(account);
+
+    private Account saveNewAccount(SignUpForm signUpForm) {
+
+        //비밀번호 암호화하여 저장.
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account = modelMapper.map(signUpForm, Account.class);
+
+        //권한 부여
+        Role role = roleService.createRoleIfNotFound("USER");
+        AccountRole accountRole = new AccountRole(account, role);
+        Set<AccountRole> roles = new HashSet<>();
+        roles.add(accountRole);
+        account.setAccountRoles(roles);
+
+        //현재 시간으로 가입일 지정
+        account.setJoinedAt(LocalDateTime.now());
+
+        return accountRepository.save(account);
     }
 
     public void login(Account account) {
@@ -68,18 +85,21 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    @Override
     public void updateProfile(Account account, ProfileForm profileForm) {
 
         account.setProfile(new Profile(profileForm.getBio(), profileForm.getUrl(), profileForm.getImage()));
         accountRepository.save(account);
     }
 
+    @Override
     public void updatePassword(Account account, String newPassword) {
 
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
 
+    @Override
     public void updateAccount(Account account, AccountForm accountForm) {
 
         account.setNickname(accountForm.getNickname());
@@ -90,23 +110,11 @@ public class AccountService implements UserDetailsService {
 
     }
 
-    public Account getAccount(String loginId) {
-
-        Account account = accountRepository.findByLoginId(loginId);
-
-        if (account == null) {
-            throw new IllegalArgumentException(loginId + "에 해당하는 사용자가 없습니다.");
-        }
-
-        return account;
-    }
-
-    public void deleteAccount(Long account_id) {
-        accountRepository.deleteById(account_id);
-    }
+    public Account getAccount(String loginId) {return accountRepository.findByLoginId(loginId);}
 
     public Page<Account> getAccountList(int page){
         PageRequest pageRequest = PageRequest.of(page, 5);
         return accountRepository.findAll(pageRequest);
     }
+
 }

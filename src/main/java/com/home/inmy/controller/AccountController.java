@@ -1,18 +1,20 @@
-package com.home.inmy.account;
+package com.home.inmy.controller;
 
-import com.home.inmy.account.form.SignUpForm;
-import com.home.inmy.account.validator.SignUpFormValidator;
-import com.home.inmy.bookmark.BookmarkServiceImpl;
-import com.home.inmy.domain.*;
-import com.home.inmy.follow.FollowServiceImpl;
-import com.home.inmy.like.LikeServiceImpl;
-import com.home.inmy.post.PostRepository;
-import com.home.inmy.post.PostServiceImpl;
+import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.form.SignUpForm;
+import com.home.inmy.validator.SignUpFormValidator;
+import com.home.inmy.service.impl.BookmarkServiceImpl;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Bookmark;
+import com.home.inmy.domain.entity.Likes;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.service.impl.FollowServiceImpl;
+import com.home.inmy.service.impl.LikeServiceImpl;
+import com.home.inmy.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -21,15 +23,13 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountService accountService;
+    private final AccountServiceImpl accountService;
     private final SignUpFormValidator signUpFormValidator;
 
     private final LikeServiceImpl likeService;
@@ -56,7 +56,7 @@ public class AccountController {
             return "account/sign-up";
         }
 
-        Account account = accountService.processNewAccount(signUpForm);
+        Account account = accountService.createAccount(signUpForm);
         accountService.login(account);
 
         return "redirect:/";

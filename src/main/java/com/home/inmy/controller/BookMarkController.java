@@ -1,9 +1,10 @@
-package com.home.inmy.bookmark;
+package com.home.inmy.controller;
 
-import com.home.inmy.account.CurrentUser;
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
-import com.home.inmy.post.PostService;
+import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.service.impl.BookmarkServiceImpl;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

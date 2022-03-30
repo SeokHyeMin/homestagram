@@ -1,4 +1,4 @@
-package com.home.inmy.account;
+package com.home.inmy.domain;
 
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

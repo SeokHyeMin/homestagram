@@ -1,8 +1,8 @@
-package com.home.inmy.postTag;
+package com.home.inmy.service;
 
-import com.home.inmy.domain.Post;
-import com.home.inmy.domain.PostTag;
-import com.home.inmy.domain.Tag;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.domain.entity.PostTag;
+import com.home.inmy.domain.entity.Tag;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
 import java.util.List;

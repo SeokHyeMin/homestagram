@@ -1,7 +1,7 @@
-package com.home.inmy.account.validator;
+package com.home.inmy.validator;
 
-import com.home.inmy.account.AccountRepository;
-import com.home.inmy.account.form.SignUpForm;
+import com.home.inmy.repository.AccountRepository;
+import com.home.inmy.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

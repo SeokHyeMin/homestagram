@@ -1,12 +1,9 @@
-package com.home.inmy.tag;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.Post;
-import com.home.inmy.domain.PostTag;
-import com.home.inmy.domain.Tag;
+import com.home.inmy.domain.entity.PostTag;
+import com.home.inmy.domain.entity.Tag;
+import com.home.inmy.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

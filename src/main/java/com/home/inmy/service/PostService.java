@@ -1,7 +1,7 @@
-package com.home.inmy.post;
+package com.home.inmy.service;
 
-import com.home.inmy.domain.Post;
-import com.home.inmy.web.dto.PostDto;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.dto.PostDto;
 
 import java.io.IOException;
 

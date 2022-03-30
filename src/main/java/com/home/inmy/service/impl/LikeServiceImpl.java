@@ -1,12 +1,13 @@
-package com.home.inmy.like;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Likes;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Likes;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.repository.LikeRepository;
+import com.home.inmy.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class LikeServiceImpl implements LikeService{
+public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
 

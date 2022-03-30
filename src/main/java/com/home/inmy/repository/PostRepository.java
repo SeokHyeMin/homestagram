@@ -1,12 +1,11 @@
-package com.home.inmy.post;
+package com.home.inmy.repository;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

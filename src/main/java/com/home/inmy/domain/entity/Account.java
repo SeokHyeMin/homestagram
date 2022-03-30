@@ -1,12 +1,13 @@
-package com.home.inmy.domain;
+package com.home.inmy.domain.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -20,8 +21,6 @@ public class Account {
 
     @Column(unique = true)
     private String nickname;
-
-    private String role;
 
     private String dateToBirth;
 
@@ -57,6 +56,9 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Comments> commentsList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account")
+    private Set<AccountRole> accountRoles = new HashSet<>();
 
     //프로필
     @Embedded

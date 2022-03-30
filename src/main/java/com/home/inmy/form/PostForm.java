@@ -1,7 +1,7 @@
-package com.home.inmy.post.form;
+package com.home.inmy.form;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.web.dto.PostDto;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.dto.PostDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

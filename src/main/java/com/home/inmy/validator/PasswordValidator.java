@@ -1,6 +1,6 @@
-package com.home.inmy.settings.validator;
+package com.home.inmy.validator;
 
-import com.home.inmy.settings.form.PasswordForm;
+import com.home.inmy.form.PasswordForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

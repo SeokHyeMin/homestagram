@@ -1,7 +1,7 @@
-package com.home.inmy.web.dto;
+package com.home.inmy.dto;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Post;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

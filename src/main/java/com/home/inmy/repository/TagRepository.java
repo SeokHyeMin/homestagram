@@ -1,6 +1,6 @@
-package com.home.inmy.tag;
+package com.home.inmy.repository;
 
-import com.home.inmy.domain.Tag;
+import com.home.inmy.domain.entity.Tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

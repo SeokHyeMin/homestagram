@@ -1,4 +1,4 @@
-package com.home.inmy.domain;
+package com.home.inmy.domain.entity;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;

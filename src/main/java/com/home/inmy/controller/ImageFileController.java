@@ -1,5 +1,6 @@
-package com.home.inmy.images;
+package com.home.inmy.controller;
 
+import com.home.inmy.domain.FileStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

@@ -1,9 +1,10 @@
-package com.home.inmy.comments;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Comments;
-import com.home.inmy.domain.Post;
-import com.home.inmy.web.dto.CommentDto;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Comments;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.repository.CommentRepository;
+import com.home.inmy.dto.CommentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

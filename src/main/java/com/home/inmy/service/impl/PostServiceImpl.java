@@ -1,14 +1,11 @@
-package com.home.inmy.post;
+package com.home.inmy.service.impl;
 
-import com.home.inmy.bookmark.BookmarkServiceImpl;
-import com.home.inmy.comments.CommentService;
-import com.home.inmy.domain.Account;
-import com.home.inmy.domain.Post;
-import com.home.inmy.images.ImageFileRepository;
-import com.home.inmy.images.ImageFileServiceImpl;
-import com.home.inmy.like.LikeServiceImpl;
-import com.home.inmy.postTag.PostTagServiceImpl;
-import com.home.inmy.web.dto.PostDto;
+import com.home.inmy.repository.PostRepository;
+import com.home.inmy.service.PostService;
+import com.home.inmy.domain.entity.Account;
+import com.home.inmy.domain.entity.Post;
+import com.home.inmy.repository.ImageFileRepository;
+import com.home.inmy.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -24,7 +21,7 @@ import java.util.List;
 @Service @Slf4j
 @Transactional
 @RequiredArgsConstructor
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
 
     private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
