@@ -127,7 +127,7 @@ public class PostController {
         model.addAttribute("postList", postList);
         model.addAttribute("postNumList", likePostNumList);
         model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
-        model.addAttribute(account);
+        model.addAttribute("account", account);
 
         if(pageSelect.equals("true")){
             return "posts/post-list :: #postList-div";

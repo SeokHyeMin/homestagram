@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments.html :: head"></head>
 <body class="bg-white">
@@ -128,8 +130,8 @@
     </div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
-<div th:replace="fragments.html :: like"></div>
-<div th:replace="fragments.html :: bookmark"></div>
+<div th:replace="fragments.html :: like" sec:authorize="hasAuthority('ROLE_USER')"></div>
+<div th:replace="fragments.html :: bookmark" sec:authorize="hasAuthority('ROLE_USER')"></div>
 <div th:replace="fragments.html :: selectbox-orderBy"></div>
 <div th:replace="fragments.html :: post-list-page"></div>
 </body>

@@ -48,7 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/","/login*","/sign-up","check-email-token","/post-list","/post-detail").permitAll()
+                .mvcMatchers("/","/login*","/sign-up","/postList","/post-detail").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/profile/**").permitAll()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated();
