@@ -4,15 +4,20 @@ import com.home.inmy.domain.UserAccount;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class UserDetailServiceImpl implements UserDetailsService {
+public class CustomUserDetailServiceImpl implements UserDetailsService {
 
     private final AccountRepository accountRepository;
 
@@ -25,6 +30,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(loginId);
         }
 
-        return new UserAccount(account);
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority(account.getAccountRole().getRoleName())); //권한정보 생성
+
+        return new AccountContext(account, roles);
     }
 }

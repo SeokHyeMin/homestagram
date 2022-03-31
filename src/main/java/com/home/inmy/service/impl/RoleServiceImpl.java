@@ -17,7 +17,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public Role createRoleIfNotFound(String roleName) {
+    public Role createRoleIfNotFound(String roleName, String roleDesc) {
 
         Role role = roleRepository.findByRoleName(roleName);
 
@@ -25,6 +25,7 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             role = Role.builder()
                     .roleName(roleName)
+                    .roleDesc(roleDesc)
                     .build();
             return roleRepository.save(role);
         }

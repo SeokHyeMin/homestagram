@@ -18,16 +18,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -61,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = modelMapper.map(signUpForm, Account.class);
 
         //권한 부여, 기본회원가입의 경우 USER
-        Role role = roleService.createRoleIfNotFound("USER");
+        Role role = roleService.createRoleIfNotFound("ROLE_USER", "사용자");
         account.setAccountRole(role);
 
         //현재 시간으로 가입일 지정

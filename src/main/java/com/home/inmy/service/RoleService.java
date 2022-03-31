@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RoleService {
 
-    Role createRoleIfNotFound(String roleName);
+    Role createRoleIfNotFound(String roleName, String roleDesc);
 
     Role getRole(long id);
 

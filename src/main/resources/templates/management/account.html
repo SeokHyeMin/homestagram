@@ -23,7 +23,7 @@
                 <th th:text="${account.id}">1</th>
                 <td th:text="${account.nickname}">닉네임</td>
                 <td th:text="${#temporals.format(account.joinedAt,'yyyy-MM-dd HH:mm')}">가입일</td>
-                <td th:text="${account.accountRole}">회원권한</td>
+                <td th:text="${account.accountRole.roleDesc}">회원권한</td>
                 <td><button type="button" class="btn btn-secondary">관리자로 등록</button></td>
                 <td><button type="button" th:name="${accountList.getNumber()}" class="btn btn-danger account-delete" th:value="${account.id}">강제탈퇴</button></td>
             </tr>
