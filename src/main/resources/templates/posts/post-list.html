@@ -130,8 +130,8 @@
     </div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
-<div th:replace="fragments.html :: like" sec:authorize="hasAuthority('ROLE_USER')"></div>
-<div th:replace="fragments.html :: bookmark" sec:authorize="hasAuthority('ROLE_USER')"></div>
+<div th:replace="fragments.html :: like"></div>
+<div th:replace="fragments.html :: bookmark"></div>
 <div th:replace="fragments.html :: selectbox-orderBy"></div>
 <div th:replace="fragments.html :: post-list-page"></div>
 </body>

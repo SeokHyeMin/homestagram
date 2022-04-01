@@ -85,6 +85,7 @@ public class AccountController {
 
         Page<Post> postList = postService.profilePageList(accountByLoginId,page);
         Boolean follow = followService.findFollow(loginId, account); //로그인 계정, 프로필 주인 계정
+        Boolean isOwner = account != null && accountByLoginId.getLoginId().equals(account.getLoginId()); //현재 계정이 게시글 주인인지 판단.
 
         int pageNum = postList.getPageable().getPageNumber(); // 현재 페이지
         int pageBlock = 5; // 블럭의 수
@@ -95,7 +96,7 @@ public class AccountController {
 
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
-
+        model.addAttribute("isOwner",isOwner);
         model.addAttribute("owner",accountByLoginId); //프로필 주인 계정
         model.addAttribute("follow",follow); //해당계정을 팔로잉하는지 안하는지
         model.addAttribute("postList",postList);
