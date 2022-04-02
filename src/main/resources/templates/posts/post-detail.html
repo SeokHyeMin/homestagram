@@ -89,13 +89,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="dropdown col-sm-2 pt-3" style="text-align: center">
+                            <div th:replace="fragments.html :: modal"></div>
+                            <div class="dropdown col-sm-2 pt-3" style="text-align: center" th:if="${isOwner}">
                                 <a role="button" class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
                                         style="width: 30px; height: 30px; border-radius: 70%; background-color: white"></a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="width: 50px">
-                                        <li><a class="dropdown-item" th:href="@{'/'}" >신고하기</a></li>
-                                        <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-update/' + ${id}}">수정하기</a></li>
-                                        <li><a th:if="${isOwner}" class="dropdown-item" th:href="@{'/post-delete/' + ${id}}">삭제하기</a></li>
+                                        <li><a class="dropdown-item" th:href="@{'/post-update/' + ${id}}">수정하기</a></li>
+                                        <li><a class="dropdown-item post-delete-btn" th:value="${id}">삭제하기</a></li>
                                     </ul>
                             </div>
                         </div>
@@ -195,6 +195,6 @@
     <div th:replace="fragments.html :: like"></div>
     <div th:replace="fragments.html :: bookmark"></div>
     <div th:replace="fragments.html :: followBtn"></div>
-    <div th:replace="fragments.html :: comments"></div>
+    <div th:replace="fragments.html :: post-comments"></div>
 </body>
 </html>

@@ -949,7 +949,7 @@
     </div>
 </div>
 
-<div th:fragment="comments">
+<div th:fragment="post-comments">
     <script type="application/javascript" th:inline="javascript">
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
@@ -960,7 +960,27 @@
         });
         let id = $("#post_id").attr("value");
 
-        if($(".user").attr('value') === 'false'){
+        $(".post-delete-btn").click(function (){
+            $(".modal-text").text("게시글을 삭제하시겠습니까?");
+            $('#myModal').fadeIn();
+            console.log("글삭제");
+            $(".delete-ok").on("click", function () {
+                $.ajax({
+                    url: '/post/delete/' + id,
+                    type: 'post',
+                    success: function () {
+                       location.href = " /postList";
+                    }
+                });
+            });
+
+            $(".close").on("click", function () {
+                $('#myModal').fadeOut();
+            });
+
+        });
+
+        if($(".user").attr('value') === 'false'){ //로그인한 경우
             $(document).on("click", ".comment-save", function () {
                 let comment = $("#comment").val();
                 $.ajax({
@@ -975,7 +995,7 @@
                     }
                 });
             });
-        }else{
+        }else{ //로그인 하지 않은 경우
             location.href = "/login";
         }
 

@@ -1,4 +1,4 @@
-package com.home.inmy.admin;
+package com.home.inmy.controller;
 
 import com.home.inmy.service.impl.AccountServiceImpl;
 import com.home.inmy.domain.CurrentUser;

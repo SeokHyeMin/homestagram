@@ -64,11 +64,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long id) { //post와 연관되어 있는 것들 함께 삭제
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        imageFileService.deleteImageFile(post);
-        likeService.deletePostLike(post);
-        bookmarkService.deletePostBookmark(post);
-        postTagService.deletePost(post);
-        commentService.commentDeleteByPost(post);
+
         postRepository.delete(post);
     }
 

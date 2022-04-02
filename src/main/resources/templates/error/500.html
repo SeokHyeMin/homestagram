@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments.html :: head"></head>
 <body class="bg-white">
 <div th:replace="fragments.html :: main-nav"></div>
-<div class="container">
-    <div style="margin-top: 10%; margin-bottom:10%; text-align: center">
-        <span class="alert alert-danger">접근권한이 없습니다.</span>
-    </div>
+<div class="container" style="text-align: center">
+    <img src="/image/error-500.png" style="width: 1000px; height: 600px">
     <div th:replace="fragments.html :: footer"></div>
 </div>
 </body>

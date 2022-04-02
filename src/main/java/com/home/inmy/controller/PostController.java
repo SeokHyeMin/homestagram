@@ -188,6 +188,14 @@ public class PostController {
         return "redirect:/post/{id}";
     }
 
+    @PostMapping("/post/delete/{id}") //글 삭제
+    public String postDelete(@PathVariable Long id){
+        log.info("=====postDelete=====");
+        postService.deletePost(id); //게시글 삭제
+
+        return "redirect:/postList";
+    }
+
     private Map<String, Integer> getPage(Page<Post> postList){ //페이지 계산하여 시작블럭, 마지막 블럭 담아 반환.
 
         Map<String, Integer> map = new HashMap<>();
