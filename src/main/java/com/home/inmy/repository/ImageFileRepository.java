@@ -11,4 +11,6 @@ import java.util.List;
 public interface ImageFileRepository extends JpaRepository<ImageFile, Long> {
 
     List<ImageFile> findByPost(Post post);
+
+    void deleteByPostAndId(Post post, Long id);
 }

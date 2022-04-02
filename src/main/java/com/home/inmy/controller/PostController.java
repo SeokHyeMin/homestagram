@@ -1,13 +1,11 @@
 package com.home.inmy.controller;
 
 import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.domain.entity.*;
+import com.home.inmy.service.ImageFileService;
 import com.home.inmy.service.impl.PostServiceImpl;
 import com.home.inmy.service.impl.BookmarkServiceImpl;
 import com.home.inmy.service.impl.CommentService;
-import com.home.inmy.domain.entity.Account;
-import com.home.inmy.domain.entity.Comments;
-import com.home.inmy.domain.entity.Post;
-import com.home.inmy.domain.entity.PostTag;
 import com.home.inmy.service.impl.FollowServiceImpl;
 import com.home.inmy.service.impl.LikeServiceImpl;
 import com.home.inmy.service.impl.PostTagServiceImpl;
@@ -23,11 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,6 +41,7 @@ public class PostController {
     private final BookmarkServiceImpl bookmarkService;
     private final FollowServiceImpl followService;
     private final CommentService commentService;
+    private final ImageFileService imageFileService;
 
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
@@ -55,13 +56,16 @@ public class PostController {
     @GetMapping("/post/{id}") // 글 상세보기
     public String postView(@PathVariable Long id, Model model, @CurrentUser Account account) {
 
+        log.info("--------------postView-------------");
         Post post = postService.getPost(id);
 
         List<PostTag> postTagList = postTagService.getPostTagList(post);
         Boolean follow = followService.findFollow(post.getAccount().getLoginId(), account); //게시글 주인, 현재 로그인 계정으로 팔로잉 여부 판단.
-        Page<Comments> comments = commentService.getComments(post, 0); //댓글 작성하고 불러올 페이지는 댓글 첫 페이지
+
         Boolean isOwner = account != null && post.getAccount().getLoginId().equals(account.getLoginId()); //현재 계정이 게시글 주인인지 판단.
 
+        //댓글 페이징
+        Page<Comments> comments = commentService.getComments(post, 0); //댓글 작성하고 불러올 페이지는 댓글 첫 페이지
         int pageNum = comments.getPageable().getPageNumber(); // 현재 페이지
         int pageBlock = 5; // 블럭의 수
         int startBlockPage = (pageNum / pageBlock) * pageBlock + 1;
@@ -139,6 +143,7 @@ public class PostController {
     @GetMapping("/post-update/{id}") //글 수정화면
     public String postUpdateView(@PathVariable Long id, @CurrentUser Account account, Model model){
 
+        log.info("-----------post-update-view------------");
         Post post = postService.getPost(id);
 
         PostForm postForm = PostForm.builder()
@@ -148,45 +153,39 @@ public class PostController {
 
         List<PostTag> tagList = postTagService.getPostTagList(post);
         List<String> tags = tagService.getTagList(tagList);
+        List<ImageFile> imageFiles = post.getImageFiles();
 
-        model.addAttribute(account);
-        model.addAttribute(id);
+        model.addAttribute("account",account);
+        model.addAttribute("id",id);
         model.addAttribute(postForm);
+        model.addAttribute("imageFiles",imageFiles);
         model.addAttribute("tagStr", String.join("," ,tags));
 
         return "posts/post-update";
     }
 
     @PostMapping("/post-update/{id}") // 글 수정
-    public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm, String tags,
+    public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm,
+                             @RequestParam String tags, @RequestParam String delete_image,
                              Errors errors, Model model, RedirectAttributes redirectAttributes) throws IOException, JSONException {
 
         if (errors.hasErrors()) {
             log.info("post update error");
-            return "posts/new-post";
+            return "posts/post-update";
         }
 
-        model.addAttribute(account);
-
+        log.info("--------post-update----------");
         PostDto postDto = postForm.createBoardPostDto(account);
         Post post = postService.updatePost(postDto, id);
         postTagService.tagSave(post, tags); //변경된 태그를 다시 추가해줌.
+        if(!delete_image.equals("")){ //삭제한 이미지 있는 경우, 해당 이미지 삭제
+            postService.deleteImage(post, delete_image);
+        }
 
+        model.addAttribute(account);
        redirectAttributes.addAttribute("id", post.getId());
 
         return "redirect:/post/{id}";
-    }
-
-    @GetMapping("/post-delete/{id}")
-    public String postDelete(@PathVariable Long id, @CurrentUser Account account, Model model, RedirectAttributes redirectAttributes){
-
-        postService.deletePost(id);
-
-        model.addAttribute(account);
-
-        redirectAttributes.addAttribute("message","해당 글을 삭제하였습니다.");
-
-        return "redirect:/postList";
     }
 
     private Map<String, Integer> getPage(Page<Post> postList){ //페이지 계산하여 시작블럭, 마지막 블럭 담아 반환.

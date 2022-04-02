@@ -25,13 +25,14 @@ public class ImageFileServiceImpl implements ImageFileService {
         newPost.setImageFiles(result);
     }
 
-    public List<ImageFile> findImageFile(){
-        return imageFileRepository.findAll();
-    }
-
     @Override
     public void deleteImageFile(Post post) {
         imageFileRepository.deleteInBatch(post.getImageFiles());
+    }
+
+    @Override
+    public void deleteImageFile(Post post, Long id) {
+        imageFileRepository.deleteByPostAndId(post, id);
     }
 
 }

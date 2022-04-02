@@ -12,4 +12,5 @@ public interface PostService {
     void updateViews(Post post);
     void deletePost(Long id);
     Post getPost(Long id);
+
 }

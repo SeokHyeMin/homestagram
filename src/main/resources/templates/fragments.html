@@ -951,8 +951,8 @@
 
 <div th:fragment="comments">
     <script type="application/javascript" th:inline="javascript">
-        const token = $("meta[name='_csrf']").attr("content");
-        const header = $("meta[name='_csrf_header']").attr("content");
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
         $(function() {
             $(document).ajaxSend(function(e, xhr, options) {
                 xhr.setRequestHeader(header, token);
@@ -996,26 +996,39 @@
         $(document).on("click", ".comment-delete", function(){
             let page = $(this).attr("name");
             let comment_id = $(this).attr("value");
-            $('#myModal').fadeIn();
-
-            $( ".delete-ok").on("click", function(){
-                $.ajax({
-                    url : '/deleteComment/' + comment_id + '/' + id,
-                    type : 'post',
-                    data : {
-                        page : page
-                    },
-                    success : function(fragment) {
-                        $('.comment-list').replaceWith(fragment);
-                    }
-                });
+            $.ajax({
+                url : '/deleteComment/' + comment_id + '/' + id,
+                type : 'post',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.comment-list').replaceWith(fragment);
+                }
             });
+        });
+    </script>
+</div>
 
-            $(".close").on("click",  function(){
-                $('#myModal').fadeOut();
+<div th:fragment="image-list">
+    <script type="application/javascript" th:inline="javascript">
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $(function() {
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(header, token);
             });
-
-            return false;
+        });
+        let image_id = ''
+        $(document).on('click','.image-delete-btn', function(){
+            if(image_id === ''){
+                image_id += $(this).attr('value');
+            }else{
+                image_id += ',' +$(this).attr('value');
+            }
+            console.log(image_id);
+            $("#delete_image_id").attr('value', image_id);
+            $("#"+$(this).attr('value')).remove();
         });
     </script>
 </div>

@@ -11,8 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,17 +32,6 @@ public class PostForm {
     private Set<String> tags;
 
     private String writer;
-
-
-
-    @Builder
-    public PostForm(String title, String content, String writer, List<MultipartFile> imageFiles, Set<String> tags) {
-        this.title = title;
-        this.content = content;
-        this.writer = writer;
-        this.imageFiles = (imageFiles != null) ? imageFiles : new ArrayList<>();
-        this.tags = (tags != null) ? tags : new HashSet<>();
-    }
 
 
     public PostDto createBoardPostDto(Account account) {

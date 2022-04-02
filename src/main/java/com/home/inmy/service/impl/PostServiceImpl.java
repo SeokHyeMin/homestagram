@@ -1,5 +1,6 @@
 package com.home.inmy.service.impl;
 
+import com.home.inmy.domain.entity.Tag;
 import com.home.inmy.repository.PostRepository;
 import com.home.inmy.service.PostService;
 import com.home.inmy.domain.entity.Account;
@@ -9,6 +10,8 @@ import com.home.inmy.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -48,8 +51,7 @@ public class PostServiceImpl implements PostService {
 
         modelMapper.map(postDto, post); //변경감지
         postTagService.deletePost(post); //해당 글 태그들 삭제 (추후에 다시 추가)
-        imageFileRepository.deleteAll(post.getImageFiles());
-        imageFileService.saveImageFile(post, postDto.getImageFiles());
+        imageFileService.saveImageFile(post, postDto.getImageFiles()); //수정 시 추가한 이미지 파일 추가.
 
         return post;
     }
@@ -99,4 +101,11 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    public void deleteImage(Post post, String delete_image) {
+
+        String[] split = delete_image.split(",");
+        for (String s : split) {
+            imageFileService.deleteImageFile(post, Long.valueOf(s));
+        }
+    }
 }

@@ -25,6 +25,4 @@ public class ImageFile { //업로드한 파일정보를 보관.
         this.storeFilename = storeFilename;
         this.post = post;
     }
-
-
 }
