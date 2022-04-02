@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
 
         modelMapper.map(postDto, post); //변경감지
-
+        postTagService.deletePost(post); //해당 글 태그들 삭제 (추후에 다시 추가)
         imageFileRepository.deleteAll(post.getImageFiles());
         imageFileService.saveImageFile(post, postDto.getImageFiles());
 

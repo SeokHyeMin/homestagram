@@ -565,7 +565,6 @@
                 $(this).html('팔로우');
                 $(this).removeClass("btn-outline-secondary unfollowBtn");
                 $(this).addClass("home white-font followBtn");
-            }
         });
     </script>
 </div>
@@ -791,6 +790,57 @@
                 $('#myModal').fadeOut();
             });
         });
+
+        $(document).on("click", ".roleUpdateAdmin", function(){
+
+            let accountId = $(this).attr("value");
+            let page = $(this).attr("name");
+
+            let header = [[${_csrf.headerName}]];
+            let token = [[${_csrf.token}]];
+            $.ajax({
+                url : '/management/account/role',
+                type : 'post',
+                data : {
+                    page : page,
+                    accountId : accountId,
+                    roleName : 'ROLE_ADMIN'
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success : function(fragment) {
+                    $('#myModal').hide();
+                    $('#account-table').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".roleUpdateUser", function(){
+
+            let accountId = $(this).attr("value");
+            let page = $(this).attr("name");
+
+            let header = [[${_csrf.headerName}]];
+            let token = [[${_csrf.token}]];
+            $.ajax({
+                url : '/management/account/role',
+                type : 'post',
+                data : {
+                    page : page,
+                    accountId : accountId,
+                    roleName : 'ROLE_USER'
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success : function(fragment) {
+                    $('#myModal').hide();
+                    $('#account-table').replaceWith(fragment);
+                }
+            });
+        });
+
     </script>
 </div>
 
@@ -945,7 +995,6 @@
 
         $(document).on("click", ".comment-delete", function(){
             let page = $(this).attr("name");
-            console.log(page);
             let comment_id = $(this).attr("value");
             $('#myModal').fadeIn();
 
@@ -965,6 +1014,8 @@
             $(".close").on("click",  function(){
                 $('#myModal').fadeOut();
             });
+
+            return false;
         });
     </script>
 </div>

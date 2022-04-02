@@ -24,8 +24,16 @@
                 <td th:text="${account.nickname}">닉네임</td>
                 <td th:text="${#temporals.format(account.joinedAt,'yyyy-MM-dd HH:mm')}">가입일</td>
                 <td th:text="${account.accountRole.roleDesc}">회원권한</td>
-                <td><button type="button" class="btn btn-secondary">관리자로 등록</button></td>
-                <td><button type="button" th:name="${accountList.getNumber()}" class="btn btn-danger account-delete" th:value="${account.id}">강제탈퇴</button></td>
+                <td th:if="${account.accountRole.roleName != 'ROLE_ADMIN'}">
+                    <button type="button"  th:name="${accountList.getNumber()}"
+                            th:value="${account.id}"  class="btn btn-warning roleUpdateAdmin">관리자로 등록</button>
+                </td>
+                <td th:if="${account.accountRole.roleName == 'ROLE_ADMIN'}">
+                    <button th:value="${account.id}" th:name="${accountList.getNumber()}"
+                            type="button" class="btn btn-secondary roleUpdateUser">사용자로 변경</button>
+                </td>
+                <td><button type="button"
+                            th:name="${accountList.getNumber()}" class="btn btn-danger account-delete" th:value="${account.id}">강제탈퇴</button></td>
             </tr>
             </tbody>
         </table>

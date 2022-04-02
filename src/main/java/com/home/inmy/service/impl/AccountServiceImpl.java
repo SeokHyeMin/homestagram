@@ -8,6 +8,7 @@ import com.home.inmy.repository.AccountRepository;
 import com.home.inmy.form.AccountForm;
 import com.home.inmy.form.ProfileForm;
 import com.home.inmy.form.SignUpForm;
+import com.home.inmy.repository.RoleRepository;
 import com.home.inmy.service.AccountService;
 import com.home.inmy.service.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +34,7 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final RoleRepository roleRepository;
 
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
@@ -103,9 +106,14 @@ public class AccountServiceImpl implements AccountService {
     public Account getAccount(String loginId) {return accountRepository.findByLoginId(loginId);}
 
     public Page<Account> getAccountList(int page){
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
         return accountRepository.findAll(pageRequest);
     }
 
 
+    public void updateAccountRole(Long id, String roleName) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("일치하는 계정이 없습니다."));
+        Role role = roleRepository.findByRoleName(roleName);
+        account.setAccountRole(role); //변경감지
+    }
 }

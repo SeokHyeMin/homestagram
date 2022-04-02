@@ -4,20 +4,13 @@ import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.repository.TagRepository;
 import com.home.inmy.service.impl.BookmarkServiceImpl;
 import com.home.inmy.domain.entity.Account;
-import com.home.inmy.domain.entity.Post;
 import com.home.inmy.domain.entity.PostTag;
 import com.home.inmy.domain.entity.Tag;
 import com.home.inmy.service.impl.LikeServiceImpl;
-import com.home.inmy.repository.PostRepository;
-import com.home.inmy.repository.PostTagRepository;
 import com.home.inmy.service.impl.PostTagServiceImpl;
-import com.home.inmy.form.TagForm;
-import com.home.inmy.service.impl.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,44 +23,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TagController {
 
-    private final PostRepository postRepository;
     private final TagRepository tagRepository;
-    private final PostTagRepository postTagRepository;
 
     private final PostTagServiceImpl postTagService;
-    private final TagService tagService;
     private final LikeServiceImpl likeService;
     private final BookmarkServiceImpl bookmarkService;
 
-    @PostMapping("/post-update/{id}/tags/add")
-    @ResponseBody
-    public ResponseEntity addTag(@PathVariable Long id, @RequestBody TagForm tagForm) {
-
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-
-        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
-        postTagService.postTagSave(post, tag);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @Transactional
-    @PostMapping("/post-update/{id}/tags/remove")
-    @ResponseBody
-    public ResponseEntity removeTag(@PathVariable Long id, @RequestBody TagForm tagForm) {
-
-        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        Tag tag = tagRepository.findByTagTitle(tagForm.getTagTitle());
-
-        if (tag == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        PostTag postTag = postTagRepository.findByPostAndTag(post, tag);
-        postTagService.deleteTag(postTag);
-
-        return ResponseEntity.ok().build();
-    }
 
     @GetMapping("/searchTag")
     public String searchPostByTag(@RequestParam String tagTitle, @CurrentUser Account account, Model model){

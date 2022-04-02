@@ -32,7 +32,7 @@ public class PostTagServiceImpl implements PostTagService {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject tagList = jsonArray.getJSONObject(i);
             String tagTitle = tagList.getString("value");
-            Tag tag = tagService.findOrCreateNew(tagTitle);
+            Tag tag = tagService.findOrCreateNew(tagTitle); //해당 태그를 찾고, 없으면 생성 후 반환
             postTagSave(post, tag);
         }
 

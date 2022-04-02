@@ -52,7 +52,7 @@ public class PostController {
     }
 
     @Transactional
-    @GetMapping("/post/{id}")
+    @GetMapping("/post/{id}") // 글 상세보기
     public String postView(@PathVariable Long id, Model model, @CurrentUser Account account) {
 
         Post post = postService.getPost(id);
@@ -87,7 +87,7 @@ public class PostController {
         return "posts/post-detail";
     }
 
-    @PostMapping("/new-post")
+    @PostMapping("/new-post") // 새 글 작성
     public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, String tags, Errors errors, Model model,
                               RedirectAttributes redirectAttributes) throws JSONException, IOException {
 
@@ -108,7 +108,7 @@ public class PostController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/postList")
+    @GetMapping("/postList") //글 목록 - 커뮤니티
     public String postList(Model model, @CurrentUser Account account,
                            @RequestParam(required = false, defaultValue = "false") String pageSelect,
                            @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
@@ -136,7 +136,7 @@ public class PostController {
         return "posts/post-list";
     }
 
-    @GetMapping("/post-update/{id}")
+    @GetMapping("/post-update/{id}") //글 수정화면
     public String postUpdateView(@PathVariable Long id, @CurrentUser Account account, Model model){
 
         Post post = postService.getPost(id);
@@ -157,9 +157,9 @@ public class PostController {
         return "posts/post-update";
     }
 
-    @PostMapping("/post-update/{id}")
-    public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm, Errors errors, Model model,
-                             RedirectAttributes redirectAttributes) throws IOException{
+    @PostMapping("/post-update/{id}") // 글 수정
+    public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm, String tags,
+                             Errors errors, Model model, RedirectAttributes redirectAttributes) throws IOException, JSONException {
 
         if (errors.hasErrors()) {
             log.info("post update error");
@@ -170,6 +170,7 @@ public class PostController {
 
         PostDto postDto = postForm.createBoardPostDto(account);
         Post post = postService.updatePost(postDto, id);
+        postTagService.tagSave(post, tags); //변경된 태그를 다시 추가해줌.
 
        redirectAttributes.addAttribute("id", post.getId());
 

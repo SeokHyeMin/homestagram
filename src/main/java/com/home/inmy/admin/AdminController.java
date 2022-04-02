@@ -61,6 +61,26 @@ public class AdminController {
 
     }
 
+    @PostMapping("/management/account/role")
+    public String accountRoleUpdate(Model model, @CurrentUser Account account, @RequestParam Long accountId,
+                                          @RequestParam String roleName,
+                                          @RequestParam(required = false, defaultValue = "0", value = "page")int page){
+
+        accountService.updateAccountRole(accountId, roleName); //권한 변경
+
+        Page<Account> accountList = accountService.getAccountList(page);
+
+        Map<String, Integer> map = getPage(accountList); //페이지 계산
+
+        model.addAttribute("startBlockPage", map.get("startBlockPage"));
+        model.addAttribute("endBlockPage", map.get("endBlockPage"));
+        model.addAttribute("accountList",accountList);
+        model.addAttribute("account",account);
+
+        return "management/account :: #account-table";
+
+    }
+
     private Map<String, Integer> getPage(Page<Account> list){ //페이지 계산하여 시작블럭, 마지막 블럭 담아 반환.
 
         Map<String, Integer> map = new HashMap<>();
