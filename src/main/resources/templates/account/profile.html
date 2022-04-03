@@ -51,6 +51,7 @@
         <div class="col-8 profile-list" id="profile-postList">
             <div class="mt-5" style="margin-left: 10%; margin-bottom: 30px">
                 <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+                    <div hidden id="list" th:value="${listText}"></div>
                         <span th:text="${listText}">게시물</span>
                         <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
                 </div>
@@ -65,14 +66,14 @@
             <nav aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
-                        <a class="page-link list-pre-page" th:value="${postList.getNumber() - 1}">Previous</a>
+                        <a class="page-link list-page" th:value="${postList.getNumber() - 1}">Previous</a>
                     </li>
                     <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
                         th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
-                        <span class="page-link list-cur-page" th:value="${i}-1" th:text="${i}"></span>
+                        <span class="page-link list-page" th:value="${i}-1" th:text="${i}"></span>
                     </li>
                     <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
-                        <a class="page-link list-next-page" th:value="${postList.getNumber() + 1}">Next</a>
+                        <a class="page-link list-page" th:value="${postList.getNumber() + 1}">Next</a>
                     </li>
                 </ul>
             </nav>

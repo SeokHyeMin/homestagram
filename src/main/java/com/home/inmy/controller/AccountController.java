@@ -112,7 +112,8 @@ public class AccountController {
 
     @Transactional(readOnly = true)
     @GetMapping("/profile/{listType}/{loginId}")
-    public String profileLike(@PathVariable String loginId, @PathVariable String listType, Model model, @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+    public String profileLike(@PathVariable String loginId, @PathVariable String listType, Model model,
+                              @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
         String listText = null;
