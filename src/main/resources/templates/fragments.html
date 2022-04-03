@@ -171,8 +171,8 @@
                 <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
-                <div hidden th:value="${#strings.isEmpty(account.accountRole.roleName)}" class="user"></div>
-                <a class="nav-link" th:href="@{'/profile/'+${account.loginId}}">
+                <div hidden th:value="${#strings.isEmpty(account?.accountRole?.roleName)}" class="user"></div>
+                <a class="nav-link" th:href="@{'/profile/'+${account?.loginId}}">
                     <i class="fa fa-plus" aria-hidden="true"></i> 내 게시물
                 </a>
             </li>
@@ -184,11 +184,11 @@
                     <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="background: #EBFBFF">
                         <img th:if="${#strings.isEmpty(account?.profile?.image)}" src="/image/profile.png"
                              width="24" height="24" class="rounded border bg-light"/>
-                        <img th:if="${!#strings.isEmpty(account?.profile?.image)}" th:src="${account.profile.image}"
+                        <img th:if="${!#strings.isEmpty(account?.profile?.image)}" th:src="${account?.profile?.image}"
                              width="24" height="24" class="rounded border"/>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink" style="width: 100px">
-                        <a class="dropdown-item" th:href="@{'/profile/' + ${account.loginId}}">프로필</a>
+                        <a class="dropdown-item" th:href="@{'/profile/' + ${account?.loginId}}">프로필</a>
                         <a class="dropdown-item" th:href="@{'/new-post'}">새 글 작성</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
@@ -966,7 +966,7 @@
             console.log("글삭제");
             $(".delete-ok").on("click", function () {
                 $.ajax({
-                    url: '/post/delete/' + id,
+                    url: '/delete-post/' + id,
                     type: 'post',
                     success: function () {
                        location.href = " /postList";
@@ -980,24 +980,25 @@
 
         });
 
-        if($(".user").attr('value') === 'false'){ //로그인한 경우
+
             $(document).on("click", ".comment-save", function () {
-                let comment = $("#comment").val();
-                $.ajax({
-                    url: '/comment/save/' + id,
-                    type: 'post',
-                    dataType: 'text',
-                    data: {
-                        comment: comment
-                    },
-                    success: function (fragment) {
-                        $('.comment-list').replaceWith(fragment);
-                    }
-                });
+                if($(".user").attr('value') === 'false') { //로그인한 경우
+                    let comment = $("#comment").val();
+                    $.ajax({
+                        url: '/comment/save/' + id,
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                            comment: comment
+                        },
+                        success: function (fragment) {
+                            $('.comment-list').replaceWith(fragment);
+                        }
+                    });
+                }else{ //로그인 하지 않은 경우
+                    location.href = "/login";
+                }
             });
-        }else{ //로그인 하지 않은 경우
-            location.href = "/login";
-        }
 
         $(document).on("click", ".comment-page", function(){
             let page = $(this).attr("value");

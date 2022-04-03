@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments.html :: head"></head>
 <body class="bg-white">
@@ -94,7 +93,7 @@
                                 <a role="button" class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
                                         style="width: 30px; height: 30px; border-radius: 70%; background-color: white"></a>
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="width: 50px">
-                                        <li><a class="dropdown-item" th:href="@{'/post-update/' + ${id}}">수정하기</a></li>
+                                        <li><a class="dropdown-item" th:href="@{'/update-post/' + ${id}}">수정하기</a></li>
                                         <li><a class="dropdown-item post-delete-btn" th:value="${id}">삭제하기</a></li>
                                     </ul>
                             </div>
@@ -142,7 +141,7 @@
                             <img th:if="${#strings.isEmpty(account?.profile?.image)}" class="post-img"
                                  src="/image/profile.png" width="35" height="35"/>
                             <img th:if="${!#strings.isEmpty(account?.profile?.image)}" th:src="${account.profile.image}" class="post-img"
-                                 width="35" height="35" alt="name" th:alt="${account.loginId}"/>
+                                 width="35" height="35" alt="name" th:alt="${account?.loginId}"/>
                         </div>
                         <div class="col-sm-9 input-group"  style="width: 760px">
                                 <input type="text" name="comment" id="comment"  class="form-control" placeholder="댓글을 입력해보세요 :)" aria-describedby="button-addon2" maxlength="20">
@@ -166,7 +165,7 @@
                                 </div>
                                 <div>
                                     <span th:text="${#temporals.format(comment.writeTime,'yyyy-MM-dd HH:mm')}" style="font-size: 11px; color: gray">댓글 작성시간</span>
-                                    <button th:if="${comment.account.loginId == account.loginId}" data-toggle="modal" data-target="#myModal"
+                                    <button th:if="${comment.account.loginId == account?.loginId}" data-toggle="modal" data-target="#myModal"
                                             th:value="${comment.id}" th:name="${comments.getNumber()}" class="btn btn-outline-light comment-delete"
                                            style="font-size: 11px; color: gray; width: 50px">삭제</button>
                                     <div th:replace="fragments.html :: modal"></div>

@@ -39,9 +39,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/","/login*","/sign-up","/postList","/post/*","/searchTag*").permitAll()
+                .mvcMatchers("/","/login*","/sign-up","/postList*","/searchTag*").permitAll()
+                .mvcMatchers(HttpMethod.GET,"/post/**","/commentList/**","/followerList/**","/followList/**").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/profile/**").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.formLogin() //로그인 인증 기능

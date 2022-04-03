@@ -140,7 +140,7 @@ public class PostController {
         return "posts/post-list";
     }
 
-    @GetMapping("/post-update/{id}") //글 수정화면
+    @GetMapping("/update-post/{id}") //글 수정화면
     public String postUpdateView(@PathVariable Long id, @CurrentUser Account account, Model model){
 
         log.info("-----------post-update-view------------");
@@ -164,7 +164,7 @@ public class PostController {
         return "posts/post-update";
     }
 
-    @PostMapping("/post-update/{id}") // 글 수정
+    @PostMapping("/update-post/{id}") // 글 수정
     public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm,
                              @RequestParam String tags, @RequestParam String delete_image,
                              Errors errors, Model model, RedirectAttributes redirectAttributes) throws IOException, JSONException {
@@ -188,7 +188,7 @@ public class PostController {
         return "redirect:/post/{id}";
     }
 
-    @PostMapping("/post/delete/{id}") //글 삭제
+    @PostMapping("/delete-post/{id}") //글 삭제
     public String postDelete(@PathVariable Long id){
         log.info("=====postDelete=====");
         postService.deletePost(id); //게시글 삭제
