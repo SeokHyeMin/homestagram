@@ -22,6 +22,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -68,13 +69,16 @@ public class AccountController {
     }
 
     @PostMapping("/delete-account")
-    public void deleteAccount(@CurrentUser Account account, @RequestParam String profileOwnerLoginId){
+    public String deleteAccount(@CurrentUser Account account, @RequestParam String profileOwnerLoginId, HttpSession session){
 
         if(profileOwnerLoginId.equals(account.getLoginId())){
             accountService.deleteAccount(account.getId());
+            session.invalidate();
         }else{
             throw new IllegalArgumentException("계정을 삭제할 권한이 없습니다.");
         }
+
+        return "redirect:/";
     }
 
     @Transactional(readOnly = true)
