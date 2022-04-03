@@ -111,6 +111,7 @@
                        </div>
                    </div>
                </div>
+                   <div hidden id="post-cur-number" th:value="${postTagList.getNumber()}"></div>
                </div>
            </div>
            <nav th:fragment="postList-pagination" aria-label="Page navigation example" th:if="${postTagList.getTotalPages() > 0}">

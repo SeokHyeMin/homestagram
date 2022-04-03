@@ -133,10 +133,11 @@ public class PostController {
         model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
         model.addAttribute("account", account);
 
-        if(pageSelect.equals("true")){
+        if(pageSelect.equals("true")){ //유저가 정렬 박스를 눌렀다면 postList-div만 바뀌게
             return "posts/post-list :: #postList-div";
         }
 
+        //정렬박스를 누른게 아닌 처음 커뮤니티 들어왔을 경우, page를 새로 나타내준다.
         return "posts/post-list";
     }
 

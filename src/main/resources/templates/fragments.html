@@ -617,6 +617,7 @@
 
         $("#selectBox-orderBy").change( function(){
             let pageSelect = "true";
+            let page = $("#post-cur-number").attr("value");
             //최신순 눌렀을 때
             if($(this).val() ===  "writeTime"){
                 $.ajax({
@@ -624,7 +625,8 @@
                     type : 'get',
                     data : {
                         orderBy : "writeTime",
-                        pageSelect : pageSelect
+                        pageSelect : pageSelect,
+                        page : page
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","writeTime");
@@ -640,7 +642,8 @@
                     type : 'get',
                     data : {
                         orderBy : "likes",
-                        pageSelect : pageSelect
+                        pageSelect : pageSelect,
+                        page : page
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","likes");
@@ -876,13 +879,15 @@
     <script type="application/javascript" th:inline="javascript">
         $("#selectBox-orderBy").change( function(){
             let tagTitle = $("#tagTitle").attr("value");
+            let page = $("#post-cur-number").attr("value");
             if($(this).val() ===  "writeTime"){
                 $.ajax({
                     url : '/searchTag/orderBy',
                     type : 'get',
                     data : {
                         orderBy : "writeTime",
-                        tagTitle : tagTitle
+                        tagTitle : tagTitle,
+                        page : page
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","writeTime");
@@ -895,7 +900,8 @@
                     type : 'get',
                     data : {
                         orderBy : "likes",
-                        tagTitle : tagTitle
+                        tagTitle : tagTitle,
+                        page : page
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","likes");
