@@ -69,15 +69,6 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(account);
     }
 
-    public void login(Account account) {
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserAccount(account),
-                account.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(token);
-    }
-
     @Override
     public void updateProfile(Account account, ProfileForm profileForm) {
 
@@ -103,14 +94,16 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+    @Override
     public Account getAccount(String loginId) {return accountRepository.findByLoginId(loginId);}
 
+    @Override
     public Page<Account> getAccountList(int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
         return accountRepository.findAll(pageRequest);
     }
 
-
+    @Override
     public void updateAccountRole(Long id, String roleName) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("일치하는 계정이 없습니다."));
         Role role = roleRepository.findByRoleName(roleName);

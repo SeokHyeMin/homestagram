@@ -57,10 +57,9 @@ public class AccountController {
             return "account/sign-up";
         }
 
-        Account account = accountService.createAccount(signUpForm);
-        accountService.login(account);
+        accountService.createAccount(signUpForm);
 
-        return "redirect:/";
+        return "/login";
     }
 
     @PostMapping("/login")

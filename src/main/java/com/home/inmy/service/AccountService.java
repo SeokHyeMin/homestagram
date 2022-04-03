@@ -5,6 +5,7 @@ import com.home.inmy.dto.AccountDto;
 import com.home.inmy.form.AccountForm;
 import com.home.inmy.form.ProfileForm;
 import com.home.inmy.form.SignUpForm;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -21,4 +22,9 @@ public interface AccountService{
 
     void deleteAccount(Long idx);
 
+    Account getAccount(String loginId);
+
+    Page<Account> getAccountList(int page);
+
+    void updateAccountRole(Long id, String roleName);
 }
