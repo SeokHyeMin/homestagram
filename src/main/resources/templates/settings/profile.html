@@ -21,7 +21,7 @@
                         <h4 class="ml-5">프로필 수정</h4><br>
                         <label for="bio">한 줄 소개</label>
                         <input id="bio" type="text" th:value="${account.profile?.bio}" th:field="*{bio}" class="form-control"
-                                placeholder="한 줄 소개를 입력하세요." aria-describedby="bioHelp" required maxlength="35">
+                                placeholder="한 줄 소개를 입력하세요." aria-describedby="bioHelp" required maxlength="18">
                         <small id="bioHelp" class="form-text text-muted">
                             35자 이내로 입력하세요.
                         </small>

@@ -35,14 +35,16 @@ public class AdminController {
         model.addAttribute("accountList",accountList);
         model.addAttribute("account",account);
 
-        if(pageSelect.equals("true")){
+        if(pageSelect.equals("true")){ //페이지를 눌렀다면 table만 바뀌도로
             return "management/account :: #account-table";
         }
+
+        //페이지를 누른게 아닌 처음 admin페이지 들어왔다면 페이지 자체를 바꿔줌.
         return "management/account";
 
     }
 
-    @PostMapping("/management/account/delete")
+    @PostMapping("/admin/account/delete")
     public String managementAccountDelete(Model model, @CurrentUser Account account, @RequestParam Long accountId,
                                           @RequestParam(required = false, defaultValue = "0", value = "page")int page){
 
@@ -61,7 +63,7 @@ public class AdminController {
 
     }
 
-    @PostMapping("/management/account/role")
+    @PostMapping("/admin/account/role")
     public String accountRoleUpdate(Model model, @CurrentUser Account account, @RequestParam Long accountId,
                                           @RequestParam String roleName,
                                           @RequestParam(required = false, defaultValue = "0", value = "page")int page){

@@ -770,13 +770,14 @@
     </script>
 </div>
 
-<div th:fragment="management-account">
+<div th:fragment="admin-account">
     <script type="application/javascript" th:inline="javascript">
         $(document).on("click", ".management-page", function(){
+            console.log("클릭");
             let page = $(this).attr("value");
             let pageSelect = "true";
             $.ajax({
-                url : '/management/account',
+                url : '/admin',
                 type : 'get',
                 data : {
                     page : page,
@@ -793,32 +794,22 @@
             let accountId = $(this).attr("value");
             let page = $(this).attr("name");
 
-            $(".modal-text").text("회원을 탈퇴시키겠습니까?");
-            $('#myModal').fadeIn();
-
-            $(".delete-ok").on("click", function () {
-
-                let header = [[${_csrf.headerName}]];
-                let token = [[${_csrf.token}]];
-                $.ajax({
-                    url : '/management/account/delete',
-                    type : 'post',
-                    data : {
-                        page : page,
-                        accountId : accountId
-                    },
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    success : function(fragment) {
-                        $('#myModal').hide();
-                        $('#account-table').replaceWith(fragment);
-                    }
-                });
-            });
-
-            $(".close").on("click", function () {
-                $('#myModal').fadeOut();
+            let header = [[${_csrf.headerName}]];
+            let token = [[${_csrf.token}]];
+            $.ajax({
+                url : '/admin/account/delete',
+                type : 'post',
+                data : {
+                    page : page,
+                    accountId : accountId
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success : function(fragment) {
+                    $('#myModal').hide();
+                    $('#account-table').replaceWith(fragment);
+                }
             });
         });
 
@@ -830,7 +821,7 @@
             let header = [[${_csrf.headerName}]];
             let token = [[${_csrf.token}]];
             $.ajax({
-                url : '/management/account/role',
+                url : '/admin/account/role',
                 type : 'post',
                 data : {
                     page : page,
@@ -855,7 +846,7 @@
             let header = [[${_csrf.headerName}]];
             let token = [[${_csrf.token}]];
             $.ajax({
-                url : '/management/account/role',
+                url : '/admin/account/role',
                 type : 'post',
                 data : {
                     page : page,
