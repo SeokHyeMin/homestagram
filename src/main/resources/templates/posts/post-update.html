@@ -11,7 +11,7 @@
             <h2>글 작성</h2>
         </div>
         <div class="row justify-content-center">
-            <form class="needs-validation col-sm-10" th:action="@{'/post-update/' + ${id}}" th:object="${postForm}"
+            <form class="needs-validation col-sm-10" th:action="@{'/update-post/' + ${id}}" th:object="${postForm}"
                   method="post" enctype="multipart/form-data" novalidate>
                 <div class="row justify-content-center mx-auto col-9">
                     <div class="col">
@@ -61,20 +61,27 @@
                     <small class="form-text text-muted">6자 이내로 키워드를 입력해보세요 :)</small>
                 </div>
             </div>
-                <input hidden id="delete_image_id" name="delete_image"/>
-                <div class="form-group">
-                    <button class="btn home white-font" type="submit" aria-describedby="submitHelp">수정</button>
+                <div class="form-group row" style="text-align: right">
+                    <div class="col-9"></div>
+                    <div class="col">
+                        <button class="btn home white-font post-update-cancle" type="button" aria-describedby="submitHelp">취소</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn home white-font" type="submit" aria-describedby="submitHelp">수정</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <button class="btn home white-font" type="button">취소</button>
-                </div>
-                <div class="form-group">
-                    <input id="postImage" type="hidden" th:field="*{imageFiles}" class="form-control" />
-                </div>
+            <input id="postImage" type="hidden" th:field="*{imageFiles}" class="form-control" />
+            <input hidden id="delete_image_id" name="delete_image"/>
             </form>
+            <div hidden th:value="${id}" id="post_id"></div>
         </div>
         <div class="fragments.html :: footer"></div>
     </div>
+    <script type="application/javascript" th:inline="javascript">
+        $(".post-update-cancle").click(function (){
+            location.href = "/post/" + $("#post_id").attr("value");
+        });
+    </script>
     <script th:replace="fragments.html :: form-validation"></script>
     <script th:replace="fragments.html :: ajax-csrf-header"></script>
     <script th:replace="fragments.html :: tags"></script>
