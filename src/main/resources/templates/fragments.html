@@ -875,7 +875,7 @@
 
             if($(this).val() ===  "writeTime"){
                 $.ajax({
-                    url : '/searchTag/orderBy',
+                    url : '/searchTag',
                     type : 'get',
                     data : {
                         orderBy : "writeTime",
@@ -890,7 +890,7 @@
                 });
             }else if($(this).val() === "likes"){
                 $.ajax({
-                    url : '/searchTag/orderBy',
+                    url : '/searchTag',
                     type : 'get',
                     data : {
                         orderBy : "likes",
@@ -912,7 +912,7 @@
             let orderBy = $(".select-box").val();
             let tagTitle = $("#tagTitle").attr("value");
             $.ajax({
-                url : '/searchTag/orderBy',
+                url : '/searchTag',
                 type : 'get',
                 data : {
                     page : page,
