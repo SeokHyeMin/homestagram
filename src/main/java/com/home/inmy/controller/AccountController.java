@@ -55,12 +55,7 @@ public class AccountController {
 
         accountService.createAccount(signUpForm);
 
-        return "/login";
-    }
-
-    @PostMapping("/login")
-    public String login() {
-        return "login";
+        return "redirect:/login";
     }
 
     @PostMapping("/delete-account")
@@ -177,7 +172,7 @@ public class AccountController {
 
         accountService.findPassword(findAccount); //임시비밀번호 발급후 메일 보내주기.
 
-        return "/login";
+        return "redirect:/login";
     }
 
 }
