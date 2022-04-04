@@ -23,17 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
-    private final ImageFileRepository imageFileRepository;
     private final PostRepository postRepository;
 
     private final PostTagServiceImpl postTagService;
     private final ImageFileServiceImpl imageFileService;
-    private final LikeServiceImpl likeService;
-    private final BookmarkServiceImpl bookmarkService;
-    private final CommentServiceImpl commentService;
 
     private final ModelMapper modelMapper;
 
+    @Override
     public Post newPostSave(PostDto postDto) throws IOException {
 
         Post newPost = postDto.createPost();
@@ -42,6 +39,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(newPost);
     }
 
+    @Override
     public Post updatePost(PostDto postDto, Long id) throws IOException {
 
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
@@ -71,34 +69,31 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 글이 없습니다."));
     }
 
+    @Override
     public List<Post> top4PostOrderByViews(){
         return postRepository.findTop4ByOrderByViewsDesc();
     }
 
-    public Page<Post> profilePageList(Account account, int page){
-
-        PageRequest pageRequest = PageRequest.of(page, 6, Sort.by(Sort.Direction.DESC, "writeTime"));
-        return postRepository.findByAccount(account, pageRequest);
-    }
-
-    public Page<Post> pageList(int page){
-
-        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "writeTime"));
-        return postRepository.findAll(pageRequest);
-    }
-
+    @Override
     public Page<Post> pageList(int page, String orderBy){
 
         PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, orderBy));
         return postRepository.findAll(pageRequest);
     }
 
-
+    @Override
     public void deleteImage(Post post, String delete_image) {
 
         String[] split = delete_image.split(",");
         for (String s : split) {
             imageFileService.deleteImageFile(post, Long.valueOf(s));
         }
+    }
+
+    @Override
+    public Page<Post> profilePageList(Account account, int page){
+
+        PageRequest pageRequest = PageRequest.of(page, 6, Sort.by(Sort.Direction.DESC, "writeTime"));
+        return postRepository.findByAccount(account, pageRequest);
     }
 }

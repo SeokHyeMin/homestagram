@@ -19,15 +19,11 @@ public class ImageFileServiceImpl implements ImageFileService {
     private final FileStore fileStore;
     private final ImageFileRepository imageFileRepository;
 
+    @Override
     public void saveImageFile(Post newPost, List<MultipartFile> multipartFiles) throws IOException {
 
         List<ImageFile> result = fileStore.storeFiles(multipartFiles, newPost);
         newPost.setImageFiles(result);
-    }
-
-    @Override
-    public void deleteImageFile(Post post) {
-        imageFileRepository.deleteInBatch(post.getImageFiles());
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.home.inmy.service;
 
+import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Post;
 import com.home.inmy.dto.PostDto;
+import org.springframework.data.domain.Page;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface PostService {
 
@@ -13,4 +16,11 @@ public interface PostService {
     void deletePost(Long id);
     Post getPost(Long id);
 
+    List<Post> top4PostOrderByViews();
+
+    Page<Post> pageList(int page, String orderBy);
+
+    void deleteImage(Post post, String delete_image);
+
+    Page<Post> profilePageList(Account accountByLoginId, int page);
 }

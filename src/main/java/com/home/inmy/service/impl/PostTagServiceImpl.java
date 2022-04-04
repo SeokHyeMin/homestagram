@@ -22,7 +22,7 @@ public class PostTagServiceImpl implements PostTagService {
 
     private final PostTagRepository postTagRepository;
 
-    private final TagService tagService;
+    private final TagServiceImpl tagService;
 
     @Override
     public void tagSave(Post post, String tags) throws JSONException {
@@ -47,11 +47,6 @@ public class PostTagServiceImpl implements PostTagService {
     }
 
     @Override
-    public void deleteTag(PostTag postTag) {
-        postTagRepository.delete(postTag);
-    }
-
-    @Override
     public void deletePost(Post post) {
         postTagRepository.deleteInBatch(post.getPostTags());
     }
@@ -62,13 +57,7 @@ public class PostTagServiceImpl implements PostTagService {
         return  postTagRepository.findByPost(post);
     }
 
-    public Page<PostTag> searchPostByTag(Tag tag, int page){
-
-        PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "id"));
-
-        return postTagRepository.findByTag(tag,pageRequest);
-    }
-
+    @Override
     public Page<PostTag> searchPostByTag(Tag tag, int page, String orderBy) {
 
         PageRequest pageRequest = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "post."+orderBy));

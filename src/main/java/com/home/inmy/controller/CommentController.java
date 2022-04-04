@@ -1,11 +1,11 @@
 package com.home.inmy.controller;
 
 import com.home.inmy.domain.CurrentUser;
-import com.home.inmy.service.impl.CommentServiceImpl;
+import com.home.inmy.service.CommentService;
+import com.home.inmy.service.PostService;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Comments;
 import com.home.inmy.domain.entity.Post;
-import com.home.inmy.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,8 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor @Slf4j
 public class CommentController {
 
-    private final CommentServiceImpl commentService;
-    private final PostServiceImpl postService;
+    private final CommentService commentService;
+    private final PostService postService;
 
     private static final String COMMENT_PATH = "posts/post-detail :: #comment-list";
 

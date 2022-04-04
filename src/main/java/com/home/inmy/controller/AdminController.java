@@ -1,5 +1,6 @@
 package com.home.inmy.controller;
 
+import com.home.inmy.service.AccountService;
 import com.home.inmy.service.impl.AccountServiceImpl;
 import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.domain.entity.Account;
@@ -19,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
 
     @GetMapping("/admin")
     public String managementAccountView(Model model, @CurrentUser Account account,

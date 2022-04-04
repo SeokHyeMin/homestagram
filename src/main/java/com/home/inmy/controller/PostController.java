@@ -10,7 +10,7 @@ import com.home.inmy.service.impl.FollowServiceImpl;
 import com.home.inmy.service.impl.LikeServiceImpl;
 import com.home.inmy.service.impl.PostTagServiceImpl;
 import com.home.inmy.form.PostForm;
-import com.home.inmy.service.impl.TagService;
+import com.home.inmy.service.impl.TagServiceImpl;
 import com.home.inmy.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,11 +36,10 @@ public class PostController {
     private final PostServiceImpl postService;
     private final PostTagServiceImpl postTagService;
     private final LikeServiceImpl likeService;
-    private final TagService tagService;
+    private final TagServiceImpl tagService;
     private final BookmarkServiceImpl bookmarkService;
     private final FollowServiceImpl followService;
     private final CommentServiceImpl commentService;
-    private final ImageFileService imageFileService;
 
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
@@ -118,8 +118,15 @@ public class PostController {
 
         Page<Post> postList = postService.pageList(page, orderBy);
 
-        List<Long> likePostNumList = likeService.getLikePostNum(likeService.getLikeList(account)); //좋아요한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
-        List<Long> bookmarkPostNumList = bookmarkService.getLikePostNum(bookmarkService.getBookmarkList(account)); //북마크한 리스트를 찾아 해당 글 번호를 리스트에 담아 반환
+        List<Long> likeList = new ArrayList<>();
+        List<Long> bookmarkList = new ArrayList<>();
+
+        if(account != null){
+            likeList = likeService.getLikeList(account) //좋아요한 리스트를 찾아
+                    .stream().map(like -> like.getPost().getId()).collect(Collectors.toList()); //해당 글 번호를 리스트에 담아 반환
+            bookmarkList = bookmarkService.getBookmarkList(account) //북마크한 리스트를 찾아
+                    .stream().map(bookmark -> bookmark.getPost().getId()).collect(Collectors.toList()); // 해당 글 번호를 리스트에 담아 반환
+        }
 
         Map<String, Integer> map = getPage(postList); //페이지 계산
 
@@ -127,8 +134,8 @@ public class PostController {
         model.addAttribute("endBlockPage", map.get("endBlockPage"));
 
         model.addAttribute("postList", postList);
-        model.addAttribute("postNumList", likePostNumList);
-        model.addAttribute("bookmarkPostNum", bookmarkPostNumList);
+        model.addAttribute("likeList", likeList);
+        model.addAttribute("bookmarkList", bookmarkList);
         model.addAttribute("account", account);
 
         if(pageSelect.equals("true")){ //유저가 정렬 박스를 눌렀다면 postList-div만 바뀌게
@@ -158,7 +165,7 @@ public class PostController {
         model.addAttribute("id",id);
         model.addAttribute(postForm);
         model.addAttribute("imageFiles",imageFiles);
-        model.addAttribute("tagStr", String.join("," ,tags));
+        model.addAttribute("tagStr", String.join("," ,tags)); //태그목록을 ,으로 연결하여 한 문장으로 전달 (뷰 나타내기 위해)
 
         return "posts/post-update";
     }
@@ -174,22 +181,24 @@ public class PostController {
         }
 
         log.info("--------post-update----------");
+
         PostDto postDto = postForm.createBoardPostDto(account);
         Post post = postService.updatePost(postDto, id);
         postTagService.tagSave(post, tags); //변경된 태그를 다시 추가해줌.
+
         if(!delete_image.equals("")){ //삭제한 이미지 있는 경우, 해당 이미지 삭제
             postService.deleteImage(post, delete_image);
         }
 
         model.addAttribute(account);
-       redirectAttributes.addAttribute("id", post.getId());
+        redirectAttributes.addAttribute("id", post.getId());
 
         return "redirect:/post/{id}";
     }
 
     @PostMapping("/delete-post/{id}") //글 삭제
     public String postDelete(@PathVariable Long id){
-        log.info("=====postDelete=====");
+        log.info("------postDelete-------");
         postService.deletePost(id); //게시글 삭제
 
         return "redirect:/postList";

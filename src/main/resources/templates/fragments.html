@@ -869,8 +869,10 @@
 <div th:fragment="search-post-list">
     <script type="application/javascript" th:inline="javascript">
         $("#selectBox-orderBy").change( function(){
+            let pageSelect = "true";
             let tagTitle = $("#tagTitle").attr("value");
             let page = $("#post-cur-number").attr("value");
+
             if($(this).val() ===  "writeTime"){
                 $.ajax({
                     url : '/searchTag/orderBy',
@@ -878,7 +880,8 @@
                     data : {
                         orderBy : "writeTime",
                         tagTitle : tagTitle,
-                        page : page
+                        page : page,
+                        pageSelect : pageSelect
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","writeTime");
@@ -892,7 +895,8 @@
                     data : {
                         orderBy : "likes",
                         tagTitle : tagTitle,
-                        page : page
+                        page : page,
+                        pageSelect : pageSelect
                     },
                     success : function(fragment) {
                         $(".select-box").attr("value","likes");
@@ -901,7 +905,9 @@
                 });
             }
         });
+
         $(document).on("click", ".post-page", function(){
+            let pageSelect = "true";
             let page = $(this).attr("value");
             let orderBy = $(".select-box").val();
             let tagTitle = $("#tagTitle").attr("value");
@@ -911,7 +917,8 @@
                 data : {
                     page : page,
                     orderBy : orderBy,
-                    tagTitle : tagTitle
+                    tagTitle : tagTitle,
+                    pageSelect : pageSelect
                 },
                 success : function(fragment) {
                     $('#postList-div').replaceWith(fragment);

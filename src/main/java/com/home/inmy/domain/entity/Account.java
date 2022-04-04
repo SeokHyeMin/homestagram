@@ -1,6 +1,7 @@
 package com.home.inmy.domain.entity;
 
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -68,4 +69,5 @@ public class Account {
     public Profile getProfile(){
         return this.profile == null ? new Profile() : this.profile;
     }
+
 }

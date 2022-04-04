@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,36 +38,19 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public void deletePostLike(Post post) {
-        likeRepository.deleteAll(post.getLikesList());
-    }
-
-    @Override
     public boolean accountPostLike(Post post , Account account){
         Likes likes = likeRepository.findByPostAndAccount(post, account);
-
+        //현재 게시물을 좋아요 눌렀는지 아닌지 여부 판단 후 눌렀다면 true, 누르지 않았다면 false 반환
         return likes != null;
     }
 
     @Override
-    public List<Long> getLikePostNum(List<Likes> likes) {
-
-        List<Long> postNumList = new ArrayList<>();
-
-        for (Likes like : likes) {
-            postNumList.add(like.getPost().getId());
-        }
-        return postNumList;
-    }
-
-    @Override
     public List<Likes> getLikeList(Account account) {
-
         return likeRepository.findByAccount(account);
     }
 
+    @Override
     public Page<Likes> getProfileLikeList(Account account, int page) {
-
         PageRequest pageRequest = PageRequest.of(page, 8);
         return likeRepository.findByAccount(account, pageRequest);
     }

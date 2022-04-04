@@ -61,16 +61,12 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public List<Follow> getFollowList(Account account) { //팔로잉 리스트
-        return followRepository.findAllByFromAccount(account);
-    }
-
     public Page<Follow> getFollowerList(Account account, int page) { //팔로워 리스트
         PageRequest pageRequest = PageRequest.of(page, 4);
         return followRepository.findAllByToAccount(account,pageRequest);
     }
 
-
+    @Override
     public Page<Follow> getFollowList(Account account, int page) { //팔로잉 리스트
         PageRequest pageRequest = PageRequest.of(page, 6);
         return followRepository.findAllByFromAccount(account, pageRequest);

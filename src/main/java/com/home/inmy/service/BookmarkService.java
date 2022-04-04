@@ -15,8 +15,6 @@ public interface BookmarkService {
 
     boolean accountPostBookmark(Post post, Account account);
 
-    List<Long> getLikePostNum(List<Bookmark> account);
-
     List<Bookmark> getBookmarkList(Account account);
 
     Page<Bookmark> getProfileBookmarkList(Account account, int page);

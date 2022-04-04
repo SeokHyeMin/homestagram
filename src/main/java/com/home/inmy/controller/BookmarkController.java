@@ -1,7 +1,7 @@
 package com.home.inmy.controller;
 
 import com.home.inmy.domain.CurrentUser;
-import com.home.inmy.service.impl.BookmarkServiceImpl;
+import com.home.inmy.service.BookmarkService;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Post;
 import com.home.inmy.service.PostService;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class BookmarkController {
 
     private final PostService postService;
-    private final BookmarkServiceImpl bookmarkService;
+    private final BookmarkService bookmarkService;
 
     @GetMapping("/bookmark/add")
     @ResponseBody

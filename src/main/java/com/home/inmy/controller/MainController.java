@@ -3,7 +3,7 @@ package com.home.inmy.controller;
 import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Post;
-import com.home.inmy.service.impl.PostServiceImpl;
+import com.home.inmy.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 public class MainController {
 
-    private final PostServiceImpl postService;
+    private final PostService postService;
 
     @GetMapping("/")
     public String home(@CurrentUser Account account, Model model){

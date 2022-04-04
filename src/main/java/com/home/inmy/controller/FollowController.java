@@ -1,10 +1,10 @@
 package com.home.inmy.controller;
 
-import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.service.AccountService;
+import com.home.inmy.service.FollowService;
 import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Follow;
-import com.home.inmy.service.impl.FollowServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor @Slf4j
 public class FollowController {
 
-    private final FollowServiceImpl followService;
-    private final AccountServiceImpl accountService;
+    private final FollowService followService;
+    private final AccountService accountService;
 
     @GetMapping("/profile/follow/{ownerLoginId}")
     @ResponseBody

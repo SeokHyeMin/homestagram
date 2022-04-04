@@ -1,17 +1,13 @@
 package com.home.inmy.controller;
 
-import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.service.*;
 import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.form.SignUpForm;
 import com.home.inmy.validator.SignUpFormValidator;
-import com.home.inmy.service.impl.BookmarkServiceImpl;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Bookmark;
 import com.home.inmy.domain.entity.Likes;
 import com.home.inmy.domain.entity.Post;
-import com.home.inmy.service.impl.FollowServiceImpl;
-import com.home.inmy.service.impl.LikeServiceImpl;
-import com.home.inmy.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,13 +26,13 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
     private final SignUpFormValidator signUpFormValidator;
 
-    private final LikeServiceImpl likeService;
-    private final FollowServiceImpl followService;
-    private final PostServiceImpl postService;
-    private final BookmarkServiceImpl bookmarkService;
+    private final LikeService likeService;
+    private final FollowService followService;
+    private final PostService postService;
+    private final BookmarkService bookmarkService;
 
 
     @InitBinder("signUpForm") //

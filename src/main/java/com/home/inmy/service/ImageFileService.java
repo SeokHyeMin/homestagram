@@ -10,7 +10,5 @@ public interface ImageFileService {
 
     void saveImageFile(Post post, List<MultipartFile> multipartFiles) throws IOException;
 
-    void deleteImageFile(Post post);
-
     void deleteImageFile(Post post, Long id);
 }

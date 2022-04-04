@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,18 +42,8 @@ public class BookmarkServiceImpl implements BookmarkService {
     public boolean accountPostBookmark(Post post, Account account) {
 
         Bookmark bookmark = bookmarkRepository.findByPostAndAccount(post, account);
-
+        //현재 게시글을 북마크에 추가하였다면 true, 아니면 false 반환.
         return bookmark != null;
-    }
-
-    @Override
-    public List<Long> getLikePostNum(List<Bookmark> bookmarks) {
-        List<Long> postNumList = new ArrayList<>();
-
-        for (Bookmark bookmark : bookmarks) {
-            postNumList.add(bookmark.getPost().getId());
-        }
-        return postNumList;
     }
 
     @Override

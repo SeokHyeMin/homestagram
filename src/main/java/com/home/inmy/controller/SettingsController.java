@@ -3,7 +3,7 @@ package com.home.inmy.controller;
 import com.home.inmy.form.AccountForm;
 import com.home.inmy.form.PasswordForm;
 import com.home.inmy.form.ProfileForm;
-import com.home.inmy.service.impl.AccountServiceImpl;
+import com.home.inmy.service.AccountService;
 import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.validator.*;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SettingsController {
 
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
     private final AccountFormValidator accountFormValidator;
     private final ModelMapper modelMapper;
 
