@@ -1,9 +1,10 @@
 package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.UserAccount;
 import com.home.inmy.domain.entity.Profile;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Role;
+import com.home.inmy.mail.EmailMessage;
+import com.home.inmy.mail.EmailService;
 import com.home.inmy.repository.AccountRepository;
 import com.home.inmy.form.AccountForm;
 import com.home.inmy.form.ProfileForm;
@@ -17,15 +18,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -38,23 +37,15 @@ public class AccountServiceImpl implements AccountService {
 
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final TemplateEngine templateEngine;
 
     private final RoleService roleService;
+    private final EmailService emailService;
 
 
-    @Override
-    public Account createAccount(SignUpForm signUpForm) {
-        return saveNewAccount(signUpForm);
-    }
 
     @Override
-    public void deleteAccount(Long account_id) {
-        accountRepository.deleteById(account_id);
-    }
-
-
-    private Account saveNewAccount(SignUpForm signUpForm) {
-
+    public void createAccount(SignUpForm signUpForm) {
         //비밀번호 암호화하여 저장.
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
         Account account = modelMapper.map(signUpForm, Account.class);
@@ -66,7 +57,13 @@ public class AccountServiceImpl implements AccountService {
         //현재 시간으로 가입일 지정
         account.setJoinedAt(LocalDateTime.now());
 
-        return accountRepository.save(account);
+        //회원 저장.
+        accountRepository.save(account);
+    }
+
+    @Override
+    public void deleteAccount(Long account_id) {
+        accountRepository.deleteById(account_id);
     }
 
     @Override
@@ -108,5 +105,33 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("일치하는 계정이 없습니다."));
         Role role = roleRepository.findByRoleName(roleName);
         account.setAccountRole(role); //변경감지
+    }
+
+    @Override
+    public void findPassword(Account account) {
+
+        //임시 비밀번호 생성.
+        StringBuilder pw = new StringBuilder();
+        for (int i = 0; i < 12; i++) {
+            pw.append((char) ((Math.random() * 26) + 97));
+        }
+
+        Context context = new Context(); //model과 비슷한 기능, 사용할 값을 넣어주도록 하자.
+        context.setVariable("loginId", account.getLoginId());
+        context.setVariable("message", "임시비밀번호가 발급되었습니다. 임시비밀번호로 로그인 해주세요.");
+        context.setVariable("password", pw.toString());
+
+        String message = templateEngine.process("mail/mailSend", context);
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(account.getEmail())
+                .subject("Homestagram 임시비밀번호입니다.") //메일 제목
+                .message(message)
+                .build();
+
+        emailService.sendEmail(emailMessage); //이메일 보내기
+
+        //이메일 보낸 후에 임시비밀번호를 해당 계정의 비밀번호로 변경해주기.
+        updatePassword(account, pw.toString());
     }
 }

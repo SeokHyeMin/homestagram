@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Homestagram</title>
+</head>
+<body>
+<div>
+    <p>안녕하세요. <span th:text="${loginId}"></span>님</p>
+
+    <h5 th:text="${message}"></h5>
+    <div>
+        <p>임시 비밀번호 : <span th:text="${password}"></span></p>
+        <span>로그인 하신 뒤 새 비밀번호로 변경하는 것을 권장합니다.</span>
+    </div>
+    <footer>
+        <small>Homestagram</small>
+    </footer>
+</div>
+
+</body>
+</html>

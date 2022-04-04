@@ -160,4 +160,28 @@ public class AccountController {
         return returnPage;
     }
 
+    @GetMapping("/find-password")
+    public String findPasswordView(Model model, @CurrentUser Account account){
+
+        log.info("--------find-password-------");
+        model.addAttribute("account",account);
+
+        return "account/findPw";
+    }
+
+    @PostMapping("/find-password")
+    public String findPassword(@CurrentUser Account account, Model model, @RequestParam String loginId){
+
+        Account findAccount = accountService.getAccount(loginId);
+
+        if(findAccount == null){
+            model.addAttribute("message","해당 아이디는 존재하지 않는 아이디입니다.");
+            return "account/findPw";
+        }
+
+        accountService.findPassword(findAccount); //임시비밀번호 발급후 메일 보내주기.
+
+        return "/login";
+    }
+
 }
