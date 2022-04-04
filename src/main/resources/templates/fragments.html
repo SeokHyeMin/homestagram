@@ -533,39 +533,31 @@
 
 <div th:fragment="followBtn">
     <script type="application/javascript" th:inline="javascript">
-
+        let ownerId = $("#ownerId").attr("value");
         //팔로우 버튼 눌렀을 때
         $(document).on("click", ".followBtn", function(){
             if($(".user").attr('value') === 'false'){
-                let ownerId = $("#ownerId").attr("value");
-
                 //팔로잉 처리
                 $.ajax({
                     url: '/follow/' + ownerId,
                     type: 'get',
                 });
-
-                $(this).html('팔로잉');
-                $(this).removeClass("home white-font followBtn");
-                $(this).addClass("btn-outline-secondary unfollowBtn");
+                    $(this).html('팔로잉');
+                    $(this).removeClass("home white-font followBtn");
+                    $(this).addClass("btn-outline-secondary unfollowBtn");
             }else {
                 location.href = "/login";
             }
         });
-
         //언팔로우 처리를 위한 로직
         $(document).on("click", ".unfollowBtn", function(){
-                console.log("언팔")
-                let ownerId = $("#ownerId").attr("value");
-
-                $.ajax({
-                    url: '/unfollow/' + ownerId,
-                    type: 'get',
-                });
-
-                $(this).html('팔로우');
-                $(this).removeClass("btn-outline-secondary unfollowBtn");
-                $(this).addClass("home white-font followBtn");
+            $.ajax({
+                url: '/unfollow/' + ownerId,
+                type: 'get',
+            });
+            $(this).html('팔로우');
+            $(this).removeClass("btn-outline-secondary unfollowBtn");
+            $(this).addClass("home white-font followBtn");
         });
     </script>
 </div>

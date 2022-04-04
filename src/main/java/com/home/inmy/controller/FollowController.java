@@ -44,23 +44,18 @@ public class FollowController {
     }
 
     @GetMapping("/follow/{ownerLoginId}")
-    @ResponseBody
-    public ResponseEntity follow(@CurrentUser Account account, @PathVariable String ownerLoginId){
+    public void follow(@CurrentUser Account account, @PathVariable String ownerLoginId){
 
-        if(account == null){
-            return null;
+        if(account != null){
+            followService.save(ownerLoginId, account);
         }
-        followService.save(ownerLoginId, account);
-
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/unfollow/{ownerLoginId}")
-    public String unfollow(@CurrentUser Account account, @PathVariable String ownerLoginId){
+    public void unfollow(@CurrentUser Account account, @PathVariable String ownerLoginId){
 
         followService.unfollow(ownerLoginId, account);
 
-        return "redirect:/profile/{ownerLoginId}";
     }
 
     @GetMapping("/followList/{ownerLoginId}")
