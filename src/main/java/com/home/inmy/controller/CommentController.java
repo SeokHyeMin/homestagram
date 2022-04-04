@@ -1,7 +1,7 @@
 package com.home.inmy.controller;
 
 import com.home.inmy.domain.CurrentUser;
-import com.home.inmy.service.impl.CommentService;
+import com.home.inmy.service.impl.CommentServiceImpl;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Comments;
 import com.home.inmy.domain.entity.Post;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor @Slf4j
 public class CommentController {
 
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
     private final PostServiceImpl postService;
 
     private static final String COMMENT_PATH = "posts/post-detail :: #comment-list";

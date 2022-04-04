@@ -1,6 +1,5 @@
 package com.home.inmy.service.impl;
 
-import com.home.inmy.domain.entity.Tag;
 import com.home.inmy.repository.PostRepository;
 import com.home.inmy.service.PostService;
 import com.home.inmy.domain.entity.Account;
@@ -10,8 +9,6 @@ import com.home.inmy.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -33,7 +30,7 @@ public class PostServiceImpl implements PostService {
     private final ImageFileServiceImpl imageFileService;
     private final LikeServiceImpl likeService;
     private final BookmarkServiceImpl bookmarkService;
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
 
     private final ModelMapper modelMapper;
 

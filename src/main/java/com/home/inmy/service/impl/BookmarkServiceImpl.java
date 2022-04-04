@@ -40,11 +40,6 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public void deletePostBookmark(Post post) { //글 삭제 시에 북마크도 삭제할 메서드
-        bookmarkRepository.deleteAll(post.getBookmarkList());
-    }
-
-    @Override
     public boolean accountPostBookmark(Post post, Account account) {
 
         Bookmark bookmark = bookmarkRepository.findByPostAndAccount(post, account);
@@ -67,6 +62,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         return bookmarkRepository.findByAccount(account);
     }
 
+    @Override
     public Page<Bookmark> getProfileBookmarkList(Account account, int page) {
 
         PageRequest pageRequest = PageRequest.of(page, 8);

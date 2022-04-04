@@ -5,7 +5,7 @@ import com.home.inmy.domain.entity.*;
 import com.home.inmy.service.ImageFileService;
 import com.home.inmy.service.impl.PostServiceImpl;
 import com.home.inmy.service.impl.BookmarkServiceImpl;
-import com.home.inmy.service.impl.CommentService;
+import com.home.inmy.service.impl.CommentServiceImpl;
 import com.home.inmy.service.impl.FollowServiceImpl;
 import com.home.inmy.service.impl.LikeServiceImpl;
 import com.home.inmy.service.impl.PostTagServiceImpl;
@@ -21,13 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class PostController {
     private final TagService tagService;
     private final BookmarkServiceImpl bookmarkService;
     private final FollowServiceImpl followService;
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
     private final ImageFileService imageFileService;
 
     @GetMapping("/new-post")
