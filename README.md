@@ -15,7 +15,7 @@
 - 관리자에게 권한 부여
 
 ### ✅ 2.1 - 프로필 기능
-<img src="https://user-images.githubusercontent.com/73224388/161745220-a3c8e48b-ee7f-41e7-8025-b454c7391858.gif">
+<img src="https://user-images.githubusercontent.com/73224388/161745220-a3c8e48b-ee7f-41e7-8025-b454c7391858.gif" width="500" height="300">
 
 - 프로필에 들어가면 팔로잉, 팔로워들을 확인할 수 있습니다.
 - 자신이 작성한 게시물, 좋아요한 게시물, 북마크한 게시글을 확인할 수 있습니다. (사진누르면 해당 게시글로 이동)
@@ -23,16 +23,17 @@
 - 프로필 주인인 경우 프로필 수정(회원정보 수정)이 가능합니다.
 
 ### ✅ 2.2 - 게시물 좋아요, 북마크, 댓글 기능
-<img src="https://user-images.githubusercontent.com/73224388/161750626-5f30fcb1-dc50-47f8-b204-cefdbe648bd3.gif"> 
+<img src="https://user-images.githubusercontent.com/73224388/161750626-5f30fcb1-dc50-47f8-b204-cefdbe648bd3.gif" width="600" height="300"> <img src="https://user-images.githubusercontent.com/73224388/161751016-043433f2-ec8d-4c97-813d-53176e6b593b.gif" width="400" height="300">
 
-게시글 조회 화면에서, 해당 게시글을 좋아요, 북마크 할 수 있습니다. 누른 즉시 결과가 화면에 반영됩니다. 
-
-<img src="https://user-images.githubusercontent.com/73224388/161751016-043433f2-ec8d-4c97-813d-53176e6b593b.gif">
-
-댓글 작성도, 화면전환없이 ajax로 등록하도록 구현하였으며, 댓글 작성자만이 삭제할 수 있습니다. 댓글은 한 화면에 5개씩 나타나도록 구현하였습니다.
+- 게시글 조회 화면에서, 해당 게시글을 좋아요, 북마크 할 수 있습니다. 누른 즉시 결과가 화면에 반영됩니다. 
+- 댓글 작성도, 화면전환없이 ajax로 등록하도록 구현하였으며, 댓글 작성자만이 삭제할 수 있습니다. 댓글은 한 화면에 5개씩 나타나도록 구현하였습니다.
 
 
-### ✅ 2.3 - 태그 검색 기능
+### ✅ 2.3 - 태그 검색 기능 
+<img src="https://user-images.githubusercontent.com/73224388/161753594-357791c2-cbdb-4442-a754-10923ab660ed.gif" width="600" height="300" > <img src="https://user-images.githubusercontent.com/73224388/161754434-7348dca7-bca4-4808-9666-12c412e7b647.gif" width="400" height="300">
+
+- 게시글 작성 시에 여러 개의 태그를 등록할 수 있습니다. 
+- 검색창에서 검색 혹은, 게시글에서 태그를 클릭하여 같은 태그를 작성한 게시글들을 조회할 수 있습니다.
 
 ### ✅ 2.4 - 게시물 최신순, 좋아요 순 정렬 기능
 
