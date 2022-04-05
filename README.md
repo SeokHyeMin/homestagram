@@ -30,7 +30,7 @@
 
 
 ### ✅ 2.3 - 태그 검색 기능 
-<img src="https://user-images.githubusercontent.com/73224388/161753594-357791c2-cbdb-4442-a754-10923ab660ed.gif" width="600" height="300" > <img src="https://user-images.githubusercontent.com/73224388/161754434-7348dca7-bca4-4808-9666-12c412e7b647.gif" width="400" height="300">
+<img src="https://user-images.githubusercontent.com/73224388/161753594-357791c2-cbdb-4442-a754-10923ab660ed.gif" width="500" height="300" > <img src="https://user-images.githubusercontent.com/73224388/161754434-7348dca7-bca4-4808-9666-12c412e7b647.gif" width="300" height="300">
 
 - 게시글 작성 시에 여러 개의 태그를 등록할 수 있으며, 같은 태그를 작성한 게시글들을 조회할 수 있습니다.
 - 태그 검색 방법
