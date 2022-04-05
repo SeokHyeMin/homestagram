@@ -40,7 +40,10 @@
   
 
 ### ✅ 2.4 - 게시물 최신순, 좋아요 순 정렬 기능
+<img src="https://user-images.githubusercontent.com/73224388/161766153-34aa128d-284f-4443-b125-ffc80c04728a.gif"> 
 
+- 게시글을 8개 단위로 페이징 하였습니다.
+- 최신순, 좋아요 순 정렬할 수 있습니다. 게시물 리스트만 바뀌도록 하였습니다.
 ### ✅ 2.5 - 관리자계정(ROLE_ADMIN)에게 권한 부여
 <img src="https://user-images.githubusercontent.com/73224388/161756120-091cb1e6-af0f-4a96-98cf-1c6e3280c7eb.png"> 
 <img src="https://user-images.githubusercontent.com/73224388/161755905-f7214629-cb77-458c-a486-d1c96a64223d.png" width="700" height="300">
