@@ -34,9 +34,25 @@
 
 - 게시글 작성 시에 여러 개의 태그를 등록할 수 있습니다. 
 - 검색창에서 검색 혹은, 게시글에서 태그를 클릭하여 같은 태그를 작성한 게시글들을 조회할 수 있습니다.
+  - **ajax로 화면전환 없이 게시물이 보여지는 부분만 변하도록 하였습니다.**
 
 ### ✅ 2.4 - 게시물 최신순, 좋아요 순 정렬 기능
 
 ### ✅ 2.5 - 관리자에게 권한 부여
+<img src="https://user-images.githubusercontent.com/73224388/161756120-091cb1e6-af0f-4a96-98cf-1c6e3280c7eb.png"> 
+<img src="https://user-images.githubusercontent.com/73224388/161755905-f7214629-cb77-458c-a486-d1c96a64223d.png" width="700" height="300">
+
+- 관리자 계정으로 로그인 한 경우 main-navbar에 회원관리 항목이 추가됩니다.
+- 회원관리 페이지에서는 모든 회원들을 확인할 수 있으며, 관리자 권한을 부여할 수 있으며 회원을 강제 탈퇴시킬 수 있습니다.
+- 관리자만 접속 가능한 URI는 SecurityConfig 의 configure(HttpSecurity http) 메서드에 다음과 같이 작성하여 설정하였습니다.
+```java 
+   protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .mvcMatchers("/","/login*","/sign-up","/postList","/searchTag","/searchTag/orderBy","/find-password").permitAll()
+                .mvcMatchers(HttpMethod.GET,"/post/**","/commentList/**","/followerList/**","/followList/**").permitAll()
+                .mvcMatchers(HttpMethod.GET,"/profile/**").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN") //관리자만 접속가능한 페이지
+                .anyRequest().authenticated();
+```
 
 ## 3. 트러블 슈팅
