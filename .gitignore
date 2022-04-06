@@ -11,5 +11,6 @@ settings.gradle
 gradlew
 gradlew.bat
 
+src/main/resources/templates
 
 src/main/resources/node_modules
