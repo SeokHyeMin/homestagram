@@ -9,5 +9,5 @@ public interface CommentService {
 
     void commentSave(String comment, Post post, Account account);
     Page<Comments> getComments(Post post, int page);
-    void commentDelete(Long comment_id);
+    void commentDelete(Long commentId);
 }

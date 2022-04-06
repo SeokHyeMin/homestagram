@@ -20,7 +20,7 @@ public interface PostService {
 
     Page<Post> pageList(int page, String orderBy);
 
-    void deleteImage(Post post, String delete_image);
+    void deleteImage(Post post, String deleteImage);
 
     Page<Post> profilePageList(Account accountByLoginId, int page);
 }

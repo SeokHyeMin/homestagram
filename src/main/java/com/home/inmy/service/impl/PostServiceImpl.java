@@ -4,7 +4,6 @@ import com.home.inmy.repository.PostRepository;
 import com.home.inmy.service.PostService;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Post;
-import com.home.inmy.repository.ImageFileRepository;
 import com.home.inmy.dto.PostDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,9 +81,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deleteImage(Post post, String delete_image) {
+    public void deleteImage(Post post, String deleteImage) {
 
-        String[] split = delete_image.split(",");
+        String[] split = deleteImage.split(",");
         for (String s : split) {
             imageFileService.deleteImageFile(post, Long.valueOf(s));
         }
