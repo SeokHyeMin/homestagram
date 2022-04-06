@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>Homestagram</title>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
+    <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs5.min.css">
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf?.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf?.headerName}"/>
+    <style>
+        .container {
+            max-width: 100%;
+        }
+
+        .form-group{
+            height: 110px; width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .tagify-outside{
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+        .page-link:hover{
+            cursor: pointer;
+        }
+        #homestagram-logo {
+            height: 200px;
+            width: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+        h3{
+            text-align: center;
+        }
+        .main-page-li {
+            padding-right: 15%;
+        }
+        .main-page-div {
+            width:1150px;
+            height:380px;
+            overflow: hidden;
+        }
+        .main-page-img {
+            width:1200px;
+            height:380px;
+            overflow: hidden;
+        }
+        #profile-box{
+            border: 1px solid lightgray;
+            margin: auto 0 15px 0;
+            padding-top: 15px;
+            padding-right: 15px;
+            width: 280px;
+            height: 380px;
+            text-align: center;
+        }
+        #logo-img {
+            height: auto;
+
+            margin-left: 2%;
+            overflow: hidden;
+        }
+        #footer-logo {
+            text-align: center;
+        }
+        #nav-list{
+           margin-left: auto;
+        }
+        #postList-box{
+            padding: 7px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR","Century Gothic", "Jeju Gothic",
+            "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+        .btn.home{
+           background: #35c5f0;
+        }
+        .btn.color-light{
+            background: white;
+            color: black;
+        }
+        .follow{
+            color: white;
+            width: 150px;
+        }
+        .white-font{
+            color: white;
+        }
+        .post-img{
+            border-radius: 70%;
+            overflow: hidden;
+        }
+        .postList-img{
+            border-radius: 20px;
+        }
+        .profile-postList-img{
+            border-radius: 7px;
+            overflow: hidden;
+        }
+        .postList-bio{
+            overflow: hidden;
+        }
+        .profile-img{
+            border-radius: 70%;
+            overflow: hidden;
+            width: 120px;
+        }
+        .dropdown-menu{
+            width: 120px;
+        }
+        body,
+        input,
+        button,
+        select,
+        optgroup,
+        textarea,
+        .tooltip,
+        .popover {
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR","Century Gothic", "Jeju Gothic",
+            "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+    </style>
+</head>
+<body>
+
+<nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-light" style="background-color: #EBFBFF">
+    <a id = "logo-img" class="navbar-brand" href="/" th:href="@{/}">
+        <img src="/image/logo.png" width="30" height="30">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item mr-2">
+                <form th:action="@{/searchTag}" class="form-inline" method="get">
+                    <input class="form-control mr-sm-2" name="tagTitle" type="search" placeholder="검색" aria-label="Search" />
+                </form>
+            </li>
+            <li class="nav-item" style="margin-left: 15px">
+                <a class="nav-link" th:href="@{/}" style="color: black">Homestagram</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/postList}" style="color: black">커뮤니티</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav justify-content-end" id = "nav-list">
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/login}">로그인</a>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <div hidden th:value="${#strings.isEmpty(account?.accountRole?.roleName)}" class="user"></div>
+                <a class="nav-link" th:href="@{'/profile/'+${account?.loginId}}">
+                    <i class="fa fa-plus" aria-hidden="true"></i> 내 게시물
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')">
+                <a class="nav-link" th:href="@{/admin}">회원관리</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="background: #EBFBFF">
+                        <img th:if="${#strings.isEmpty(account?.profile?.image)}" src="/image/profile.png"
+                             width="24" height="24" class="rounded border bg-light"/>
+                        <img th:if="${!#strings.isEmpty(account?.profile?.image)}" th:src="${account?.profile?.image}"
+                             width="24" height="24" class="rounded border"/>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink" style="width: 100px">
+                        <a class="dropdown-item" th:href="@{'/profile/' + ${account?.loginId}}">프로필</a>
+                        <a class="dropdown-item" th:href="@{'/new-post'}">새 글 작성</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
+                        <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                            <button class="dropdown-item" type="submit">로그아웃</button>
+                        </form>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<footer th:fragment="footer">
+    <div class="row justify-content-center" id="footer-logo">
+        <a id = "logo-img-footer" class="navbar-brand" href="/" th:href="@{/}">
+            <img src="/image/logo.png" width="30" height="30" >
+        </a>
+        Homestagram
+    </div>
+</footer>
+
+<div th:fragment="sub-nav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid justify-content-center">
+                <ul class="navbar-nav">
+                    <li class="nav-item sub-nav-list">
+                        <a id="photoList" class="nav-link photoList" href="#">게시물</a>
+                    </li>
+                    <li class="nav-item sub-nav-list">
+                        <a id="likeList" class="nav-link likeList" href="#">좋아요</a></li>
+                    <li class="nav-item sub-nav-list">
+                        <a id="bookmarkList" class="nav-link bookmarkList" href="#">북마크</a>
+                    </li>
+                </ul>
+            <div id="profileOwner" th:value="${owner.loginId}" hidden></div>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="settings-menu (currentMenu)" class="list-group">
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">프로필</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">비밀번호</a>
+    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">계정</a>
+</div>
+
+<div th:fragment="followList" class="col-8 profile-list" id="followList">
+        <div class="mt-5" style="margin-left: 10%;">
+            <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+                <span>팔로잉</span>
+            </div>
+            <div th:if="${followList != null}" class="row" style="padding-left: 10px; padding-top: 15px" th:each="follow : ${followList}">
+                <div class="col-2" style="width: 60px" th:if="${#strings.isEmpty(follow.toAccount.profile?.image)}">
+                    <a th:href="@{'/profile/'+${follow.toAccount.loginId}}">
+                        <img src="/image/profile.png" style="width: 60px; height: 60px; border-radius: 70%"/>
+                    </a>
+                </div>
+                <div class="col-2" style="width: 60px" th:if="${!#strings.isEmpty(follow.toAccount.profile?.image)}">
+                    <a th:href="@{'/profile/'+${follow.toAccount.loginId}}">
+                        <img th:src="${follow.toAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
+                    </a>
+                </div>
+                <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.toAccount.nickname}" style="text-align: center; font-weight: bold; margin-left: 10px">닉네임</span></div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+    <nav aria-label="Page navigation example" th:if="${followList.getTotalPages() > 0}">
+        <ul class="pagination justify-content-center page-list">
+            <li class="page-item" th:classappend="${!followList.hasPrevious()}? disabled">
+                <span class="page-link follow-page" th:value="${followList.getNumber() - 1}">Previous</span>
+            </li>
+            <li class="page-item" th:classappend="${i == followList.getNumber() + 1}? active"
+                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                <a class="page-link follow-page" th:value="${i}-1" th:text="${i}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!followList.hasNext()}? disabled">
+                <a class="page-link follow-page" th:value="${followList.getNumber() + 1}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:fragment="followerList" class="col-8 profile-list" id="followerList">
+    <div class="mt-5" style="margin-left: 10%;">
+        <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+            <span>팔로워</span>
+        </div>
+        <div th:if="${followerList != null}" class="row" style="padding-left: 10px; padding-top: 15px" th:each="follow : ${followerList}">
+            <div class="col-2" style="width: 60px" th:if="${#strings.isEmpty(follow.fromAccount.profile?.image)}">
+                <a th:href="@{'/profile/'+${follow.fromAccount.loginId}}">
+                    <img src="/image/profile.png" style="width: 60px; height: 60px; border-radius: 70%"/>
+                </a>
+            </div>
+            <div class="col-2" style="width: 60px" th:if="${!#strings.isEmpty(follow.fromAccount.profile?.image)}">
+                <a th:href="@{'/profile/'+${follow.fromAccount.loginId}}">
+                    <img th:src="${follow.fromAccount.profile.image}" style="width: 60px; height: 60px; border-radius: 70%"/>
+                </a>
+            </div>
+            <div class="col" style="display: inline-block; margin-top: 22px; height: 20px"><span th:text="${follow.fromAccount.nickname}" style="text-align: center; font-weight: bold; margin-left: 10px">닉네임</span></div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example" th:if="${followerList.getTotalPages() > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!followerList.hasPrevious()}? disabled">
+                <a class="page-link follower-page" th:value="${followerList.getNumber() - 1}">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${i == followerList.getNumber() + 1}? active"
+                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                <span class="page-link follower-page" th:value="${i}-1" th:text="${i}">[[${i}]]</span>
+            </li>
+            <li class="page-item" th:classappend="${!followerList.hasNext()}? disabled">
+                <a class="page-link follower-page" th:value="${followerList.getNumber() + 1}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div th:fragment="profileList" class="col-8 profile-list" id="profile-Lists">
+    <div class="mt-5" style="margin-left: 10%; margin-bottom: 30px">
+        <div style="padding-left: 10px; font-size: 18px; font-weight: bold">
+            <div hidden id="list" th:value="${listText}"></div>
+            <span th:value="${listText}" id="listText" th:text="${listText}">게시물</span>
+            <span th:text="${postList.getTotalElements()}" style="color: #35c5f0">글 개수</span>
+        </div>
+        <div class="row" style="margin-right: 8%; padding-top: 15px;">
+            <div class="col-md-3" th:each="list: ${postList}" style="padding-left: 10px; padding-bottom: 15px">
+                <a th:href="@{'/post/'+${list.post.id}}">
+                    <img class="profile-postList-img" th:src="|/images/${list.post.imageFiles[0].getStoreFilename()}|" width="170" height="170"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example" th:if="${postList.getTotalPages() > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!postList.hasPrevious()}? disabled">
+                <a class="page-link list-page" th:value="${postList.getNumber() - 1}">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${i == postList.getNumber() + 1}? active"
+                th:each="i: ${#numbers.sequence(startBlockPage, endBlockPage)}">
+                <span class="page-link list-page" th:value="${i}-1" th:text="${i}"></span>
+            </li>
+            <li class="page-item" th:classappend="${!postList.hasNext()}? disabled">
+                <a class="page-link list-page" th:value="${postList.getNumber() + 1}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script type="application/javascript" th:fragment="form-validation">
+    (function () {
+        'use strict';
+
+        window.addEventListener('load', function () {
+
+            var forms = document.getElementsByClassName('needs-validation');
+
+
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        }, false)
+    }())
+</script>
+
+<script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf-header">
+    $(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+</script>
+
+<div th:fragment="tags">
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+    <script type="application/javascript">
+        $(function () {
+
+            const tagInput = document.querySelector("#tags");
+            const tagify = new Tagify(tagInput, {
+                pattern: /^.{0,20}$/,
+                dropdown : {
+                    enabled: 1,      // suggest tags after a single character input
+                }  // map tags
+            });
+
+            // add a class to Tagify's input element
+            tagify.DOM.input.classList.add('form-control');
+            // re-place Tagify's input element outside of the element (tagify.DOM.scope), just before it
+            tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+
+        });
+    </script>
+</div>
+
+<div th:fragment="update-tags (baseUrl)">
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+    <script type="application/javascript" th:inline="javascript">
+        $(function() {
+            function tagRequest(url, tagTitle) {
+                $.ajax({
+                    dataType: "json",
+                    autocomplete: {
+                        enabled: true,
+                        rightKey: true,
+                    },
+                    contentType: "application/json; charset=utf-8",
+                    method: "POST",
+                    url: "[(${baseUrl})]" + url,
+                    data: JSON.stringify({'tagTitle': tagTitle})
+                }).done(function (data, status) {
+                    console.log("${data} and status is ${status}");
+                });
+            }
+
+            function onAdd(e) {
+                tagRequest("/add", e.detail.data.value);
+            }
+
+            function onRemove(e) {
+                tagRequest("/remove", e.detail.data.value);
+            }
+
+            var tagInput = document.querySelector("#tags");
+            const tagify = new Tagify(tagInput, {
+                pattern: /^.{0,20}$/,
+                dropdown : {
+                    enabled: 1,      // suggest tags after a single character input
+                }  // map tags
+            });
+            tagify.on("add", onAdd);
+            tagify.on("remove", onRemove);
+            // add a class to Tagify's input element
+            tagify.DOM.input.classList.add('form-control');
+            // re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+            tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+        });
+    </script>
+</div>
+
+<div th:fragment="like">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on("click",".heart-click",function() {
+
+            if($(".user").attr('value') === 'false'){
+                let id = $(this).attr('value');
+                // 빈하트를 눌렀을때
+                if($(this).children('svg').attr('class') === "bi bi-heart"){
+                    console.log("빈하트")
+                    $.ajax({
+                        url : '/like/add',
+                        type : 'get',
+                        data : {
+                            id : id,
+                        },
+                        success : function(likes) {
+                            $('#'+id).text(likes);
+                        }
+                    });
+
+                    // 꽉찬하트로 바꾸기
+                    $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
+                    $('.heart_icon'+id).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>");
+
+                    // 꽉찬 하트를 눌렀을 때
+                }else if($(this).children('svg').attr('class') === "bi bi-heart-fill"){
+                    $.ajax({
+                        url : '/like/remove',
+                        type : 'get',
+                        data : {
+                            id : id,
+                        },
+                        success : function(likes) {
+                            $('#'+id).text(likes);
+                        }
+                    });
+                    // 빈하트로 바꾸기
+                    $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart' viewBox='0 0 16 16'><path d='m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z'/></svg>");
+                    $('.heart_icon'+id).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='crimson' class='bi bi-heart' viewBox='0 0 16 16'><path d='m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z'/></svg>");
+                }
+            }else{
+                location.href = "/login";
+            }
+        });
+    </script>
+</div>
+
+<div th:fragment="bookmark">
+    <script type="application/javascript" th:inline="javascript">
+
+        $(document).on("click",".bookmark-click",function() {
+            if($(".user").attr('value') === 'false'){
+                console.log("북마크 클릭")
+                let id = $(this).attr('value');
+
+                // 빈하트를 눌렀을때
+                if ($(this).children('svg').attr('class') === "bi bi-bookmark") {
+                    $.ajax({
+                        url: '/bookmark/add',
+                        type: 'get',
+                        data: {
+                            id: id,
+                        },
+                        success: function (bookmark) {
+                            $('#bookmark' + id).text(bookmark);
+                        }
+                    });
+                    // 꽉찬 북마크로 바꾸기
+                    $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='#005baf' class='bi bi-bookmark-fill' viewBox='0 0 16 16'><path d='M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'/></svg>");
+                    $('.bookmark_icon' + id).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='#005baf' class='bi bi-bookmark-fill' viewBox='0 0 16 16'><path d='M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'/></svg>");
+
+                    // 꽉찬 북마크를 눌렀을 때
+                } else if ($(this).children('svg').attr('class') === "bi bi-bookmark-fill") {
+                    $.ajax({
+                        url: '/bookmark/remove',
+                        type: 'get',
+                        data: {
+                            id: id,
+                        },
+                        success: function (bookmark) {
+                            $('#bookmark' + id).text(bookmark);
+                        }
+                    });
+                    // 빈 북마크로 바꾸기
+                    $(this).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='#005baf' class='bi bi-bookmark' viewBox='0 0 16 16'><path d='M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z'/></svg>");
+                    $('.bookmark_icon' + id).html("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='#005baf' class='bi bi-bookmark' viewBox='0 0 16 16'><path d='M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z'/></svg>");
+                }
+            }else{
+                location.href = "/login";
+            }
+        });
+    </script>
+</div>
+
+<div th:fragment="followBtn">
+    <script type="application/javascript" th:inline="javascript">
+        let ownerId = $("#ownerId").attr("value");
+        //팔로우 버튼 눌렀을 때
+        $(document).on("click", ".followBtn", function(){
+            if($(".user").attr('value') === 'false'){
+                //팔로잉 처리
+                $.ajax({
+                    url: '/follow/' + ownerId,
+                    type: 'get',
+                });
+                    $(this).html('팔로잉');
+                    $(this).removeClass("home white-font followBtn");
+                    $(this).addClass("btn-outline-secondary unfollowBtn");
+            }else {
+                location.href = "/login";
+            }
+        });
+        //언팔로우 처리를 위한 로직
+        $(document).on("click", ".unfollowBtn", function(){
+            $.ajax({
+                url: '/unfollow/' + ownerId,
+                type: 'get',
+            });
+            $(this).html('팔로우');
+            $(this).removeClass("btn-outline-secondary unfollowBtn");
+            $(this).addClass("home white-font followBtn");
+        });
+    </script>
+</div>
+
+<div th:fragment="followBtn-profile">
+    <script type="application/javascript" th:inline="javascript">
+
+        $(document).on("click", ".followBtn", function(){
+            if($(".user").attr('value') === 'false'){
+                console.log("팔로우 클릭")
+                let ownerId = $("#ownerId").attr("value");
+
+                $.ajax({
+                    url: '/profile/follow/' + ownerId,
+                    type: 'get',
+                    success: function (size) {
+                        $("#follower").text(size);
+                    }
+                });
+
+                $(this).html('팔로잉');
+                $(this).removeClass("home white-font followBtn");
+                $(this).addClass("btn-outline-secondary unfollowBtn");
+            }else{
+                location.href = "/login";
+            }
+        });
+
+        $(document).on("click", ".unfollowBtn", function(){
+            let ownerId = $("#ownerId").attr("value");
+
+            $.ajax({
+                url : '/profile/unfollow/' + ownerId,
+                type : 'get',
+                success : function(size){
+                    $("#follower").text(size);
+                }
+            });
+
+            $(this).html('팔로우');
+            $(this).removeClass("btn-outline-secondary unfollowBtn");
+            $(this).addClass("home white-font followBtn");
+        });
+    </script>
+</div>
+
+<div th:fragment="selectbox-orderBy">
+    <script type="application/javascript" th:inline="javascript">
+
+        $("#selectBox-orderBy").change( function(){
+            let pageSelect = "true";
+            let page = $("#post-cur-number").attr("value");
+            //최신순 눌렀을 때
+            if($(this).val() ===  "writeTime"){
+                $.ajax({
+                    url : '/postList',
+                    type : 'get',
+                    data : {
+                        orderBy : "writeTime",
+                        pageSelect : pageSelect,
+                        page : page
+                    },
+                    success : function(fragment) {
+                        $(".select-box").attr("value","writeTime");
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+
+                // 좋아요순 눌렀을 때
+            }else if($(this).val() === "likes"){
+                let pageSelect = "true";
+                $.ajax({
+                    url : '/postList',
+                    type : 'get',
+                    data : {
+                        orderBy : "likes",
+                        pageSelect : pageSelect,
+                        page : page
+                    },
+                    success : function(fragment) {
+                        $(".select-box").attr("value","likes");
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+
+<div th:fragment="profile-sub-nav-list">
+    <script type="application/javascript" th:inline="javascript">
+
+        $("#likeList").click( function(){
+            let loginId = $("#profileOwner").attr("value");
+            $.ajax({
+                url : '/profile/like/' + loginId,
+                type : 'get',
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                }
+            });
+        });
+
+        $("#photoList").click( function(){
+            let loginId = $("#profileOwner").attr("value");
+            $.ajax({
+                url : '/profile/photoList/' + loginId,
+                type : 'get',
+                success : function(fragment) {
+
+                    $('.profile-list').replaceWith(fragment);
+                }
+            });
+        });
+
+        $("#bookmarkList").click( function(){
+            let loginId = $("#profileOwner").attr("value");
+            $.ajax({
+                url : '/profile/bookmarkList/' + loginId,
+                type : 'get',
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".list-page", function(){
+            let page = $(this).attr("value");
+            let list = $("#list").attr("value");
+
+            let loginId = $("#profileOwner").attr("value");
+            let listType = '';
+
+            if(list === '북마크'){
+                listType = 'bookmarkList';
+            }else if(list === '좋아요'){
+                listType = 'like';
+            }else{
+                listType = 'photoList';
+            }
+
+            $.ajax({
+                url : '/profile/'+ listType + '/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                }
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="follow-list">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on('click', 'dd', function(){
+            let loginId = $("#profileOwner").attr("value");
+            let list = $(this).attr("id");
+            if(list === "follower"){
+                $.ajax({
+                    url : '/followerList/' + loginId,
+                    type : 'get',
+                    success : function(fragment) {
+                        $('.profile-list').replaceWith(fragment);
+                    }
+                });
+            }else if(list === "following"){
+                $.ajax({
+                    url : '/followList/' + loginId,
+                    type : 'get',
+                    success : function(fragment) {
+                        $('.profile-list').replaceWith(fragment);
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+
+<div th:fragment="post-list-page">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on("click", ".post-page", function(){
+            let page = $(this).attr("value");
+            let orderBy = $(".select-box").val();
+            let pageSelect = "true";
+            $.ajax({
+                url : '/postList',
+                type : 'get',
+                data : {
+                    page : page,
+                    orderBy : orderBy,
+                    pageSelect : pageSelect
+                },
+                success : function(fragment) {
+                    $('#postList-div').replaceWith(fragment);
+                }
+            });
+        });
+
+    </script>
+</div>
+
+<div th:fragment="admin-account">
+    <script type="application/javascript" th:inline="javascript">
+        $(document).on("click", ".management-page", function(){
+            console.log("클릭");
+            let page = $(this).attr("value");
+            let pageSelect = "true";
+            $.ajax({
+                url : '/admin',
+                type : 'get',
+                data : {
+                    page : page,
+                    pageSelect : pageSelect
+                },
+                success : function(fragment) {
+                    $('#account-table').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".account-delete", function(){
+
+            let accountId = $(this).attr("value");
+            let page = $(this).attr("name");
+
+            let header = [[${_csrf.headerName}]];
+            let token = [[${_csrf.token}]];
+            $.ajax({
+                url : '/admin/account/delete',
+                type : 'post',
+                data : {
+                    page : page,
+                    accountId : accountId
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success : function(fragment) {
+                    $('#myModal').hide();
+                    $('#account-table').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".roleUpdateAdmin", function(){
+
+            let accountId = $(this).attr("value");
+            let page = $(this).attr("name");
+
+            let header = [[${_csrf.headerName}]];
+            let token = [[${_csrf.token}]];
+            $.ajax({
+                url : '/admin/account/role',
+                type : 'post',
+                data : {
+                    page : page,
+                    accountId : accountId,
+                    roleName : 'ROLE_ADMIN'
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success : function(fragment) {
+                    $('#myModal').hide();
+                    $('#account-table').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".roleUpdateUser", function(){
+
+            let accountId = $(this).attr("value");
+            let page = $(this).attr("name");
+
+            let header = [[${_csrf.headerName}]];
+            let token = [[${_csrf.token}]];
+            $.ajax({
+                url : '/admin/account/role',
+                type : 'post',
+                data : {
+                    page : page,
+                    accountId : accountId,
+                    roleName : 'ROLE_USER'
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success : function(fragment) {
+                    $('#myModal').hide();
+                    $('#account-table').replaceWith(fragment);
+                }
+            });
+        });
+
+    </script>
+</div>
+
+<div th:fragment="search-post-list">
+    <script type="application/javascript" th:inline="javascript">
+        $("#selectBox-orderBy").change( function(){
+            let pageSelect = "true";
+            let tagTitle = $("#tagTitle").attr("value");
+            let page = $("#post-cur-number").attr("value");
+
+            if($(this).val() ===  "writeTime"){
+                $.ajax({
+                    url : '/searchTag',
+                    type : 'get',
+                    data : {
+                        orderBy : "writeTime",
+                        tagTitle : tagTitle,
+                        page : page,
+                        pageSelect : pageSelect
+                    },
+                    success : function(fragment) {
+                        $(".select-box").attr("value","writeTime");
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+            }else if($(this).val() === "likes"){
+                $.ajax({
+                    url : '/searchTag',
+                    type : 'get',
+                    data : {
+                        orderBy : "likes",
+                        tagTitle : tagTitle,
+                        page : page,
+                        pageSelect : pageSelect
+                    },
+                    success : function(fragment) {
+                        $(".select-box").attr("value","likes");
+                        $('#postList-div').replaceWith(fragment);
+                    }
+                });
+            }
+        });
+
+        $(document).on("click", ".post-page", function(){
+            let pageSelect = "true";
+            let page = $(this).attr("value");
+            let orderBy = $(".select-box").val();
+            let tagTitle = $("#tagTitle").attr("value");
+            $.ajax({
+                url : '/searchTag',
+                type : 'get',
+                data : {
+                    page : page,
+                    orderBy : orderBy,
+                    tagTitle : tagTitle,
+                    pageSelect : pageSelect
+                },
+                success : function(fragment) {
+                    $('#postList-div').replaceWith(fragment);
+                }
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="follow-list-page">
+    <script type="application/javascript" th:inline="javascript">
+
+        $(document).on("click", ".follow-page", function(){
+            let page = $(this).attr("value");
+            let loginId = $("#profileOwner").attr("value");
+            $.ajax({
+                url : '/followList/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".follower-page", function(){
+            let page = $(this).attr("value");
+            let loginId = $("#profileOwner").attr("value");
+            $.ajax({
+                url : '/followerList/' + loginId,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.profile-list').replaceWith(fragment);
+                }
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="modal" class="modal" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">확인</h5>
+                <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-text">삭제하시겠습니까?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary delete-ok">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="post-comments">
+    <script type="application/javascript" th:inline="javascript">
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $(function() {
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+        });
+        let id = $("#post_id").attr("value");
+
+        $(".post-delete-btn").click(function (){
+            $(".modal-text").text("게시글을 삭제하시겠습니까?");
+            $('#myModal').fadeIn();
+            console.log("글삭제");
+            $(".delete-ok").on("click", function () {
+                $.ajax({
+                    url: '/delete-post/' + id,
+                    type: 'post',
+                    success: function () {
+                       location.href = "/postList";
+                    }
+                });
+            });
+
+            $(".close").on("click", function () {
+                $('#myModal').fadeOut();
+            });
+
+        });
+
+
+            $(document).on("click", ".comment-save", function () {
+                if($(".user").attr('value') === 'false') { //로그인한 경우
+                    let comment = $("#comment").val();
+                    $.ajax({
+                        url: '/comment/save/' + id,
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                            comment: comment
+                        },
+                        success: function (fragment) {
+                            $('.comment-list').replaceWith(fragment);
+                        }
+                    });
+                }else{ //로그인 하지 않은 경우
+                    location.href = "/login";
+                }
+            });
+
+        $(document).on("click", ".comment-page", function(){
+            let page = $(this).attr("value");
+            $.ajax({
+                url : '/commentList/' + id,
+                type : 'get',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.comment-list').replaceWith(fragment);
+                }
+            });
+        });
+
+        $(document).on("click", ".comment-delete", function(){
+            let page = $(this).attr("name");
+            let comment_id = $(this).attr("value");
+            $.ajax({
+                url : '/deleteComment/' + comment_id + '/' + id,
+                type : 'post',
+                data : {
+                    page : page
+                },
+                success : function(fragment) {
+                    $('.comment-list').replaceWith(fragment);
+                }
+            });
+        });
+    </script>
+</div>
+
+<div th:fragment="image-list">
+    <script type="application/javascript" th:inline="javascript">
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $(function() {
+            $(document).ajaxSend(function(e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+        });
+        let image_id = ''
+        $(document).on('click','.image-delete-btn', function(){
+            if(image_id === ''){
+                image_id += $(this).attr('value');
+            }else{
+                image_id += ',' +$(this).attr('value');
+            }
+            console.log(image_id);
+            $("#delete_image_id").attr('value', image_id);
+            $("#"+$(this).attr('value')).remove();
+        });
+    </script>
+</div>
+
+<div th:fragment="delete-account">
+    <script type="application/javascript" th:inline="javascript">
+        let header = [[${_csrf.headerName}]];
+        let token = [[${_csrf.token}]];
+
+            $("#delete-account").on("click", function () {
+
+                $(".modal-text").text("계정을 삭제하시겠습니까?");
+                $('#myModal').fadeIn();
+
+                $(".delete-ok").on("click", function () {
+                    let profileOwnerLoginId = $("#profile-owner").attr("value");
+
+                    $.ajax({
+                        url: '/delete-account',
+                        type: 'post',
+                        data: {
+                            profileOwnerLoginId : profileOwnerLoginId,
+                        },
+                        dataType: 'text',
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader(header, token);
+                        },
+                        success: function () {
+                            location.href = "/";
+                        }
+                    });
+                });
+
+                $(".close").on("click", function () {
+                    $('#myModal').fadeOut();
+                });
+            });
+    </script>
+</div>
+</body>
+</html>
