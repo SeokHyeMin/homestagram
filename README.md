@@ -18,8 +18,9 @@
 - 관리자에게 권한 부여
 
 ### ✅ 2.1 - 프로필 기능
-<img src="https://user-images.githubusercontent.com/73224388/161745220-a3c8e48b-ee7f-41e7-8025-b454c7391858.gif" width="500" height="300">
+<img src="https://user-images.githubusercontent.com/73224388/161745220-a3c8e48b-ee7f-41e7-8025-b454c7391858.gif" width="700" height="300">
 
+- Account에 임베디드 값 타입으로 Profile을 생성하였습니다.
 - 프로필에 들어가면 팔로잉, 팔로워들을 확인할 수 있습니다.
 - 자신이 작성한 게시물, 좋아요한 게시물, 북마크한 게시글을 확인할 수 있습니다. (사진누르면 해당 게시글로 이동)
   - **위의 두 경우 ajax로 화면전환 없이 게시물이 보여지는 부분만 변하도록 하였습니다.**
@@ -28,14 +29,14 @@
 ### ✅ 2.2 - 게시물 좋아요, 북마크, 댓글 기능
 <img src="https://user-images.githubusercontent.com/73224388/161750626-5f30fcb1-dc50-47f8-b204-cefdbe648bd3.gif" width="400" height="300"> <img src="https://user-images.githubusercontent.com/73224388/161751016-043433f2-ec8d-4c97-813d-53176e6b593b.gif" width="400" height="300">
 
-- 게시글 조회 화면에서, 해당 게시글을 좋아요, 북마크 할 수 있습니다. 누른 즉시 결과가 화면에 반영됩니다. 
-- 댓글 작성도, 화면전환없이 ajax로 등록하도록 구현하였으며, 댓글 작성자만이 삭제할 수 있습니다. 댓글은 한 화면에 5개씩 나타나도록 구현하였습니다.
+- 게시글을 좋아요 또는 북마크 할 수 있습니다. 누른 즉시 결과가 화면에 반영됩니다. 
+- 댓글 작성도, ajax로 등록하도록 구현하여 화면전환없이 반영되도록 하였습니다. 댓글 작성자만이 삭제할 수 있으며 한 화면에 5개씩 나타나도록 구현하였습니다.
 
 
 ### ✅ 2.3 - 태그 검색 기능 
 <img src="https://user-images.githubusercontent.com/73224388/161753594-357791c2-cbdb-4442-a754-10923ab660ed.gif" width="500" height="300" > <img src="https://user-images.githubusercontent.com/73224388/161754434-7348dca7-bca4-4808-9666-12c412e7b647.gif" width="300" height="300">
 
-- 게시글 작성 시에 여러 개의 태그를 등록할 수 있으며, 같은 태그를 작성한 게시글들을 조회할 수 있습니다.
+- 게시글 작성 시에 여러 개의 태그를 등록할 수 있습니다. 같은 태그를 작성한 게시글들을 조회할 수 있습니다.
 - 태그 검색 방법
   - 검색창에서 태그를 검색.
     - **ajax로 화면전환 없이 게시물이 보여지는 부분만 변하도록 하였습니다.**
@@ -52,7 +53,7 @@
 <img src="https://user-images.githubusercontent.com/73224388/161755905-f7214629-cb77-458c-a486-d1c96a64223d.png" width="700" height="300">
 
 - 관리자 계정으로 로그인 한 경우 main-navbar에 회원관리 항목이 추가됩니다.
-- 회원관리 페이지에서는 모든 회원들을 확인할 수 있으며, 관리자 권한을 부여할 수 있으며 회원을 강제 탈퇴시킬 수 있습니다.
+- 회원관리 페이지에서는 모든 회원들을 확인할 수 있으며, 관리자는 회원의 권한변경 및 강제 탈퇴가 가능합니다.
 - 관리자만 접속 가능한 URI는 ```SecurityConfig``` 의 ```configure(HttpSecurity http)``` 메서드에 다음과 같이 작성하여 설정하였습니다.
 ```java 
    protected void configure(HttpSecurity http) throws Exception {
