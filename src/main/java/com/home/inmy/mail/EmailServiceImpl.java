@@ -32,7 +32,7 @@ public class EmailServiceImpl implements EmailService{
 
         } catch (MessagingException e) {
             log.error("failed to send email", e);
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 }
