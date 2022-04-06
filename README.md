@@ -1,7 +1,7 @@
 # homestagram
 인테리어에 관심있는 사람들이 모여, 인테리어 사진들을 올리고 소통할 수 있는 커뮤니티 입니다.
 ## DB 설계
-<img src="https://user-images.githubusercontent.com/73224388/161959139-cca9619e-14cf-4f72-b6ef-d0023ce35e58.png">
+<img src="https://user-images.githubusercontent.com/73224388/161960901-31592bfa-e870-4e27-a962-b40012f5b892.png">
 
 ## 1. 기술 스택
 #### Front-end
