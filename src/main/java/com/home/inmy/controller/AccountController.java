@@ -78,7 +78,7 @@ public class AccountController {
     //프로필 보여주기
     @Transactional(readOnly = true)
     @GetMapping("/profile/{loginId}")
-    public String profile(@PathVariable String loginId, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+    public String profileView(@PathVariable String loginId, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
         Account accountByLoginId = accountService.getAccount(loginId); //해당 프로필 주인
 

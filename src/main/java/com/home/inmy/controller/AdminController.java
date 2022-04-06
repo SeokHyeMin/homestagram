@@ -25,7 +25,7 @@ public class AdminController {
 
     //회원관리 페이지로 이동
     @GetMapping("/admin")
-    public String managementAccountView(Model model, @CurrentUser Account account,
+    public String adminView(Model model, @CurrentUser Account account,
                                         @RequestParam(required = false, defaultValue = "false") String pageSelect,
                                         @RequestParam(required = false, defaultValue = "0", value = "page")int page){
 
@@ -47,9 +47,9 @@ public class AdminController {
 
     }
 
-    //회원 탈퇴시키기
+    //회원 강퇴시키기
     @PostMapping("/admin/account/delete")
-    public String managementAccountDelete(Model model, @CurrentUser Account account, @RequestParam Long accountId,
+    public String expulsionOfMembers(Model model, @CurrentUser Account account, @RequestParam Long accountId,
                                           @RequestParam(required = false, defaultValue = "0", value = "page")int page){
 
         accountService.deleteAccount(accountId); //해당계정 삭제
