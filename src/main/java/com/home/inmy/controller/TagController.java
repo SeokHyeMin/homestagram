@@ -1,17 +1,13 @@
 package com.home.inmy.controller;
 
 import com.home.inmy.domain.CurrentUser;
-import com.home.inmy.domain.entity.Likes;
 import com.home.inmy.repository.TagRepository;
 import com.home.inmy.service.BookmarkService;
 import com.home.inmy.service.LikeService;
 import com.home.inmy.service.PostTagService;
-import com.home.inmy.service.impl.BookmarkServiceImpl;
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.PostTag;
 import com.home.inmy.domain.entity.Tag;
-import com.home.inmy.service.impl.LikeServiceImpl;
-import com.home.inmy.service.impl.PostTagServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -33,7 +29,8 @@ public class TagController {
     private final LikeService likeService;
     private final BookmarkService bookmarkService;
 
-    @GetMapping("/searchTag")
+    //태그 검색
+    @GetMapping("/searchTag")       //pageSelect로 검색창을 통해 접근(false)했는지, 글 목록에서 정렬 혹은 페이지 번호를 통해 접근(true)했는지 확인
     public String searchPostByTag(Model model, @CurrentUser Account account, @RequestParam String tagTitle,
                                   @RequestParam(required = false, defaultValue = "false") String pageSelect,
                                   @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,

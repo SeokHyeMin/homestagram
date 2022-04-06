@@ -1,7 +1,6 @@
 package com.home.inmy.controller;
 
 import com.home.inmy.service.AccountService;
-import com.home.inmy.service.impl.AccountServiceImpl;
 import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.domain.entity.Account;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,9 @@ public class AdminController {
 
     private final AccountService accountService;
 
+    private static final String PATH = "management/account :: #account-table";
+
+    //회원관리 페이지로 이동
     @GetMapping("/admin")
     public String managementAccountView(Model model, @CurrentUser Account account,
                                         @RequestParam(required = false, defaultValue = "false") String pageSelect,
@@ -37,7 +39,7 @@ public class AdminController {
         model.addAttribute("account",account);
 
         if(pageSelect.equals("true")){ //페이지를 눌렀다면 table만 바뀌도로
-            return "management/account :: #account-table";
+            return PATH;
         }
 
         //페이지를 누른게 아닌 처음 admin페이지 들어왔다면 페이지 자체를 바꿔줌.
@@ -45,6 +47,7 @@ public class AdminController {
 
     }
 
+    //회원 탈퇴시키기
     @PostMapping("/admin/account/delete")
     public String managementAccountDelete(Model model, @CurrentUser Account account, @RequestParam Long accountId,
                                           @RequestParam(required = false, defaultValue = "0", value = "page")int page){
@@ -60,10 +63,11 @@ public class AdminController {
         model.addAttribute("accountList",accountList);
         model.addAttribute("account",account);
 
-        return "management/account :: #account-table";
+        return PATH;
 
     }
 
+    //회원권한 변경하기
     @PostMapping("/admin/account/role")
     public String accountRoleUpdate(Model model, @CurrentUser Account account, @RequestParam Long accountId,
                                           @RequestParam String roleName,
@@ -80,7 +84,7 @@ public class AdminController {
         model.addAttribute("accountList",accountList);
         model.addAttribute("account",account);
 
-        return "management/account :: #account-table";
+        return PATH;
 
     }
 

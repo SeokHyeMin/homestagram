@@ -23,6 +23,7 @@ public class FollowController {
     private final FollowService followService;
     private final AccountService accountService;
 
+    //프로필페이지에서 팔로우 버튼 눌렀을 경우 로직
     @GetMapping("/profile/follow/{ownerLoginId}")
     @ResponseBody
     public Integer profileFollow(@CurrentUser Account account, @PathVariable String ownerLoginId){
@@ -33,6 +34,7 @@ public class FollowController {
         return followService.getFollowerList(profileOwner).size(); //화면의 팔로워 숫자를 바꿔주기 위해 반환.
     }
 
+    //프로필 페이지에서 언팔로우 했을 경우
     @GetMapping("/profile/unfollow/{ownerLoginId}")
     @ResponseBody
     public Integer profileUnfollow(@CurrentUser Account account, @PathVariable String ownerLoginId){
@@ -43,6 +45,7 @@ public class FollowController {
         return followService.getFollowerList(profileOwner).size(); //화면의 팔로워 숫자를 바꿔주기 위해 반환.
     }
 
+    //팔로우 버튼 눌렀을 때 (게시글에서)
     @GetMapping("/follow/{ownerLoginId}")
     public void follow(@CurrentUser Account account, @PathVariable String ownerLoginId){
 
@@ -51,6 +54,7 @@ public class FollowController {
         }
     }
 
+    //언팔로우 버튼 눌렀을 때 (게시글에서)
     @GetMapping("/unfollow/{ownerLoginId}")
     public void unfollow(@CurrentUser Account account, @PathVariable String ownerLoginId){
 
@@ -58,6 +62,7 @@ public class FollowController {
 
     }
 
+    //팔로잉 리스트 보여주기
     @GetMapping("/followList/{ownerLoginId}")
     public String followList(@PathVariable String ownerLoginId, Model model, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
@@ -80,6 +85,7 @@ public class FollowController {
        return "fragments :: #followList";
     }
 
+    //팔로워 리스트 보여주기
     @GetMapping("/followerList/{ownerLoginId}")
     public String followerList(@PathVariable String ownerLoginId, Model model, @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 

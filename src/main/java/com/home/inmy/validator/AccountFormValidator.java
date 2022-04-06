@@ -13,15 +13,14 @@ import org.springframework.validation.Validator;
 public class AccountFormValidator implements Validator {
 
     private final AccountRepository accountRepository;
-    private static boolean nicknameChangeCheck = false;
-    private static boolean loginIdChangeCheck = false;
-    private static boolean emailChangeCheck = false;
-    private static boolean phoneNumberChangeCheck = false;
+    private boolean nicknameChangeCheck = false;
+    private boolean loginIdChangeCheck = false;
+    private boolean emailChangeCheck = false;
+    private boolean phoneNumberChangeCheck = false;
 
 
     //변경하지 않고 넘어온 것 있는지 먼저 체크
-    public static void check(Account account, AccountForm accountForm){
-
+    public void check(Account account, AccountForm accountForm){
 
         //기존 닉네임과 변경할 닉네임이 다르면 변경이 일어난것, 같으면 닉네임은 변경하지 않겠다는 것.
         if(!(account.getNickname().equals(accountForm.getNickname()))){

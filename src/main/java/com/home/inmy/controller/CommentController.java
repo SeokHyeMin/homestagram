@@ -25,10 +25,11 @@ public class CommentController {
 
     private static final String COMMENT_PATH = "posts/post-detail :: #comment-list";
 
-    @PostMapping("/comment/save/{post_id}")
-    public String commentSave(@PathVariable Long post_id, @RequestParam String comment, @CurrentUser Account account, Model model){
+    //댓글 저장
+    @PostMapping("/comment/save/{id}")
+    public String commentSave(@PathVariable Long id, @RequestParam String comment, @CurrentUser Account account, Model model){
 
-        Post post = postService.getPost(post_id);
+        Post post = postService.getPost(id);
 
         commentService.commentSave(comment, post, account);
 
@@ -43,11 +44,12 @@ public class CommentController {
         return COMMENT_PATH;
     }
 
-    @GetMapping("/commentList/{post_id}")
-    public String commentListView(@PathVariable Long post_id, @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+    //댓글 리스트 가져오기
+    @GetMapping("/commentList/{id}")
+    public String commentListView(@PathVariable Long id, @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                                   @CurrentUser Account account, Model model){
 
-        Post post = postService.getPost(post_id);
+        Post post = postService.getPost(id);
         Page<Comments> comments = commentService.getComments(post, page);
         Map<String, Integer> map = getPage(comments); //페이지 계산
 
@@ -60,13 +62,14 @@ public class CommentController {
 
     }
 
-    @PostMapping("/deleteComment/{comment_id}/{post_id}")
-    public String deleteComment(@PathVariable Long post_id, @PathVariable Long comment_id,
+    //댓글 삭제
+    @PostMapping("/deleteComment/{commentId}/{id}")
+    public String deleteComment(@PathVariable Long id, @PathVariable Long commentId,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                                 @CurrentUser Account account, Model model){
 
-        Post post = postService.getPost(post_id);
-        commentService.commentDelete(comment_id); //댓글 삭제
+        Post post = postService.getPost(id);
+        commentService.commentDelete(commentId); //댓글 삭제
 
         Page<Comments> comments = commentService.getComments(post, page); //댓글 작성하고 불러올 페이지는 댓글 첫 페이지
         Map<String, Integer> map = getPage(comments); //페이지 계산

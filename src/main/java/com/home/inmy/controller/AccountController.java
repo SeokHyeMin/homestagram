@@ -40,12 +40,14 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
+    //회원가입 페이지
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
         model.addAttribute(new SignUpForm());
         return "account/sign-up";
     }
 
+    //회원가입
     @PostMapping("/sign-up")
     public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors) {
 
@@ -58,6 +60,7 @@ public class AccountController {
         return "redirect:/login";
     }
 
+    //탈퇴
     @PostMapping("/delete-account")
     public String deleteAccount(@CurrentUser Account account, @RequestParam String profileOwnerLoginId, HttpSession session){
 
@@ -71,6 +74,8 @@ public class AccountController {
         return "redirect:/";
     }
 
+
+    //프로필 보여주기
     @Transactional(readOnly = true)
     @GetMapping("/profile/{loginId}")
     public String profile(@PathVariable String loginId, Model model, @CurrentUser Account account, @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
@@ -100,6 +105,8 @@ public class AccountController {
         return "account/profile";
     }
 
+
+    //프로필 게시물, 좋아요, 북마크 리스트 가져오기
     @Transactional(readOnly = true)
     @GetMapping("/profile/{listType}/{loginId}")
     public String profileLike(@PathVariable String loginId, @PathVariable String listType, Model model,
@@ -151,6 +158,7 @@ public class AccountController {
         return returnPage;
     }
 
+    //비밀번호 찾기 페이지
     @GetMapping("/find-password")
     public String findPasswordView(Model model, @CurrentUser Account account){
 
@@ -160,6 +168,8 @@ public class AccountController {
         return "account/findPw";
     }
 
+
+    //비밀번호 찾기
     @PostMapping("/find-password")
     public String findPassword(@CurrentUser Account account, Model model, @RequestParam String loginId){
 
