@@ -42,7 +42,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/","/login*","/sign-up","/postList","/searchTag","/searchTag/orderBy","/find-password").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/post/**","/commentList/**","/followerList/**","/followList/**").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/profile/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN") //관리자만 접속가능한 페이지
                 .anyRequest().authenticated();
 
         http.formLogin() //로그인 인증 기능
