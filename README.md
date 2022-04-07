@@ -5,7 +5,7 @@
 
 ## 1. 기술 스택
 #### Front-end
-<img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=white"/> <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=HTML5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=CSS3&logoColor=white"/> <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=white"/> <img src="https://img.shields.io/badge/Jquery-0769AD?style=flat-square&logo=Jquery&logoColor=white"/>
+<img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=white"/> <img src="https://img.shields.io/badge/Thymeleaf-005F0F?style=flat-square&logo=Thymeleaf&logoColor=white"/> <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=HTML5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=CSS3&logoColor=white"/> <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=Javascript&logoColor=white"/> <img src="https://img.shields.io/badge/Jquery-0769AD?style=flat-square&logo=Jquery&logoColor=white"/> 
 #### Back-end
 <img src="https://img.shields.io/badge/JAVA-007396?style=flat-square&logo=JAVA&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=Spring Security&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Data JPA-6DB33F?style=flat-square&logo=Spring&logoColor=white"/> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=PostgreSQL&logoColor=white"/> 
 
@@ -30,7 +30,7 @@
 <img src="https://user-images.githubusercontent.com/73224388/161750626-5f30fcb1-dc50-47f8-b204-cefdbe648bd3.gif" width="400" height="300"> <img src="https://user-images.githubusercontent.com/73224388/161751016-043433f2-ec8d-4c97-813d-53176e6b593b.gif" width="400" height="300">
 
 - 게시글을 좋아요 또는 북마크 할 수 있습니다. 누른 즉시 결과가 화면에 반영됩니다. 
-- 댓글 작성도, ajax로 등록하도록 구현하여 화면전환없이 반영되도록 하였습니다. 댓글 작성자만이 삭제할 수 있으며 한 화면에 5개씩 나타나도록 구현하였습니다.
+- 댓글 작성도, ajax로 화면전환없이 반영되도록 하였습니다. 댓글은 작성자만이 삭제할 수 있으며 한 화면에 5개씩 나타나도록 구현하였습니다.
 
 
 ### ✅ 2.3 - 태그 검색 기능 
@@ -47,7 +47,7 @@
 <img src="https://user-images.githubusercontent.com/73224388/161766153-34aa128d-284f-4443-b125-ffc80c04728a.gif"> 
 
 - 게시글을 8개 단위로 페이징 하였습니다.
-- 최신순, 좋아요 순 정렬할 수 있습니다. 게시물 리스트만 바뀌도록 하였습니다.
+- 최신순, 좋아요 순 정렬할 수 있습니다. 화면전환 없이 게시물 리스트만 바뀌도록 하였습니다.
 ### ✅ 2.5 - 관리자계정(ROLE_ADMIN)에게 권한 부여
 <img src="https://user-images.githubusercontent.com/73224388/161756120-091cb1e6-af0f-4a96-98cf-1c6e3280c7eb.png"> 
 <img src="https://user-images.githubusercontent.com/73224388/161755905-f7214629-cb77-458c-a486-d1c96a64223d.png" width="700" height="300">
@@ -75,7 +75,7 @@ Spring Security를 사용하면서 ajax post방식 통신 시에 403에러 발�
 
 #### 해결방법
 ```javascript
-//헤더 값에 csrf 토큰 값을 정한 후,
+
 <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
 <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 
