@@ -42,7 +42,8 @@ dependencies {
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.4.2'
-
+    testImplementation('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
     implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
 
     implementation 'commons-io:commons-io:2.6'

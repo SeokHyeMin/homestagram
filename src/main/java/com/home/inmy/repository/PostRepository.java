@@ -15,12 +15,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface PostRepository extends JpaRepository<Post, Long>{
 
-    @EntityGraph(value = "Post.withAccountAndImageFiles")
-    List<Post> findTop4ByOrderByViewsDesc();
-
     Page<Post> findByAccount(Account account, Pageable pageable);
 
-    @EntityGraph(value = "Post.withAccountAndImageFiles")
+    @EntityGraph(attributePaths = {"account"})
     Page<Post> findAll(Pageable pageable);
 
 }
