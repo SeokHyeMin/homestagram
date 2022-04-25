@@ -93,6 +93,8 @@ public class PostController {
     public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, String tags, Errors errors, Model model,
                               RedirectAttributes redirectAttributes) throws JSONException, IOException {
 
+        log.info("--------------postSave-------------");
+
         if (errors.hasErrors()) {
             log.info("post save error");
             return "posts/new-post";
@@ -115,6 +117,8 @@ public class PostController {
                            @RequestParam(required = false, defaultValue = "false") String pageSelect,
                            @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
                            @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+
+        log.info("--------------postList-------------");
 
         Page<Post> postList = postService.pageList(page, orderBy);
 
@@ -150,6 +154,7 @@ public class PostController {
     public String postUpdateView(@PathVariable Long id, @CurrentUser Account account, Model model){
 
         log.info("-----------post-update-view------------");
+
         Post post = postService.getPost(id);
 
         PostForm postForm = PostForm.builder()

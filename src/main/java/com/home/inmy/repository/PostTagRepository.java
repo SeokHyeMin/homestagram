@@ -14,11 +14,10 @@ import java.util.List;
 @Transactional
 public interface PostTagRepository extends JpaRepository<PostTag, Long> {
 
+    @EntityGraph(attributePaths = {"tag"})
     List<PostTag> findByPost(Post post);
 
     @EntityGraph(value = "PostTag.withPost")
     Page<PostTag> findByTag(Tag tag, Pageable pageable);
-
-    PostTag findByPostAndTag(Post post, Tag tag);
 
 }

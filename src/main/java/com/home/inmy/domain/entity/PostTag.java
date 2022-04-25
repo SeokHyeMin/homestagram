@@ -10,8 +10,7 @@ import javax.persistence.*;
         @NamedAttributeNode(value = "post", subgraph = "post")
     },
         subgraphs = @NamedSubgraph(name = "post", attributeNodes = {
-                @NamedAttributeNode("account"),
-                @NamedAttributeNode("imageFiles")
+                @NamedAttributeNode("account")
         })
 )
 @Entity

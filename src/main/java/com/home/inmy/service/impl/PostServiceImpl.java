@@ -69,10 +69,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Post> top4PostOrderByViews(){
-
-        PageRequest pageRequest = PageRequest.of(0, 4, Sort.by(Sort.Direction.DESC, "views"));
-        return postRepository.findAll(pageRequest);
+    public List<Post> mainPost(){
+        return postRepository.findTop4ByOrderByViewsDesc();
     }
 
     @Override

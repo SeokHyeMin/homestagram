@@ -16,7 +16,7 @@ public interface PostService {
     void deletePost(Long id);
     Post getPost(Long id);
 
-    Page<Post> top4PostOrderByViews();
+    List<Post> mainPost();
 
     Page<Post> pageList(int page, String orderBy);
 

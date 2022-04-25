@@ -1,6 +1,7 @@
 package com.home.inmy.controller;
 
 import com.home.inmy.domain.CurrentUser;
+import com.home.inmy.domain.entity.Post;
 import com.home.inmy.repository.TagRepository;
 import com.home.inmy.service.BookmarkService;
 import com.home.inmy.service.LikeService;
@@ -9,6 +10,7 @@ import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.PostTag;
 import com.home.inmy.domain.entity.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class TagController {
@@ -35,6 +38,8 @@ public class TagController {
                                   @RequestParam(required = false, defaultValue = "false") String pageSelect,
                                   @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
                                   @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+
+        log.info("--------------searchPostByTag-------------");
 
         Tag tag = tagRepository.findByTagTitle(tagTitle);
 
@@ -61,9 +66,11 @@ public class TagController {
         model.addAttribute("startBlockPage", startBlockPage);
         model.addAttribute("endBlockPage", endBlockPage);
 
-        model.addAttribute("postTagList", postTagList);
+        model.addAttribute("postTagList",postTagList);
+
         model.addAttribute("likeList", likeList);
         model.addAttribute("bookmarkList", bookmarkList);
+
         model.addAttribute("account",account);
         model.addAttribute("message",tagTitle);
 

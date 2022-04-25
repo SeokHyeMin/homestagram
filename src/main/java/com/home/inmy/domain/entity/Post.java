@@ -1,7 +1,6 @@
 package com.home.inmy.domain.entity;
 
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
