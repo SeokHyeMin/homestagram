@@ -14,8 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class PostTagServiceImpl implements PostTagService {
@@ -49,12 +47,6 @@ public class PostTagServiceImpl implements PostTagService {
     @Override
     public void deletePost(Post post) {
         postTagRepository.deleteInBatch(post.getPostTags());
-    }
-
-    @Override
-    public List<PostTag> getPostTagList(Post post) {
-
-        return  postTagRepository.findByPost(post);
     }
 
     @Override

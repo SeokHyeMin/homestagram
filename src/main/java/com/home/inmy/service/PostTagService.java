@@ -16,7 +16,5 @@ public interface PostTagService {
 
     void deletePost(Post post);
 
-    List<PostTag> getPostTagList(Post post);
-
     Page<PostTag> searchPostByTag(Tag tag, int page, String orderBy);
 }

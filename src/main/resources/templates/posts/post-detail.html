@@ -42,9 +42,9 @@
                         </div>
                     </div>
                     <div class="row" style="margin-bottom: 20px; margin-top: 15px">
-                        <div class="tagList" style="width:140px; color: #35c5f0; cursor: pointer" th:each="tag : ${postTagList}" >
-                            #<a th:href="@{/searchTag(tagTitle=${tag.getTag().getTagTitle()})}" style="text-decoration-line: none; color: #35c5f0"><span class="tags" onMouseover="this.style.color='gray';" onMouseout="this.style.color='#35c5f0';"
-                                      th:text="${tag.getTag().getTagTitle()}" th:value="${tag.getTag().getTagTitle()}"></span></a>
+                        <div class="tagList" style="width:140px; color: #35c5f0; cursor: pointer" th:each="tag : ${tagList}" >
+                            #<a th:href="@{/searchTag(tagTitle=${tag.getTagTitle()})}" style="text-decoration-line: none; color: #35c5f0"><span class="tags" onMouseover="this.style.color='gray';" onMouseout="this.style.color='#35c5f0';"
+                                      th:text="${tag.getTagTitle()}" th:value="${tag.getTagTitle()}"></span></a>
                         </div>
                     </div>
                     <div>

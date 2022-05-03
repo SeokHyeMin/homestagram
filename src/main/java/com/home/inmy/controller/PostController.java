@@ -2,13 +2,7 @@ package com.home.inmy.controller;
 
 import com.home.inmy.domain.CurrentUser;
 import com.home.inmy.domain.entity.*;
-import com.home.inmy.service.ImageFileService;
-import com.home.inmy.service.impl.PostServiceImpl;
-import com.home.inmy.service.impl.BookmarkServiceImpl;
-import com.home.inmy.service.impl.CommentServiceImpl;
-import com.home.inmy.service.impl.FollowServiceImpl;
-import com.home.inmy.service.impl.LikeServiceImpl;
-import com.home.inmy.service.impl.PostTagServiceImpl;
+import com.home.inmy.service.*;
 import com.home.inmy.form.PostForm;
 import com.home.inmy.service.impl.TagServiceImpl;
 import com.home.inmy.dto.PostDto;
@@ -33,14 +27,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PostController {
 
-    private final PostServiceImpl postService;
-    private final PostTagServiceImpl postTagService;
-    private final LikeServiceImpl likeService;
-    private final TagServiceImpl tagService;
-    private final BookmarkServiceImpl bookmarkService;
-    private final FollowServiceImpl followService;
-    private final CommentServiceImpl commentService;
+    private final PostService postService;
+    private final PostTagService postTagService;
+    private final LikeService likeService;
+    private final TagService tagService;
+    private final BookmarkService bookmarkService;
+    private final FollowService followService;
+    private final CommentService commentService;
 
+    //글 작성 화면
     @GetMapping("/new-post")
     public String newPostView(Model model, @CurrentUser Account account) {
 
@@ -50,17 +45,47 @@ public class PostController {
         return "posts/new-post";
     }
 
-    @Transactional
+    @PostMapping("/new-post") // 새 글 작성
+    public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, String tags, Errors errors, Model model,
+                              RedirectAttributes redirectAttributes) throws JSONException, IOException {
+
+        log.info("============newPostSave============");
+
+        if (errors.hasErrors()) {
+            log.info("post save error");
+            return "posts/new-post";
+        }
+
+        PostDto postDto = postForm.createBoardPostDto(account);
+        Post newPost = postService.newPostSave(postDto);
+
+        //작성한 태그 저장
+        postTagService.tagSave(newPost, tags);
+
+        model.addAttribute(account);
+        redirectAttributes.addAttribute("id", newPost.getId());
+
+        return "redirect:/post/{id}";
+    }
+
+    @Transactional(readOnly = true)
     @GetMapping("/post/{id}") // 글 상세보기
     public String postView(@PathVariable Long id, Model model, @CurrentUser Account account) {
 
-        log.info("--------------postView-------------");
+        log.info("============postView============");
+
+        //해당 게시물과, 게시물의 태그 리스트 가져오기
         Post post = postService.getPost(id);
+        List<Tag> tagList = post.getPostTags().stream().map(postTag -> postTag.getTag()).collect(Collectors.toList());
 
-        List<PostTag> postTagList = postTagService.getPostTagList(post);
-        Boolean follow = followService.findFollow(post.getAccount().getLoginId(), account); //게시글 주인, 현재 로그인 계정으로 팔로잉 여부 판단.
+        //조회수 증가
+        postService.updateViews(post);
 
-        Boolean isOwner = account != null && post.getAccount().getLoginId().equals(account.getLoginId()); //현재 계정이 게시글 주인인지 판단.
+        //게시글 주인, 현재 로그인 계정으로 팔로잉 여부 판단.
+        Boolean follow = followService.findFollow(post.getAccount().getLoginId(), account);
+
+        //현재 계정이 게시글 주인인지 판단.
+        Boolean isOwner = account != null && post.getAccount().getLoginId().equals(account.getLoginId());
 
         //댓글 페이징
         Page<Comments> comments = commentService.getComments(post, 0); //댓글 작성하고 불러올 페이지는 댓글 첫 페이지
@@ -75,40 +100,17 @@ public class PostController {
         model.addAttribute("endBlockPage",endBlockPage);
 
         model.addAttribute("comments", comments);
-        postService.updateViews(post); //조회수 증가
 
         model.addAttribute("post",post);
-        model.addAttribute("postTagList",postTagList);
+        model.addAttribute("tagList",tagList);
         model.addAttribute("account",account);
-        model.addAttribute("comments",comments);
+
         model.addAttribute("follow",follow); //팔로우 여부
         model.addAttribute("isOwner",isOwner); //현재 로그인한 계정과 프로필 주인이 같으면 true
         model.addAttribute("like",likeService.accountPostLike(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true
         model.addAttribute("bookmark",bookmarkService.accountPostBookmark(post, account)); //현재 로그인한 계정이 해당 게시글을 좋아요 눌렀다면 true
 
         return "posts/post-detail";
-    }
-
-    @PostMapping("/new-post") // 새 글 작성
-    public String newPostSave(@CurrentUser Account account, @Valid PostForm postForm, String tags, Errors errors, Model model,
-                              RedirectAttributes redirectAttributes) throws JSONException, IOException {
-
-        log.info("--------------postSave-------------");
-
-        if (errors.hasErrors()) {
-            log.info("post save error");
-            return "posts/new-post";
-        }
-
-        PostDto postDto = postForm.createBoardPostDto(account);
-        Post newPost = postService.newPostSave(postDto);
-
-        postTagService.tagSave(newPost, tags);
-
-        model.addAttribute(account);
-        redirectAttributes.addAttribute("id", newPost.getId());
-
-        return "redirect:/post/{id}";
     }
 
     @Transactional(readOnly = true)
@@ -118,13 +120,14 @@ public class PostController {
                            @RequestParam(required = false, defaultValue = "writeTime", value = "orderBy") String orderBy,
                            @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
-        log.info("--------------postList-------------");
+        log.info("============postList============");
 
         Page<Post> postList = postService.pageList(page, orderBy);
 
         List<Long> likeList = new ArrayList<>();
         List<Long> bookmarkList = new ArrayList<>();
 
+        //로그인 한 경우에만 좋아요, 북마크한 게시물 리스트 가져오기
         if(account != null){
             likeList = likeService.getLikeList(account) //좋아요한 리스트를 찾아
                     .stream().map(like -> like.getPost().getId()).collect(Collectors.toList()); //해당 글 번호를 리스트에 담아 반환
@@ -153,7 +156,7 @@ public class PostController {
     @GetMapping("/update-post/{id}") //글 수정화면
     public String postUpdateView(@PathVariable Long id, @CurrentUser Account account, Model model){
 
-        log.info("-----------post-update-view------------");
+        log.info("============postUpdateView============");
 
         Post post = postService.getPost(id);
 
@@ -162,8 +165,8 @@ public class PostController {
                             .content(post.getContent())
                             .build();
 
-        List<PostTag> tagList = postTagService.getPostTagList(post);
-        List<String> tags = tagService.getTagList(tagList);
+        //해당 게시글의 태그 타이틀 가져오기.
+        List<String> tags = post.getPostTags().stream().map(postTag -> postTag.getTag().getTagTitle()).collect(Collectors.toList());
         List<ImageFile> imageFiles = post.getImageFiles();
 
         model.addAttribute("account",account);
@@ -177,21 +180,22 @@ public class PostController {
 
     @PostMapping("/update-post/{id}") // 글 수정
     public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm,
-                             @RequestParam String tags, @RequestParam String delete_image,
-                             Errors errors, Model model, RedirectAttributes redirectAttributes) throws IOException, JSONException {
+                             @RequestParam String tags, @RequestParam String delete_image, Errors errors,
+                             Model model, RedirectAttributes redirectAttributes) throws IOException, JSONException {
+
+        log.info("============postUpdate============");
 
         if (errors.hasErrors()) {
             log.info("post update error");
             return "posts/post-update";
         }
 
-        log.info("--------post-update----------");
-
         PostDto postDto = postForm.createBoardPostDto(account);
         Post post = postService.updatePost(postDto, id);
         postTagService.tagSave(post, tags); //변경된 태그를 다시 추가해줌.
 
-        if(!delete_image.equals("")){ //삭제한 이미지 있는 경우, 해당 이미지 삭제
+        //삭제한 이미지 있는 경우, 해당 이미지 삭제
+        if(!delete_image.equals("")){
             postService.deleteImage(post, delete_image);
         }
 
@@ -203,7 +207,7 @@ public class PostController {
 
     @PostMapping("/delete-post/{id}") //글 삭제
     public String postDelete(@PathVariable Long id){
-        log.info("------postDelete-------");
+
         postService.deletePost(id); //게시글 삭제
 
         return "redirect:/postList";
