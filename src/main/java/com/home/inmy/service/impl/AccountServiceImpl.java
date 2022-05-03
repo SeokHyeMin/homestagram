@@ -42,8 +42,6 @@ public class AccountServiceImpl implements AccountService {
     private final RoleService roleService;
     private final EmailService emailService;
 
-
-
     @Override
     public void createAccount(SignUpForm signUpForm) {
         //비밀번호 암호화하여 저장.
@@ -61,26 +59,27 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-    @Override
+    @Override //회원 탈퇴
     public void deleteAccount(Long accountId) {
         accountRepository.deleteById(accountId);
     }
 
-    @Override
+    @Override //프로필 수정
     public void updateProfile(Account account, ProfileForm profileForm) {
 
         account.setProfile(new Profile(profileForm.getBio(), profileForm.getUrl(), profileForm.getImage()));
         accountRepository.save(account);
     }
 
-    @Override
+    @Override //비밀번호 수정
     public void updatePassword(Account account, String newPassword) {
 
+        //비밀번호를 암호화하여 저장.
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
 
-    @Override
+    @Override   //계정 수정
     public void updateAccount(Account account, AccountForm accountForm) {
 
         account.setNickname(accountForm.getNickname());
@@ -94,20 +93,20 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccount(String loginId) {return accountRepository.findByLoginId(loginId);}
 
-    @Override
+    @Override   //회원 리스트
     public Page<Account> getAccountList(int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
         return accountRepository.findAll(pageRequest);
     }
 
-    @Override
+    @Override   //회원 권한 수정
     public void updateAccountRole(Long id, String roleName) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("일치하는 계정이 없습니다."));
         Role role = roleRepository.findByRoleName(roleName);
         account.setAccountRole(role); //변경감지
     }
 
-    @Override
+    @Override   //비밀번호 찾기
     public void findPassword(Account account) {
 
         //임시 비밀번호 생성.
