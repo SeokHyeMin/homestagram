@@ -18,7 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long>{
 
     Page<Post> findByAccount(Account account, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"account","imageFiles"})
+    @EntityGraph(attributePaths = {"account"})
     List<Post> findTop4ByOrderByViewsDesc();
 
     @EntityGraph(attributePaths = {"account"})

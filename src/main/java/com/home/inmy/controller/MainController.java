@@ -27,7 +27,7 @@ public class MainController {
             model.addAttribute(account);
         }
 
-        List<Post> postList = postService.mainPost(); //조회수 높은 글 4개
+        Page<Post> postList = postService.mainPost(); //조회수 높은 글 4개
 
         model.addAttribute("postList",postList);
 
