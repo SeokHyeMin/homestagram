@@ -2,6 +2,7 @@ package com.home.inmy.service;
 
 import com.home.inmy.domain.entity.Account;
 import com.home.inmy.domain.entity.Post;
+import com.home.inmy.domain.entity.Tag;
 import com.home.inmy.dto.PostDto;
 import org.springframework.data.domain.Page;
 
@@ -11,10 +12,18 @@ import java.util.List;
 public interface PostService {
 
     Post newPostSave(PostDto postDto) throws IOException;
+
     Post updatePost(PostDto postDto, Long id) throws IOException;
+
     void updateViews(Post post);
+
     void deletePost(Long id);
+
     Post getPost(Long id);
+
+    List<Tag> getPostTag(Post post);
+
+    List<String> getPostTagTitleList(Post post);
 
     Page<Post> mainPost();
 

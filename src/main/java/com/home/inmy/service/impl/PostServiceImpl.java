@@ -1,5 +1,7 @@
 package com.home.inmy.service.impl;
 
+import com.home.inmy.domain.entity.PostTag;
+import com.home.inmy.domain.entity.Tag;
 import com.home.inmy.repository.PostRepository;
 import com.home.inmy.service.PostService;
 import com.home.inmy.domain.entity.Account;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service @Slf4j
 @Transactional
@@ -95,5 +98,15 @@ public class PostServiceImpl implements PostService {
 
         PageRequest pageRequest = PageRequest.of(page, 6, Sort.by(Sort.Direction.DESC, "writeTime"));
         return postRepository.findByAccount(account, pageRequest);
+    }
+
+    @Override
+    public List<String> getPostTagTitleList(Post post) {
+        return post.getPostTags().stream().map(postTag -> postTag.getTag().getTagTitle()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Tag> getPostTag(Post post) {
+        return post.getPostTags().stream().map(PostTag::getTag).collect(Collectors.toList());
     }
 }

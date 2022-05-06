@@ -76,7 +76,7 @@ public class PostController {
 
         //해당 게시물과, 게시물의 태그 리스트 가져오기
         Post post = postService.getPost(id);
-        List<Tag> tagList = post.getPostTags().stream().map(postTag -> postTag.getTag()).collect(Collectors.toList());
+        List<Tag> tagList = postService.getPostTag(post);
 
         //조회수 증가
         postService.updateViews(post);
@@ -166,7 +166,7 @@ public class PostController {
                             .build();
 
         //해당 게시글의 태그 타이틀 가져오기.
-        List<String> tags = post.getPostTags().stream().map(postTag -> postTag.getTag().getTagTitle()).collect(Collectors.toList());
+        List<String> tags = postService.getPostTagTitleList(post);
         List<ImageFile> imageFiles = post.getImageFiles();
 
         model.addAttribute("account",account);
@@ -177,6 +177,8 @@ public class PostController {
 
         return "posts/post-update";
     }
+
+
 
     @PostMapping("/update-post/{id}") // 글 수정
     public String postUpdate(@PathVariable Long id, @CurrentUser Account account, @Valid PostForm postForm,
