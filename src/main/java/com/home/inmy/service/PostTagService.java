@@ -6,8 +6,6 @@ import com.home.inmy.domain.entity.Tag;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface PostTagService {
 
     void postTagSave(Post post, Tag tag);
