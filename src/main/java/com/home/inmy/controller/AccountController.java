@@ -34,12 +34,6 @@ public class AccountController {
     private final PostService postService;
     private final BookmarkService bookmarkService;
 
-
-    @InitBinder("signUpForm") //
-    public void initBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(signUpFormValidator);
-    }
-
     //회원가입 페이지
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
